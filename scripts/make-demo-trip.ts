@@ -1,0 +1,43 @@
+// Makes the committed demo trip from a private trip file:
+//   npm run demo-trip -- [input=my-trip.json] [output=demo/trip.demo.json]
+//
+// Every calendar date moves by the same random number of whole weeks (so
+// weekdays stay the same) and all free-text notes are dropped. The offset is
+// never printed or stored, so the real dates can't be recovered from the output.
+// The offset lands the trip 10–80 weeks later: still inside the validity window
+// of the current entry rules, so tests on the demo trip stay meaningful.
+import { randomInt } from 'node:crypto';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { Temporal } from 'temporal-polyfill';
+
+const [input = 'my-trip.json', output = 'demo/trip.demo.json'] = process.argv.slice(2);
+const days = randomInt(10, 81) * 7;
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+const DROP = new Set(['note', 'entryNote', 'private']);
+
+function transform(value: unknown): unknown {
+  if (typeof value === 'string' && DATE.test(value)) {
+    return Temporal.PlainDate.from(value).add({ days }).toString();
+  }
+  if (Array.isArray(value)) return value.map(transform);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([k]) => !DROP.has(k))
+        .map(([k, v]) => [k, transform(v)]),
+    );
+  }
+  return value;
+}
+
+const trip = transform(JSON.parse(readFileSync(input, 'utf8'))) as Record<string, unknown>;
+const demo = {
+  ...trip,
+  demo: true,
+  trip: { ...(trip.trip as object), title: 'Demo trip' },
+};
+
+mkdirSync(dirname(output), { recursive: true });
+writeFileSync(output, JSON.stringify(demo, null, 2) + '\n');
+console.log(`Wrote ${output} (dates shifted by a random number of weeks, notes removed).`);

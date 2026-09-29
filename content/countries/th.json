@@ -1,0 +1,59 @@
+{
+  "country": "TH",
+  "iso3": "THA",
+  "name": "Thailand",
+  "timeZone": "Asia/Bangkok",
+  "currency": "THB",
+  "adviceUrl": "https://www.nederlandwereldwijd.nl/reisadvies/thailand",
+  "emergencyNumbers": [
+    {
+      "id": "th-emergency",
+      "label": "General emergency",
+      "number": "191",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "th-tourist-police",
+      "label": "Tourist police",
+      "number": "1155",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "th-medical",
+      "label": "Medical emergencies",
+      "number": "1669",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "th-fire",
+      "label": "Fire",
+      "number": "199",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    }
+  ],
+  "facts": []
+}

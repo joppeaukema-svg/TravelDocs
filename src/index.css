@@ -1,0 +1,118 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens. Light mode is "passport paper": warm off-white, deep ink,
+ * teal accent — high contrast for bright sunlight. Dark mode swaps the values;
+ * every utility reads the variables, so components never branch on theme.
+ */
+@theme {
+  --font-sans: 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans',
+    'Noto Sans CJK SC', 'Noto Sans Thai', 'Noto Sans Lao', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-paper: #f4f1ea;
+  --color-card: #fffdf8;
+  --color-sunk: #ebe6da;
+  --color-ink: #16213a;
+  --color-muted: #555e70;
+  --color-line: #d9d2c2;
+  --color-accent: #0c6158;
+  --color-accent-soft: #dcefeb;
+  --color-on-accent: #ffffff;
+  --color-crit: #a8201a;
+  --color-crit-soft: #fbe7e4;
+  --color-warn: #804a00;
+  --color-warn-soft: #fcefd6;
+  --color-ok: #1b6535;
+  --color-ok-soft: #e0f1e5;
+  --color-info: #1d4a93;
+  --color-info-soft: #e4ecf9;
+  --color-sos: #c1121f;
+}
+
+@layer base {
+  :root[data-theme='dark'] {
+    --color-paper: #0f141c;
+    --color-card: #171e29;
+    --color-sunk: #0b0f15;
+    --color-ink: #edf0f5;
+    --color-muted: #a2abba;
+    --color-line: #2b3544;
+    --color-accent: #5fcabc;
+    --color-accent-soft: #143430;
+    --color-on-accent: #06201c;
+    --color-crit: #ff8f85;
+    --color-crit-soft: #3b1714;
+    --color-warn: #ffc56b;
+    --color-warn-soft: #382a12;
+    --color-ok: #85d7a0;
+    --color-ok-soft: #142e1e;
+    --color-info: #a3bff5;
+    --color-info-soft: #17243c;
+    --color-sos: #ff4d5a;
+    color-scheme: dark;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root[data-theme='system'] {
+      --color-paper: #0f141c;
+      --color-card: #171e29;
+      --color-sunk: #0b0f15;
+      --color-ink: #edf0f5;
+      --color-muted: #a2abba;
+      --color-line: #2b3544;
+      --color-accent: #5fcabc;
+      --color-accent-soft: #143430;
+      --color-on-accent: #06201c;
+      --color-crit: #ff8f85;
+      --color-crit-soft: #3b1714;
+      --color-warn: #ffc56b;
+      --color-warn-soft: #382a12;
+      --color-ok: #85d7a0;
+      --color-ok-soft: #142e1e;
+      --color-info: #a3bff5;
+      --color-info-soft: #17243c;
+      --color-sos: #ff4d5a;
+      color-scheme: dark;
+    }
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    background: var(--color-paper);
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.45;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  /* 16px+ keeps iOS from zooming into focused fields. */
+  input,
+  select,
+  textarea {
+    font-size: 17px;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility safe-top {
+  padding-top: max(env(safe-area-inset-top), 0.5rem);
+}
+
+@utility safe-bottom {
+  padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+}

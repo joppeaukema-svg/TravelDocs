@@ -1,0 +1,188 @@
+{
+  "version": "2026-09-29",
+  "freshnessDays": 30,
+  "schedule": {
+    "defaultTime": "09:00",
+    "arrivalKitTime": "19:00",
+    "quietFrom": "22:00",
+    "quietUntil": "08:00",
+    "t21": 21,
+    "t7": 7
+  },
+  "stayWarningDays": [14, 7, 3, 1],
+
+  "sources": {
+    "nl-reisadvies": { "title": "Reisadvies — NederlandWereldwijd", "url": "https://www.nederlandwereldwijd.nl/reisadvies", "verifiedAt": "2026-09-29" },
+    "nl-advice-cn": { "title": "Reisadvies China — NederlandWereldwijd", "url": "https://www.nederlandwereldwijd.nl/reisadvies/china", "verifiedAt": "2026-09-29" },
+    "nl-advice-jp": { "title": "Reisadvies Japan — NederlandWereldwijd", "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan", "verifiedAt": "2026-09-29" },
+    "nl-advice-vn": { "title": "Reisadvies Vietnam — NederlandWereldwijd", "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam", "verifiedAt": "2026-09-29" },
+    "nl-advice-th": { "title": "Reisadvies Thailand — NederlandWereldwijd", "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand", "verifiedAt": "2026-09-29" },
+    "nl-advice-la": { "title": "Reisadvies Laos — NederlandWereldwijd", "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos", "verifiedAt": "2026-09-29" },
+    "nl-advice-ph": { "title": "Reisadvies Filipijnen — NederlandWereldwijd", "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen", "verifiedAt": "2026-09-29" },
+    "cn-embassy-visa-free": { "title": "Chinese embassy in the Netherlands — visa exemption notice", "url": "https://nl.china-embassy.gov.cn/eng/ls/zytz/202511/t20251104_11746916.htm", "verifiedAt": "2026-09-29" },
+    "cn-nia-transit": { "title": "National Immigration Administration of China (confirm the 240-hour transit rules and ports)", "url": "https://en.nia.gov.cn", "verifiedAt": "2026-09-29", "unverified": true },
+    "cn-arrival-card": { "title": "China online arrival card — National Immigration Administration", "url": "https://s.nia.gov.cn/ArrivalCardFillingPC/", "verifiedAt": "2026-09-29" },
+    "jp-vjw": { "title": "Visit Japan Web — Digital Agency", "url": "https://services.digital.go.jp/en/visit-japan-web/", "verifiedAt": "2026-09-29" },
+    "jp-mhlw-meds": { "title": "Bringing medicines into Japan — MHLW Q&A (PDF)", "url": "https://www.mhlw.go.jp/english/policy/health-medical/pharmaceuticals/dl/qa_01.pdf", "verifiedAt": "2026-09-29" },
+    "jp-impconf": { "title": "Import Confirmation (Yunyu Kakunin-sho) — MHLW", "url": "https://impconf.mhlw.go.jp", "verifiedAt": "2026-09-29" },
+    "jp-taxfree": { "title": "Japan's tax exemption — JNTO", "url": "https://www.japan.travel/en/plan/japans-tax-exemption/", "verifiedAt": "2026-09-29", "unverified": true },
+    "jp-holidays": { "title": "国民の祝日について — Cabinet Office", "url": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html", "verifiedAt": "2026-09-29", "unverified": true },
+    "anwb-japan": { "title": "Reisdocumenten Japan — ANWB", "url": "https://www.anwb.nl/vakantie/japan/reisvoorbereiding/reisdocumenten", "verifiedAt": "2026-09-29" },
+    "vn-exemption": { "title": "New visa exemption policies from 15 August 2025 — Vietnam National Authority of Tourism", "url": "https://vietnam.travel/things-to-do/new-visa-exemption-policies-effective-15-august-2025", "verifiedAt": "2026-09-29" },
+    "vn-evisa": { "title": "Vietnam e-visa — official portal", "url": "https://evisa.gov.vn", "verifiedAt": "2026-09-29" },
+    "vn-prearrival": { "title": "Vietnam pre-arrival form — Immigration Department", "url": "https://prearrival.immigration.gov.vn", "verifiedAt": "2026-09-29", "unverified": true },
+    "th-tdac": { "title": "Thailand Digital Arrival Card manual — Immigration Bureau", "url": "https://tdac.immigration.go.th/manual/en/index.html", "verifiedAt": "2026-09-29" },
+    "guide-chiangrai-laos": { "title": "Chiang Rai to Laos (traveller guide, Dec 2025)", "url": "https://www.maptrotting.com/journey-chiang-rai-to-laos/", "verifiedAt": "2026-09-29", "unverified": true },
+    "la-evisa": { "title": "Lao e-visa — official portal", "url": "https://laoevisa.gov.la", "verifiedAt": "2026-09-29" },
+    "la-checkpoints": { "title": "Lao immigration checkpoints (visa on arrival)", "url": "https://immigration.gov.la/en/checkpoint", "verifiedAt": "2026-09-29" },
+    "la-voa-duration": { "title": "Lao immigration checkpoints — confirm the visa-on-arrival stay", "url": "https://immigration.gov.la/en/checkpoint", "verifiedAt": "2026-09-29", "unverified": true },
+    "la-ldif": { "title": "Laos Digital Immigration Form — Immigration Department", "url": "https://www.immigration.gov.la/en/home", "verifiedAt": "2026-09-29", "unverified": true },
+    "la-lcr": { "title": "Laos–China Railway online booking (KPL news agency)", "url": "https://kpl.gov.la/En/detail.aspx?id=71839", "verifiedAt": "2026-09-29", "unverified": true },
+    "ph-etravel": { "title": "eTravel — Government of the Philippines", "url": "https://etravel.gov.ph", "verifiedAt": "2026-09-29" },
+    "ph-bi": { "title": "Bureau of Immigration Philippines", "url": "https://immigration.gov.ph", "verifiedAt": "2026-09-29" },
+    "ph-holidays-2026": { "title": "Proclamation No. 1006 — regular holidays and special days 2026", "url": "https://pco.gov.ph/issuances/proclamation-no-1006-declaring-the-regular-holidays-and-special-non-working-days-for-the-year-2026/", "verifiedAt": "2026-09-29", "unverified": true },
+    "ph-holidays-2027": { "title": "PBBM declares 2027 regular and special holidays — PCO", "url": "https://pco.gov.ph/news_releases/pbbm-declares-2027-regular-and-special-holidays/", "verifiedAt": "2026-09-29", "unverified": true },
+    "ph-sinulog-2027": { "title": "Sinulog 2027 (The Manila Times, Sep 2026)", "url": "https://www.manilatimes.net/2026/09/23/regions/sinulog-2027-facing-budget-challenges/2430713", "verifiedAt": "2026-09-29", "unverified": true },
+    "poliswijzer-max-days": { "title": "Maximale reisduur doorlopende reisverzekering — Poliswijzer", "url": "https://www.poliswijzer.nl/reisverzekering/kennisbank/maximale-reisduur-doorlopende-reisverzekering", "verifiedAt": "2026-09-29" },
+    "cak-medicines": { "title": "Medicijnen mee op reis — CAK", "url": "https://www.hetcak.nl/medicijnen-mee-op-reis/", "verifiedAt": "2026-09-29" },
+    "ggd-vaccinations": { "title": "GGD reisvaccinaties", "url": "https://www.ggdreisvaccinaties.nl/", "verifiedAt": "2026-09-29" },
+    "lcr-nl": { "title": "Landelijk Coördinatiecentrum Reizigersadvisering", "url": "https://www.lcr.nl", "verifiedAt": "2026-09-29" },
+    "bz-informatieservice": { "title": "BZ Informatieservice", "url": "https://informatieservice.nederlandwereldwijd.nl", "verifiedAt": "2026-09-29" },
+    "kopieid": { "title": "Veilige kopie van je identiteitsbewijs (KopieID) — Rijksoverheid", "url": "https://www.rijksoverheid.nl/vraag-en-antwoord/identiteitsfraude/veilige-kopie-identiteitsbewijs", "verifiedAt": "2026-09-29" }
+  },
+
+  "stayRegimes": [
+    { "id": "cn-visa-free-30", "country": "CN", "title": "30-day visa exemption for Dutch passports", "entryTypes": ["visa-free"], "maxDays": 30, "arrivalUntil": "2026-12-31", "note": "A return or onward ticket is required.", "sourceIds": ["cn-embassy-visa-free", "nl-advice-cn"] },
+    { "id": "cn-transit-240h", "country": "CN", "title": "240-hour visa-free transit", "entryTypes": ["visa-free-transit"], "maxHours": 240, "requiresThirdCountryOnward": true, "ports": ["fuzhou|\\bFOC\\b", "xiamen|\\bXMN\\b"], "note": "Needs an onward ticket to a third country and a passport valid for more than 3 months. Fuzhou and Xiamen airports qualify; confirm other ports with the National Immigration Administration.", "sourceIds": ["cn-nia-transit"] },
+    { "id": "jp-visa-free-90", "country": "JP", "title": "Visa-free stay", "entryTypes": ["visa-free"], "maxDays": 90, "sourceIds": ["nl-advice-jp"] },
+    { "id": "vn-visa-free-45", "country": "VN", "title": "45-day visa exemption", "entryTypes": ["visa-free"], "maxDays": 45, "arrivalFrom": "2025-08-15", "arrivalUntil": "2028-08-14", "extendable": false, "suggestWhenTooLong": "Apply for an e-visa (up to 90 days) — only at evisa.gov.vn or thithucdientu.gov.vn; ignore paid lookalike sites.", "note": "Treat it as non-extendable. Needs a return or onward ticket and proof of the trip's purpose.", "sourceIds": ["vn-exemption"] },
+    { "id": "vn-evisa-90", "country": "VN", "title": "E-visa", "entryTypes": ["e-visa"], "maxDays": 90, "sourceIds": ["vn-evisa", "nl-advice-vn"] },
+    { "id": "th-visa-free-60", "country": "TH", "title": "Visa-free stay (arrivals before 15 Sep 2026)", "entryTypes": ["visa-free"], "maxDays": 60, "arrivalUntil": "2026-09-14", "sourceIds": ["nl-advice-th"] },
+    { "id": "th-visa-free-30", "country": "TH", "title": "Visa-free stay", "entryTypes": ["visa-free"], "maxDays": 30, "arrivalFrom": "2026-09-15", "note": "You must be able to show you'll leave Thailand within this period.", "sourceIds": ["nl-advice-th"] },
+    { "id": "la-evisa-30", "country": "LA", "title": "Lao e-visa", "entryTypes": ["e-visa"], "maxDays": 30, "note": "Check the stay on your approval letter.", "sourceIds": ["la-evisa"] },
+    { "id": "la-voa-30", "country": "LA", "title": "Lao visa on arrival", "entryTypes": ["visa-on-arrival"], "maxDays": 30, "note": "Check the date stamped in your passport.", "sourceIds": ["la-voa-duration"] },
+    { "id": "ph-visa-free-30", "country": "PH", "title": "Visa-free stay", "entryTypes": ["visa-free"], "maxDays": 30, "extendable": true, "note": "Longer stays: extend at the Bureau of Immigration before the 30 days run out. After 6 months an ECC is needed to leave.", "sourceIds": ["nl-advice-ph", "ph-bi"] }
+  ],
+
+  "passport": [
+    { "country": "CN", "basis": "stay", "entryTypes": ["visa-free", "visa", "e-visa", "undecided"], "sourceIds": ["nl-advice-cn"] },
+    { "country": "CN", "basis": "arrival", "months": 3, "entryTypes": ["visa-free-transit"], "sourceIds": ["cn-nia-transit"] },
+    { "country": "JP", "basis": "stay", "sourceIds": ["nl-advice-jp"] },
+    { "country": "VN", "basis": "arrival", "months": 6, "sourceIds": ["nl-advice-vn"] },
+    { "country": "TH", "basis": "arrival", "months": 6, "sourceIds": ["nl-advice-th"] },
+    { "country": "LA", "basis": "departure", "months": 6, "blankPages": 2, "sourceIds": ["nl-advice-la"] },
+    { "country": "PH", "basis": "departure", "months": 6, "sourceIds": ["nl-advice-ph"] }
+  ],
+
+  "onward": [
+    { "country": "CN", "why": "China wants to see a return or onward ticket.", "sourceIds": ["nl-advice-cn"] },
+    { "country": "VN", "entryTypes": ["visa-free"], "why": "Vietnam's visa exemption needs a return or onward ticket.", "sourceIds": ["vn-exemption"] },
+    { "country": "TH", "entryTypes": ["visa-free"], "why": "Thailand wants proof that you'll leave within the visa-free period.", "weakProofTypes": ["bus", "transport"], "weakProofNote": "A local bus paid on board proves nothing at the border. Keep other proof ready: your Laos e-visa plus the flight out of Laos, or a pre-booked bus or boat into Laos.", "sourceIds": ["nl-advice-th"] },
+    { "country": "PH", "why": "The Philippines checks your exit ticket on arrival.", "sourceIds": ["nl-advice-ph"] }
+  ],
+
+  "evisa": [
+    {
+      "country": "LA",
+      "applyUrl": "https://laoevisa.gov.la",
+      "applyLeadDays": 7,
+      "processing": "about 3 working days; 4×6 cm photo and passport bio page; fee via the official calculator",
+      "ports": [
+        { "name": "Wattay International Airport (Vientiane)", "match": "wattay|\\bVTE\\b" },
+        { "name": "Luang Prabang International Airport", "match": "luang prabang[^,]*airport|\\bLPQ\\b" },
+        { "name": "Pakse International Airport", "match": "pakse[^,]*airport|\\bPKZ\\b" },
+        { "name": "Lao–Thai Friendship Bridge I (Vientiane)", "match": "friendship bridge i\\b|nong khai" },
+        { "name": "Lao–Thai Friendship Bridge II (Savannakhet)", "match": "friendship bridge ii\\b|mukdahan" },
+        { "name": "Lao–Thai Friendship Bridge IV (Bokeo)", "match": "friendship bridge iv\\b|huay ?xai|houayxay|chiang khong" },
+        { "name": "Boten checkpoint and Boten railway station", "match": "boten" },
+        { "name": "Khamsavath railway station (Vientiane)", "match": "khamsavath" }
+      ],
+      "alternativesUrl": "https://immigration.gov.la/en/checkpoint",
+      "sourceIds": ["la-evisa", "la-checkpoints"]
+    }
+  ],
+
+  "forms": [
+    { "id": "cn-arrival-card", "country": "CN", "name": "China online arrival card", "direction": "arrival", "modes": ["air", "land", "sea"], "opensDaysBefore": 7, "deadline": "day-before-travel", "mandatory": false, "url": "https://s.nia.gov.cn/ArrivalCardFillingPC/", "detail": "Only via the official site, the NIA 12367 app or the WeChat/Alipay mini-programs. Fill it in before travelling; paper cards on arrival are the fallback.", "sourceIds": ["cn-arrival-card"] },
+    { "id": "jp-vjw", "country": "JP", "name": "Visit Japan Web", "direction": "arrival", "modes": ["air", "sea"], "opensDaysBefore": 14, "deadline": "day-before-travel", "preferAtHomeWithinDays": 7, "mandatory": false, "url": "https://services.digital.go.jp/en/visit-japan-web/", "detail": "Recommended: one QR code covers immigration and customs. Save a screenshot of it; paper forms are still accepted.", "sourceIds": ["jp-vjw"] },
+    { "id": "vn-prearrival", "country": "VN", "name": "Vietnam pre-arrival form", "direction": "arrival", "modes": ["air"], "entryPointMatch": "\\b(HAN|SGN|DAD|PQC)\\b|noi bai|tan son nhat|ho chi minh|hanoi|da nang|phu quoc", "opensDaysBefore": 3, "deadline": "day-before-travel", "mandatory": true, "url": "https://prearrival.immigration.gov.vn", "detail": "Mandatory when landing at Ho Chi Minh City, Hanoi, Da Nang or Phu Quoc.", "sourceIds": ["vn-prearrival", "nl-advice-vn"] },
+    { "id": "th-tdac", "country": "TH", "name": "Thailand Digital Arrival Card (TDAC)", "direction": "arrival", "modes": ["air", "land", "sea"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://tdac.immigration.go.th", "detail": "Free, for air and land arrivals, within 3 days before arrival. Only at tdac.immigration.go.th — ignore paid lookalike sites. It's done at the first Thai airport, also on a connection.", "sourceIds": ["th-tdac"] },
+    { "id": "la-ldif-arrival", "country": "LA", "name": "Laos Digital Immigration Form (arrival)", "direction": "arrival", "modes": ["air", "land"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://www.immigration.gov.la/en/home", "detail": "Within 3 days before arrival. Keep the QR code offline.", "sourceIds": ["la-ldif"] },
+    { "id": "la-ldif-departure", "country": "LA", "name": "Laos Digital Immigration Form (departure)", "direction": "departure", "modes": ["air", "land"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://www.immigration.gov.la/en/home", "detail": "Again within 3 days before leaving Laos. Keep the QR code offline.", "sourceIds": ["la-ldif"] },
+    { "id": "ph-etravel-arrival", "country": "PH", "name": "eTravel (arrival)", "direction": "arrival", "modes": ["air", "sea"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://etravel.gov.ph", "detail": "Free, within 72 hours before arrival; the QR code is shown at check-in. Ignore paid lookalike sites.", "sourceIds": ["ph-etravel", "nl-advice-ph"] },
+    { "id": "ph-etravel-departure", "country": "PH", "name": "eTravel (departure)", "direction": "departure", "modes": ["air", "sea"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://etravel.gov.ph", "detail": "The Dutch advice says to fill it in before departure too.", "sourceIds": ["nl-advice-ph", "ph-etravel"] }
+  ],
+
+  "bookingWindows": [
+    { "id": "la-lcr", "country": "LA", "name": "Laos–China Railway", "types": ["train", "transport"], "stations": ["vientiane", "vang ?vieng", "luang prabang", "muang xay|oudomxay", "boten", "muang nga", "na teuy"], "opensDaysBefore": 7, "opensAt": "06:30", "timeZone": "Asia/Vientiane", "busyMonths": [12, 1, 2], "detail": "Domestic tickets go on sale about 7 days ahead at 06:30 Laos time in the official LCR Ticket app and sell out fast in December–February. Some travellers need a Lao, Thai or Chinese phone number to register. Station security bans aerosols and knives.", "sourceIds": ["la-lcr", "nl-advice-la"] }
+  ],
+
+  "advisoryAreas": [
+    { "id": "th-myanmar-border", "country": "TH", "placeMatch": "golden triangle|mae sai|chiang saen", "detail": "The Golden Triangle lies on the Myanmar border, where a 10 km strip is orange in the Dutch advice (the towns of Mae Sai, Mae Sot and Ranong excepted). Check the map in the live advice and what your policy says.", "sourceIds": ["nl-advice-th"] },
+    { "id": "la-bokeo-border", "country": "LA", "placeMatch": "huay ?xai|houayxay|bokeo|gibbon", "detail": "Huay Xai is in Bokeo province, where the Laos–Myanmar border area is orange in the Dutch advice. Check on the map that Huay Xai and the Gibbon Experience area are outside it, and what your policy says.", "sourceIds": ["nl-advice-la"] },
+    { "id": "la-xaysomboune", "country": "LA", "placeMatch": "xaysomboune|xaisomboun", "detail": "Xaysomboune province is orange in the Dutch advice.", "sourceIds": ["nl-advice-la"] },
+    { "id": "ph-south", "country": "PH", "placeMatch": "mindanao|sulu|zamboanga|basilan|tawi", "detail": "Parts of western Mindanao, the Sulu archipelago and the Sulu Sea are red in the Dutch advice.", "sourceIds": ["nl-advice-ph"] },
+    { "id": "jp-fukushima", "country": "JP", "placeMatch": "fukushima", "detail": "South-east Fukushima has a red zone (the nuclear exclusion area).", "sourceIds": ["nl-advice-jp"] }
+  ],
+
+  "bag": [
+    { "id": "bag-vape-banned", "flag": "vape", "countries": ["VN", "TH", "LA"], "severity": "critical", "title": "Vapes are banned", "detail": "Bringing, using or selling vapes and refills is banned — Vietnam: heavy fines or 1–15 years in prison; Thailand: up to 10 years; Laos: vapes and shisha banned. Leave them at home.", "sourceIds": ["nl-advice-vn", "nl-advice-th", "nl-advice-la"] },
+    { "id": "bag-vape-jp", "flag": "vape", "countries": ["JP"], "severity": "info", "title": "E-liquid limit in Japan", "detail": "Maximum 120 ml of e-cigarette liquid per month for personal use.", "sourceIds": ["nl-advice-jp"] },
+    { "id": "bag-meds-jp", "flag": "prescriptionMeds", "countries": ["JP"], "severity": "warn", "title": "Medicines into Japan", "detail": "Up to one month's supply of ordinary prescription medicine (two months over-the-counter) without paperwork; more needs an Import Confirmation applied for online before arrival. Amphetamine-type ADHD medicine is prohibited; some substances (e.g. lisdexamfetamine, pseudoephedrine) are controlled.", "sourceIds": ["jp-mhlw-meds", "jp-impconf"] },
+    { "id": "bag-scooter-vn", "flag": "scooter", "countries": ["VN"], "severity": "warn", "title": "Scooters in Vietnam", "detail": "Many tourist accidents. The Dutch advice: only ride under 50 cc, have an IDP, and make sure your insurance covers vehicle accidents.", "sourceIds": ["nl-advice-vn"] },
+    { "id": "bag-diving", "flag": "diving", "countries": ["PH"], "severity": "warn", "title": "Diving needs extra cover", "detail": "Check your policy's diving cover and maximum depth.", "sourceIds": ["nl-advice-ph"] }
+  ],
+
+  "holidays": [
+    { "id": "jp-culture-day-2026", "country": "JP", "name": "Culture Day", "from": "2026-11-03", "to": "2026-11-03", "detail": "National holiday: busier transport, some offices closed.", "sourceIds": ["jp-holidays"] },
+    { "id": "ph-rizal-new-year-2026", "country": "PH", "name": "Rizal Day and New Year", "from": "2026-12-30", "to": "2027-01-01", "detail": "Holidays: full ferries and flights, closed offices.", "sourceIds": ["ph-holidays-2026", "ph-holidays-2027"] },
+    { "id": "ph-sinulog-2027", "country": "PH", "name": "Sinulog festival", "from": "2027-01-16", "to": "2027-01-17", "placeMatch": "cebu", "detail": "Third Sunday of January in Cebu: fully booked hotels and busy transport.", "sourceIds": ["ph-sinulog-2027"] }
+  ],
+
+  "crossings": [
+    {
+      "id": "th-la-friendship-bridge-iv",
+      "name": "Friendship Bridge IV (Chiang Khong ↔ Huay Xai)",
+      "countries": ["TH", "LA"],
+      "match": "friendship bridge iv\\b|huay ?xai|houayxay|chiang khong",
+      "evisaAccepted": ["LA"],
+      "visaOnArrival": ["LA"],
+      "requirements": "Lao visa on arrival: per traveller guides bring a passport photo and US dollars (the cheapest way to pay); a small overtime fee applies after 16:00 and at weekends and holidays.",
+      "howToCross": "From Chiang Rai's central bus terminal a local bus leaves towards Chiang Khong about every hour (~2 h, ~90 THB paid on board). Ask for the Laos border and take a tuk-tuk to the bridge. The bridge can only be crossed by the shuttle bus (small fee, no walking), then a tuk-tuk into Huay Xai.",
+      "sourceIds": ["la-evisa", "la-checkpoints", "guide-chiangrai-laos"]
+    }
+  ],
+
+  "driving": [
+    { "country": "JP", "idpModel": "1949", "detail": "A Dutch licence is only valid together with an IDP of the 1949 model. The ANWB issues it in person at its stores (bring your licence, proof of address and a passport photo; you get it on the spot), so arrange it before leaving the Netherlands.", "sourceIds": ["anwb-japan"] },
+    { "country": "VN", "detail": "The Dutch advice: only ride under 50 cc, have an IDP, and make sure insurance covers vehicle accidents.", "sourceIds": ["nl-advice-vn"] },
+    { "country": "PH", "detail": "An IDP is required; it is valid for at most 90 days.", "sourceIds": ["nl-advice-ph"] }
+  ],
+
+  "predeparture": [
+    { "id": "pd-clinic", "weeksBefore": 8, "title": "Travel clinic appointment", "detail": "Vaccination advice per country from the GGD; other providers via LCR.", "sourceIds": ["ggd-vaccinations", "lcr-nl"] },
+    { "id": "pd-passport", "weeksBefore": 8, "title": "Passport valid until at least {passportRequiredUntil} with {blankPages} blank pages", "detail": "{passportBinding}", "sourceIds": ["nl-reisadvies"] },
+    { "id": "pd-insurance", "weeksBefore": 8, "title": "Insurance: {tripDays}-day trip vs maximum days per trip; evacuation, scooter and diving cover", "detail": "Policies use limits such as 45, 60, 90, 180 or 365 days. Many Dutch insurers change their cover in orange and red areas. Tell family who insures you and how to reach them.", "sourceIds": ["poliswijzer-max-days"] },
+    { "id": "pd-idp", "weeksBefore": 8, "when": "driving", "title": "International driving permit{idpModel} at an ANWB store", "detail": "The ANWB issues it in person at its stores — it can't be arranged once you've left.", "sourceIds": ["anwb-japan"] },
+    { "id": "pd-meds", "weeksBefore": 8, "when": "flag:prescriptionMeds", "title": "Medicine statement, and Japan's Import Confirmation if needed", "sourceIds": ["cak-medicines", "jp-impconf"] },
+    { "id": "pd-payment-cn", "weeksBefore": 2, "when": "country:CN", "title": "Payment app for China (Alipay or WeChat Pay) set up and tested with your card", "detail": "Cash and foreign cards aren't accepted everywhere.", "sourceIds": ["nl-advice-cn"] },
+    { "id": "pd-esim-cn", "weeksBefore": 2, "when": "country:CN", "title": "eSIM that works in China", "detail": "Google, WhatsApp and many other services are blocked in China.", "sourceIds": ["nl-advice-cn"] },
+    { "id": "pd-bank", "weeksBefore": 2, "title": "Bank cards enabled outside Europe; card-blocking numbers saved", "sourceIds": [] },
+    { "id": "pd-maps", "weeksBefore": 2, "title": "Offline maps downloaded", "sourceIds": [] },
+    { "id": "pd-copies", "weeksBefore": 2, "title": "Safe passport copy (KopieID app) shared with family", "sourceIds": ["kopieid"] },
+    { "id": "pd-backup", "weeksBefore": 2, "title": "First encrypted backup of this app", "detail": "More → Backup & restore; keep the file in your own cloud or email.", "sourceIds": [] },
+    { "id": "pd-informatieservice", "weeksBefore": 2, "title": "Sign up for the BZ Informatieservice", "detail": "Email when the advice changes or in a crisis.", "sourceIds": ["bz-informatieservice"] }
+  ],
+
+  "countryPrep": [
+    { "id": "cp-cash", "country": "ANY", "moment": "t7", "title": "Money for {countryName}: some {currency} in cash, cards ready", "sourceIds": [] },
+    { "id": "cp-sim", "country": "ANY", "moment": "t7", "title": "eSIM or local SIM for {countryName}; offline maps for {places}", "sourceIds": [] },
+    { "id": "cp-leftover", "country": "ANY", "moment": "exit", "title": "Spend or change leftover {currency}", "sourceIds": [] },
+    { "id": "cp-cn-blocked", "country": "CN", "moment": "t7", "title": "Google, WhatsApp, Instagram, Facebook, YouTube and X are blocked in China", "detail": "Tell contacts how to reach you. Online criticism of China can be punishable, including posts made before the trip.", "sourceIds": ["nl-advice-cn"] },
+    { "id": "cp-jp-cash", "country": "JP", "moment": "t7", "title": "Cash for Japan: cards aren't accepted everywhere", "detail": "Also install an earthquake alert app such as Safety tips or NHK World-Japan.", "sourceIds": ["nl-advice-jp"] },
+    { "id": "cp-jp-taxfree", "country": "JP", "moment": "exit", "title": "Tax-free refund at the airport", "detail": "From 1 Nov 2026 tax-free shopping becomes a refund at departure: confirm your purchases at the airport before bag drop.", "sourceIds": ["jp-taxfree"] },
+    { "id": "cp-la-lcr-app", "country": "LA", "moment": "t7", "title": "Install the LCR Ticket app (Laos–China Railway)", "detail": "Some travellers report needing a Lao, Thai or Chinese phone number to register.", "sourceIds": ["la-lcr"] },
+    { "id": "cp-la-methanol", "country": "LA", "moment": "t7", "title": "Only drink from sealed bottles and cans — no free shots", "detail": "Methanol poisoning killed tourists in Vang Vieng in Nov 2024.", "sourceIds": ["nl-advice-la"] },
+    { "id": "cp-ph-hospital", "country": "PH", "moment": "t7", "title": "Insurer's assistance line one tap away", "detail": "Hospitals often ask for prepayment or a payment guarantee.", "sourceIds": ["nl-advice-ph"] }
+  ]
+}

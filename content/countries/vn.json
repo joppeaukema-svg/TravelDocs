@@ -1,0 +1,47 @@
+{
+  "country": "VN",
+  "iso3": "VNM",
+  "name": "Vietnam",
+  "timeZone": "Asia/Ho_Chi_Minh",
+  "currency": "VND",
+  "adviceUrl": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam",
+  "emergencyNumbers": [
+    {
+      "id": "vn-police",
+      "label": "Police",
+      "number": "113",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "vn-fire",
+      "label": "Fire",
+      "number": "114",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "vn-ambulance",
+      "label": "Ambulance",
+      "number": "115",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    }
+  ],
+  "facts": []
+}
