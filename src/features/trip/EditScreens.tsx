@@ -68,7 +68,7 @@ export function StayScreen({ id }: { id: string }) {
       {status.synthetic ? (
         <Notice title="Derived from two flights">Add a real stay to your trip file to edit it.</Notice>
       ) : (
-        <StayForm stay={status.stay} />
+        <StayForm key={status.stay.id} stay={status.stay} />
       )}
       {items.length > 0 && (
         <>
@@ -118,7 +118,7 @@ function StayForm({ stay }: { stay: Stay }) {
         type="date"
         value={v.stampedUntil ?? ''}
         onChange={(stampedUntil) => set({ stampedUntil })}
-        hint="Always overrides the calculated date."
+        hint="Always overrides the calculated date. Personal: not shared with your travel companion."
       />
       <TextField label="Entry point" value={v.entry.point} onChange={(point) => set({ entry: { ...v.entry, point } })} />
       <SelectField label="Arriving" value={v.entry.mode} onChange={(mode) => set({ entry: { ...v.entry, mode } })} options={MODE_OPTIONS} />
@@ -149,6 +149,7 @@ const EMPTY: BookingForm = {
   id: '',
   type: 'flight',
   status: 'planned',
+  who: 'both',
   documentIds: [],
   depart: { date: '', time: null, tz: 'Europe/Amsterdam' },
 };
@@ -156,14 +157,15 @@ const EMPTY: BookingForm = {
 export function BookingScreen({ id }: { id: string }) {
   const isNew = id === 'new';
   const existing = useLiveQuery(async () => (isNew ? null : ((await db.bookings.get(id)) ?? null)), [id]);
-  if (existing === undefined) return null;
+  // The live query briefly returns the previous booking after navigating; wait for this one.
+  if (existing === undefined || (existing && existing.id !== id)) return null;
   if (!isNew && existing === null) {
     return <Notice tone="warn" title="This booking no longer exists" action={<LinkButton href="#/trip">Trip</LinkButton>} />;
   }
   return (
     <>
       <PageTitle>{isNew ? 'New booking' : 'Booking'}</PageTitle>
-      <BookingEditor initial={existing ?? { ...EMPTY, id: crypto.randomUUID() }} isNew={isNew} />
+      <BookingEditor key={id} initial={existing ?? { ...EMPTY, id: crypto.randomUUID() }} isNew={isNew} />
     </>
   );
 }
@@ -282,6 +284,17 @@ function BookingEditor({ initial, isNew }: { initial: BookingForm; isNew: boolea
       </div>
       <TextField label="Free cancellation until" type="date" {...text('freeCancellationUntil')} />
       <TextArea label="Notes" value={v.note ?? ''} onChange={(s) => set({ note: s || undefined })} />
+      <SelectField
+        label="Who"
+        value={v.who}
+        onChange={(who) => set({ who })}
+        options={[
+          { value: 'both', label: 'Both of us (shared)' },
+          { value: 'me', label: 'Just me (not shared)' },
+        ]}
+        hint="Shared bookings go to your travel companion when you share the trip."
+      />
+      <TextArea label="My private note (never shared)" value={v.myNote ?? ''} onChange={(s) => set({ myNote: s || undefined })} rows={2} />
 
       <SectionTitle>Linked documents</SectionTitle>
       {(docs ?? []).length === 0 ? (

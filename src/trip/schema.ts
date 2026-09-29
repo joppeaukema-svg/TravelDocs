@@ -55,8 +55,10 @@ export const Stay = z
     entryNote: z.string().optional(),
     actualFrom: isoDate.optional(),
     actualTo: isoDate.optional(),
-    /** The "valid until" date stamped in the passport. Always wins. */
+    /** The "valid until" date stamped in the passport. Always wins. Personal: never shared. */
     stampedUntil: isoDate.optional(),
+    /** Last edit, for merging with a travel companion's copy. */
+    updatedAt: z.string().optional(),
   })
   .refine((s) => s.to >= s.from, { message: '"to" is before "from"', path: ['to'] });
 export type Stay = z.infer<typeof Stay>;
@@ -104,6 +106,11 @@ export const Booking = z.object({
   freeCancellationUntil: isoDate.optional(),
   documentIds: z.array(z.string()).default([]),
   note: z.string().optional(),
+  /** "me": only this traveller's (not shared). */
+  who: z.enum(['both', 'me']).default('both'),
+  /** Personal note, never shared. */
+  myNote: z.string().optional(),
+  updatedAt: z.string().optional(),
 });
 export type Booking = z.infer<typeof Booking>;
 
@@ -112,6 +119,7 @@ export const Day = z.object({
   country: z.string().regex(/^[A-Z]{2}$/),
   place: z.string().nullable().default(null),
   note: z.string().default(''),
+  updatedAt: z.string().optional(),
 });
 export type Day = z.infer<typeof Day>;
 
@@ -124,6 +132,7 @@ export const TripMeta = z.object({
   homeTimeZone: timeZone.default('Europe/Amsterdam'),
   demo: z.boolean().default(false),
   importedAt: z.string().optional(),
+  updatedAt: z.string().optional(),
 });
 export type TripMeta = z.infer<typeof TripMeta>;
 
