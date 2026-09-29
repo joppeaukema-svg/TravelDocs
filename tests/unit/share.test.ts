@@ -4,8 +4,11 @@ import { parseTripFile, type TripData } from '../../src/trip/io';
 import {
   decryptShare,
   encryptShare,
+  InvalidShareError,
   isValidCode,
   mergeTrip,
+  shareBytesFrom,
+  shareText,
   newTripCode,
   sharePayload,
   WrongTripCodeError,
@@ -122,5 +125,19 @@ describe('share file', () => {
     const typed = code.toLowerCase().replace(/-/g, ' ');
     expect((await decryptShare(bytes, typed)).payload).toEqual(payload);
     await expect(decryptShare(bytes, newTripCode())).rejects.toBeInstanceOf(WrongTripCodeError);
+  });
+
+  it('travels as one chat message: compact, and survives line breaks added by chat apps', async () => {
+    const payload = sharePayload(demo(), {});
+    const code = newTripCode();
+    const bytes = new Uint8Array(await (await encryptShare(payload, code, FAST)).arrayBuffer());
+    const text = shareText(bytes);
+    expect(text.length).toBeLessThan(12_000); // WhatsApp allows ~65,000 characters
+    const mangled = `Forwarded:\n${text.replace(/(.{60})/g, '$1\n')}\nsent from my phone`;
+    expect((await decryptShare(shareBytesFrom(mangled), code)).payload).toEqual(payload);
+    // A text file with the message, and the binary form, work too.
+    expect(shareBytesFrom(new TextEncoder().encode(text))).toEqual(bytes);
+    expect(shareBytesFrom(bytes)).toEqual(bytes);
+    expect(() => shareBytesFrom('hello')).toThrow(InvalidShareError);
   });
 });

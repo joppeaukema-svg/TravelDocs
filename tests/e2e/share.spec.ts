@@ -17,18 +17,16 @@ test('share the trip with a travel companion and merge their changes back', asyn
   const code = (await page.getByTestId('trip-code').textContent())!.trim();
   expect(code).toMatch(/^\w{4}-\w{4}-\w{4}$/);
   await page.getByRole('button', { name: 'Prepare trip to send' }).click();
-  const sent = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Send trip file' }).click();
-  const fileA = testInfo.outputPath('from-a.tcshare');
-  await (await sent).saveAs(fileA);
-  expect(readFileSync(fileA).toString('latin1')).not.toContain('Tokashiki');
+  const message = await page.getByTestId('share-message').inputValue();
+  expect(message).toMatch(/^Travel Companion — our trip \(encrypted\)/);
+  expect(message).not.toContain('Tokashiki');
 
   // Phone B: receive with the code into an empty app.
   const phoneB = await browser.newContext(testInfo.project.use);
   const b = await phoneB.newPage();
   b.on('dialog', (d) => void d.accept());
   await b.goto('/#/trip');
-  await b.getByTestId('share-input').setInputFiles(fileA);
+  await b.getByTestId('share-paste').fill(message);
   await b.getByLabel('Trip code').fill('wrong-code-abcd');
   await b.getByRole('button', { name: 'Merge into my trip' }).click();
   await expect(b.getByText(/12 letters and digits|does not open/)).toBeVisible();
@@ -49,12 +47,13 @@ test('share the trip with a travel companion and merge their changes back', asyn
   await expect(b.getByTestId('trip-code')).toHaveText(code);
   await b.getByRole('button', { name: 'Prepare trip to send' }).click();
   const back = b.waitForEvent('download');
-  await b.getByRole('button', { name: 'Send trip file' }).click();
-  const fileB = testInfo.outputPath('from-b.tcshare');
+  await b.getByRole('button', { name: 'Save as a text file instead' }).click();
+  const fileB = testInfo.outputPath('from-b.txt');
   await (await back).saveAs(fileB);
   await phoneB.close();
 
   // Phone A merges: B's booking arrives, A's personal booking is still there.
+  expect(readFileSync(fileB, 'utf8')).toContain('TC1.');
   await page.goto('/#/trip');
   await page.getByTestId('share-input').setInputFiles(fileB);
   await page.getByRole('button', { name: 'Merge into my trip' }).click();

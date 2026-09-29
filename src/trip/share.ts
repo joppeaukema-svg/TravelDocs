@@ -13,7 +13,6 @@ import { Booking, Day, Stay, TripMeta } from './schema';
  */
 
 export const SHARE_FORMAT = 'travel-companion-share/1';
-export const SHARE_EXTENSION = '.tcshare';
 const MAGIC = utf8Encode('TCSHARE1');
 
 // No 0/O, 1/I/L: easy to read out loud and type.
@@ -168,7 +167,13 @@ const ShareHeader = z.object({
   salt: z.string(),
   iv: z.string(),
   iterations: z.number().int().positive(),
+  compression: z.literal('gzip').optional(),
 });
+
+async function gzip(bytes: Uint8Array<ArrayBuffer>, mode: 'compress' | 'decompress'): Promise<Bytes> {
+  const stream = new Blob([bytes]).stream().pipeThrough(mode === 'compress' ? new CompressionStream('gzip') : new DecompressionStream('gzip'));
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
 
 export class WrongTripCodeError extends Error {
   constructor() {
@@ -206,10 +211,12 @@ export async function encryptShare(payload: SharePayload, code: string, iteratio
   const salt = randomBytes(16);
   const iv = randomBytes(12);
   const header = utf8Encode(
-    JSON.stringify({ format: SHARE_FORMAT, createdAt: now.toISOString(), salt: toBase64(salt), iv: toBase64(iv), iterations }),
+    JSON.stringify({ format: SHARE_FORMAT, createdAt: now.toISOString(), salt: toBase64(salt), iv: toBase64(iv), iterations, compression: 'gzip' }),
   );
   const key = await codeKey(code, salt, iterations);
-  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv, additionalData: header }, key, utf8Encode(JSON.stringify(payload)));
+  // Compressed before encryption (ciphertext doesn't compress): a whole trip fits in one chat message.
+  const plain = await gzip(utf8Encode(JSON.stringify(payload)), 'compress');
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv, additionalData: header }, key, plain);
   return new Blob([concatBytes(MAGIC, u32(header.length), header, new Uint8Array(ct))], { type: 'application/octet-stream' });
 }
 
@@ -236,9 +243,49 @@ export async function decryptShare(file: Uint8Array, code: string): Promise<{ pa
   } catch {
     throw new WrongTripCodeError();
   }
-  return { payload: SharePayload.parse(JSON.parse(utf8Decode(new Uint8Array(plain)))), createdAt: header.createdAt };
+  const json = header.compression === 'gzip' ? await gzip(new Uint8Array(plain), 'decompress') : new Uint8Array(plain);
+  return { payload: SharePayload.parse(JSON.parse(utf8Decode(json))), createdAt: header.createdAt };
 }
 
+// --- As a chat message ------------------------------------------------------
+// Chat apps mangle unknown file types (WhatsApp turns them into ".bin"), so the
+// encrypted trip also travels as plain text: a message you copy and paste.
+
+const TOKEN = 'TC1.';
+// The block ends with a dot (not in the base64url alphabet), so text a chat app adds after it can't join in.
+const TOKEN_RE = /TC1\.([A-Za-z0-9_-]+)\./;
+
+function base64url(bytes: Uint8Array): string {
+  return toBase64(bytes).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function fromBase64url(text: string): Bytes {
+  const b64 = text.replace(/-/g, '+').replace(/_/g, '/');
+  return fromBase64(b64 + '='.repeat((4 - (b64.length % 4)) % 4));
+}
+
+export function shareText(encrypted: Uint8Array): string {
+  return [
+    'Travel Companion — our trip (encrypted).',
+    'Open the app → Trip → Receive a shared trip → paste this whole message.',
+    '',
+    TOKEN + base64url(encrypted) + '.',
+  ].join('\n');
+}
+
+/** The encrypted share from a pasted message, a text file or a binary share file. */
+export function shareBytesFrom(input: string | Uint8Array): Bytes {
+  if (typeof input !== 'string') {
+    const bytes = toBytes(input);
+    if (MAGIC.every((b, i) => bytes[i] === b)) return bytes;
+    input = utf8Decode(bytes);
+  }
+  const m = TOKEN_RE.exec(input.replace(/\s+/g, ''));
+  if (!m) throw new InvalidShareError();
+  return fromBase64url(m[1]!);
+}
+
+/** A .txt file with the same message, which chat apps and the iPhone Files app can open. */
 export function shareFileName(now = new Date()): string {
-  return `trip-share-${now.toISOString().slice(0, 10)}${SHARE_EXTENSION}`;
+  return `trip-share-${now.toISOString().slice(0, 10)}.txt`;
 }
