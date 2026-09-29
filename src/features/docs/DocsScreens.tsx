@@ -139,7 +139,7 @@ export function NewDocScreen() {
 export function DocScreen({ id }: { id: string }) {
   return (
     <VaultGate what="this document">
-      <DocDetail id={id} />
+      <DocDetail key={id} id={id} />
     </VaultGate>
   );
 }

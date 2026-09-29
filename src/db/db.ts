@@ -95,6 +95,10 @@ export const META = {
   lastBackupAt: 'lastBackupAt',
   profile: 'profile',
   trip: 'trip',
+  /** Deleted trip items (for merging with a companion's copy). */
+  tripDeleted: 'tripDeleted',
+  /** The trip code shared with a travel companion. */
+  shareCode: 'shareCode',
 } as const;
 
 /** Deletes every row in every table (the schema itself stays). */

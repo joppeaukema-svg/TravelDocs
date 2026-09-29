@@ -68,6 +68,21 @@ When the plan changes, replace the old import: delete the “Trip prep” calend
 Calendar; Google: Settings → the calendar → Remove) and import the new file into a fresh one. Event IDs are stable, so
 Google Calendar also updates events when you re-import into the same calendar.
 
+## Travelling together
+
+Two people each use the app on their own phone and share the trip, without accounts or a server:
+
+1. One of you: **Trip → Travelling together → Create a trip code**, then **Send trip** (AirDrop, messenger, email).
+   Tell the other person the trip code in person — it is never sent with the file.
+2. The other: install the app, **Trip → Receive a shared trip**, pick the file, type the code.
+3. After changes, either of you sends again; the other receives it the same way. The newest edit of each stay or
+   booking wins, and deletions carry over.
+
+What is shared: stays, bookings marked **Both of us**, the day plan and trip dates. What never leaves the phone: the
+vault (documents, passport, insurance, personal details), the emergency card, profile, checklist ticks, the date
+stamped in your passport, documents linked to a booking, bookings marked **Just me** and each booking's **private
+note**.
+
 ## Development
 
 Needs Node 22.

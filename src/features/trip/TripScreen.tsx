@@ -14,6 +14,7 @@ import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
 import { DownloadIcon, PlusIcon, UploadIcon } from '../../ui/icons';
 import { Button, Card, cx, ErrorText, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
 import { CheckCard, StayCard } from './parts';
+import { SharePanel } from './SharePanel';
 
 export function TripScreen() {
   const rules = useRules();
@@ -25,6 +26,8 @@ export function TripScreen() {
       <>
         <PageTitle sub="Import your itinerary to get stay counters, entry checks and prep reminders.">Trip</PageTitle>
         <ImportPanel onImported={setReport} />
+        <SectionTitle>Travelling together?</SectionTitle>
+        <SharePanel hasTrip={false} />
       </>
     );
   }
@@ -197,6 +200,9 @@ function TripView({ rules, onImported }: { rules: Rules; onImported: (r: ImportR
         Timeline
       </SectionTitle>
       <Timeline rules={rules} />
+
+      <SectionTitle>Travelling together</SectionTitle>
+      <SharePanel hasTrip />
 
       <SectionTitle>Export and import</SectionTitle>
       <ExportPanel rules={rules} onImported={onImported} />
