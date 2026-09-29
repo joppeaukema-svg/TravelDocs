@@ -1,0 +1,35 @@
+{
+  "country": "PH",
+  "iso3": "PHL",
+  "name": "Philippines",
+  "timeZone": "Asia/Manila",
+  "currency": "PHP",
+  "adviceUrl": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen",
+  "emergencyNumbers": [
+    {
+      "id": "ph-emergency",
+      "label": "Emergency",
+      "number": "911",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "ph-police",
+      "label": "Police",
+      "number": "117",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    }
+  ],
+  "facts": []
+}

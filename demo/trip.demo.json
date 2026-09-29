@@ -1,0 +1,1144 @@
+{
+  "format": "travel-companion-trip/1",
+  "traveller": {
+    "passport": "NL",
+    "homeTimeZone": "Europe/Amsterdam"
+  },
+  "trip": {
+    "title": "Demo trip",
+    "depart": "2028-03-11",
+    "return": "2028-06-08"
+  },
+  "stays": [
+    {
+      "id": "cn-fuzhou",
+      "country": "CN",
+      "kind": "layover",
+      "places": [
+        "Fuzhou"
+      ],
+      "from": "2028-03-12",
+      "to": "2028-03-13",
+      "entry": {
+        "point": "Fuzhou Changle International Airport (FOC)",
+        "mode": "air"
+      },
+      "exit": {
+        "point": "Fuzhou Changle International Airport (FOC)",
+        "mode": "air"
+      },
+      "entryType": "visa-free"
+    },
+    {
+      "id": "jp",
+      "country": "JP",
+      "kind": "stay",
+      "places": [
+        "Tokyo",
+        "Kamikochi",
+        "Matsumoto",
+        "Kyoto",
+        "Osaka",
+        "Nachikatsuura",
+        "Kumano",
+        "Fukuoka",
+        "Okinawa"
+      ],
+      "from": "2028-03-13",
+      "to": "2028-04-04",
+      "entry": {
+        "point": "Tokyo — Narita or Haneda (to confirm)",
+        "mode": "air"
+      },
+      "exit": {
+        "point": "Fukuoka Airport (FUK)",
+        "mode": "air"
+      },
+      "entryType": "visa-free"
+    },
+    {
+      "id": "vn",
+      "country": "VN",
+      "kind": "stay",
+      "places": [
+        "Hanoi",
+        "Ha Long Bay",
+        "Ninh Binh",
+        "Sapa",
+        "Ban Gioc",
+        "Cao Bang"
+      ],
+      "from": "2028-04-04",
+      "to": "2028-04-23",
+      "entry": {
+        "point": "Hanoi Noi Bai International Airport (HAN)",
+        "mode": "air"
+      },
+      "exit": {
+        "point": "Hanoi Noi Bai International Airport (HAN)",
+        "mode": "air"
+      },
+      "entryType": "visa-free"
+    },
+    {
+      "id": "th",
+      "country": "TH",
+      "kind": "transit",
+      "places": [
+        "Chiang Rai"
+      ],
+      "from": "2028-04-23",
+      "to": "2028-04-24",
+      "entry": {
+        "point": "First Thai airport of the Hanoi → Chiang Rai flight (to confirm, likely Bangkok)",
+        "mode": "air"
+      },
+      "exit": {
+        "point": "Chiang Khong — Friendship Bridge IV",
+        "mode": "land"
+      },
+      "entryType": "visa-free"
+    },
+    {
+      "id": "la",
+      "country": "LA",
+      "kind": "stay",
+      "places": [
+        "Huay Xai",
+        "Gibbon Experience",
+        "Pakbeng",
+        "Luang Prabang",
+        "Nong Khiaw",
+        "Vang Vieng",
+        "Vientiane",
+        "Thakhek",
+        "Pakse"
+      ],
+      "from": "2028-04-24",
+      "to": "2028-05-17",
+      "entry": {
+        "point": "Friendship Bridge IV — Huay Xai (Bokeo)",
+        "mode": "land"
+      },
+      "exit": {
+        "point": "Wattay International Airport, Vientiane (VTE)",
+        "mode": "air"
+      },
+      "entryType": "undecided"
+    },
+    {
+      "id": "ph",
+      "country": "PH",
+      "kind": "stay",
+      "places": [
+        "Manila",
+        "Coron",
+        "Coron Island",
+        "Cebu",
+        "Bohol",
+        "Siquijor"
+      ],
+      "from": "2028-05-17",
+      "to": "2028-06-07",
+      "entry": {
+        "point": "Manila Ninoy Aquino International Airport (MNL)",
+        "mode": "air"
+      },
+      "exit": {
+        "point": "Manila Ninoy Aquino International Airport (MNL)",
+        "mode": "air"
+      },
+      "entryType": "visa-free"
+    },
+    {
+      "id": "cn-xiamen",
+      "country": "CN",
+      "kind": "layover",
+      "places": [
+        "Xiamen"
+      ],
+      "from": "2028-06-07",
+      "to": "2028-06-08",
+      "entry": {
+        "point": "Xiamen Gaoqi International Airport (XMN)",
+        "mode": "air"
+      },
+      "exit": {
+        "point": "Xiamen Gaoqi International Airport (XMN)",
+        "mode": "air"
+      },
+      "entryType": "visa-free-transit"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "f-ams-foc",
+      "type": "flight",
+      "status": "planned",
+      "from": "Amsterdam (AMS)",
+      "to": "Fuzhou (FOC)",
+      "depart": {
+        "date": "2028-03-11",
+        "time": "21:30",
+        "tz": "Europe/Amsterdam"
+      },
+      "arrive": {
+        "date": "2028-03-12",
+        "time": "14:45",
+        "tz": "Asia/Shanghai"
+      }
+    },
+    {
+      "id": "f-foc-tyo",
+      "type": "flight",
+      "status": "planned",
+      "from": "Fuzhou (FOC)",
+      "to": "Tokyo (NRT or HND — to confirm)",
+      "depart": {
+        "date": "2028-03-13",
+        "time": null,
+        "tz": "Asia/Shanghai"
+      },
+      "arrive": {
+        "date": "2028-03-13",
+        "time": "13:40",
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g-tyo-kamikochi",
+      "type": "transport",
+      "status": "planned",
+      "from": "Tokyo",
+      "to": "Kamikochi / Matsumoto",
+      "depart": {
+        "date": "2028-03-18",
+        "time": null,
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g-kamikochi-kyoto",
+      "type": "transport",
+      "status": "planned",
+      "from": "Kamikochi",
+      "to": "Kyoto",
+      "depart": {
+        "date": "2028-03-21",
+        "time": null,
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g-kyoto-osaka",
+      "type": "transport",
+      "status": "planned",
+      "from": "Kyoto",
+      "to": "Osaka",
+      "depart": {
+        "date": "2028-03-24",
+        "time": null,
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "a-parkrun-osaka",
+      "type": "activity",
+      "status": "planned",
+      "title": "Parkrun Osaka",
+      "depart": {
+        "date": "2028-03-25",
+        "time": null,
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "t-osaka-nachikatsuura",
+      "type": "train",
+      "status": "planned",
+      "from": "Osaka",
+      "to": "Nachikatsuura",
+      "depart": {
+        "date": "2028-03-26",
+        "time": null,
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "g-kumano-fukuoka",
+      "type": "transport",
+      "status": "idea",
+      "from": "Kumano / Nachikatsuura",
+      "to": "Fukuoka",
+      "depart": {
+        "date": "2028-03-28",
+        "time": null,
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "f-fuk-oka",
+      "type": "flight",
+      "status": "planned",
+      "from": "Fukuoka (FUK)",
+      "to": "Okinawa Naha (OKA)",
+      "depart": {
+        "date": "2028-03-30",
+        "time": "17:35",
+        "tz": "Asia/Tokyo"
+      },
+      "arrive": {
+        "date": "2028-03-30",
+        "time": "19:30",
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "c-okinawa",
+      "type": "car",
+      "status": "idea",
+      "title": "Rental car Okinawa, drive north",
+      "depart": {
+        "date": "2028-03-31",
+        "time": null,
+        "tz": "Asia/Tokyo"
+      },
+      "arrive": {
+        "date": "2028-04-02",
+        "time": null,
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "s-tokashiki",
+      "type": "accommodation",
+      "status": "planned",
+      "title": "One night on Tokashiki island",
+      "depart": {
+        "date": "2028-04-01",
+        "time": null,
+        "tz": "Asia/Tokyo"
+      },
+      "arrive": {
+        "date": "2028-04-02",
+        "time": null,
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "f-oka-fuk",
+      "type": "flight",
+      "status": "planned",
+      "from": "Okinawa Naha (OKA)",
+      "to": "Fukuoka (FUK)",
+      "depart": {
+        "date": "2028-04-03",
+        "time": "15:00",
+        "tz": "Asia/Tokyo"
+      },
+      "arrive": {
+        "date": "2028-04-03",
+        "time": "16:50",
+        "tz": "Asia/Tokyo"
+      }
+    },
+    {
+      "id": "f-fuk-han",
+      "type": "flight",
+      "status": "booked",
+      "from": "Fukuoka (FUK)",
+      "to": "Hanoi (HAN)",
+      "depart": {
+        "date": "2028-04-04",
+        "time": "08:55",
+        "tz": "Asia/Tokyo"
+      },
+      "arrive": {
+        "date": "2028-04-04",
+        "time": "12:25",
+        "tz": "Asia/Ho_Chi_Minh"
+      }
+    },
+    {
+      "id": "tour-halong",
+      "type": "tour",
+      "status": "planned",
+      "title": "Ha Long Bay cruise 2D1N",
+      "depart": {
+        "date": "2028-04-07",
+        "time": null,
+        "tz": "Asia/Ho_Chi_Minh"
+      },
+      "arrive": {
+        "date": "2028-04-08",
+        "time": null,
+        "tz": "Asia/Ho_Chi_Minh"
+      }
+    },
+    {
+      "id": "a-halong-marathon",
+      "type": "activity",
+      "status": "idea",
+      "title": "Ha Long Bay Marathon",
+      "depart": {
+        "date": "2028-04-09",
+        "time": null,
+        "tz": "Asia/Ho_Chi_Minh"
+      }
+    },
+    {
+      "id": "g-hanoi-sapa",
+      "type": "transport",
+      "status": "planned",
+      "from": "Hanoi",
+      "to": "Sapa",
+      "depart": {
+        "date": "2028-04-14",
+        "time": null,
+        "tz": "Asia/Ho_Chi_Minh"
+      }
+    },
+    {
+      "id": "g-sapa-bangioc",
+      "type": "transport",
+      "status": "planned",
+      "from": "Sapa",
+      "to": "Ban Gioc",
+      "depart": {
+        "date": "2028-04-17",
+        "time": null,
+        "tz": "Asia/Ho_Chi_Minh"
+      }
+    },
+    {
+      "id": "g-caobang-hanoi",
+      "type": "transport",
+      "status": "planned",
+      "from": "Cao Bang",
+      "to": "Hanoi",
+      "depart": {
+        "date": "2028-04-22",
+        "time": null,
+        "tz": "Asia/Ho_Chi_Minh"
+      }
+    },
+    {
+      "id": "f-han-cei",
+      "type": "flight",
+      "status": "planned",
+      "from": "Hanoi (HAN)",
+      "to": "Chiang Rai (CEI)",
+      "depart": {
+        "date": "2028-04-23",
+        "time": "12:05",
+        "tz": "Asia/Ho_Chi_Minh"
+      },
+      "arrive": {
+        "date": "2028-04-23",
+        "time": null,
+        "tz": "Asia/Bangkok"
+      }
+    },
+    {
+      "id": "b-chiangrai-huayxai",
+      "type": "bus",
+      "status": "planned",
+      "from": "Chiang Rai",
+      "to": "Huay Xai (via Chiang Khong, Friendship Bridge IV)",
+      "depart": {
+        "date": "2028-04-24",
+        "time": null,
+        "tz": "Asia/Bangkok"
+      }
+    },
+    {
+      "id": "tour-gibbon",
+      "type": "tour",
+      "status": "planned",
+      "title": "Gibbon Experience (2 days)",
+      "depart": {
+        "date": "2028-04-25",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      },
+      "arrive": {
+        "date": "2028-04-26",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      }
+    },
+    {
+      "id": "boat-slowboat",
+      "type": "boat",
+      "status": "planned",
+      "from": "Huay Xai",
+      "to": "Luang Prabang (via Pakbeng)",
+      "depart": {
+        "date": "2028-04-27",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      },
+      "arrive": {
+        "date": "2028-04-28",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      }
+    },
+    {
+      "id": "g-lp-nongkhiaw",
+      "type": "transport",
+      "status": "planned",
+      "from": "Luang Prabang",
+      "to": "Nong Khiaw",
+      "depart": {
+        "date": "2028-05-02",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      }
+    },
+    {
+      "id": "g-nongkhiaw-vangvieng",
+      "type": "transport",
+      "status": "planned",
+      "from": "Nong Khiaw",
+      "to": "Vang Vieng",
+      "depart": {
+        "date": "2028-05-05",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      }
+    },
+    {
+      "id": "g-vangvieng-vientiane",
+      "type": "transport",
+      "status": "planned",
+      "from": "Vang Vieng",
+      "to": "Vientiane",
+      "depart": {
+        "date": "2028-05-07",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      }
+    },
+    {
+      "id": "g-vientiane-thakhek",
+      "type": "transport",
+      "status": "idea",
+      "from": "Vientiane",
+      "to": "Thakhek",
+      "depart": {
+        "date": "2028-05-08",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      }
+    },
+    {
+      "id": "sc-thakhek-loop",
+      "type": "scooter",
+      "status": "planned",
+      "title": "Thakhek Loop by scooter",
+      "depart": {
+        "date": "2028-05-09",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      },
+      "arrive": {
+        "date": "2028-05-13",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      }
+    },
+    {
+      "id": "b-to-pakse",
+      "type": "bus",
+      "status": "idea",
+      "title": "Night bus to Pakse",
+      "depart": {
+        "date": "2028-05-14",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      }
+    },
+    {
+      "id": "b-pakse-vientiane",
+      "type": "bus",
+      "status": "planned",
+      "from": "Pakse",
+      "to": "Vientiane",
+      "depart": {
+        "date": "2028-05-16",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      }
+    },
+    {
+      "id": "f-vte-mnl",
+      "type": "flight",
+      "status": "planned",
+      "from": "Vientiane (VTE)",
+      "to": "Manila (MNL)",
+      "depart": {
+        "date": "2028-05-17",
+        "time": null,
+        "tz": "Asia/Vientiane"
+      },
+      "arrive": {
+        "date": "2028-05-17",
+        "time": null,
+        "tz": "Asia/Manila"
+      }
+    },
+    {
+      "id": "f-mnl-usu",
+      "type": "flight",
+      "status": "planned",
+      "from": "Manila (MNL)",
+      "to": "Coron / Busuanga (USU)",
+      "depart": {
+        "date": "2028-05-20",
+        "time": "11:45",
+        "tz": "Asia/Manila"
+      },
+      "arrive": {
+        "date": "2028-05-20",
+        "time": "13:00",
+        "tz": "Asia/Manila"
+      }
+    },
+    {
+      "id": "g-coron-cebu",
+      "type": "transport",
+      "status": "planned",
+      "from": "Coron",
+      "to": "Cebu",
+      "depart": {
+        "date": "2028-05-27",
+        "time": null,
+        "tz": "Asia/Manila"
+      }
+    },
+    {
+      "id": "ferry-cebu-bohol",
+      "type": "ferry",
+      "status": "planned",
+      "from": "Cebu",
+      "to": "Bohol",
+      "depart": {
+        "date": "2028-05-29",
+        "time": null,
+        "tz": "Asia/Manila"
+      }
+    },
+    {
+      "id": "ferry-bohol-siquijor",
+      "type": "ferry",
+      "status": "planned",
+      "from": "Bohol",
+      "to": "Siquijor",
+      "depart": {
+        "date": "2028-06-03",
+        "time": null,
+        "tz": "Asia/Manila"
+      }
+    },
+    {
+      "id": "g-siquijor-manila",
+      "type": "transport",
+      "status": "planned",
+      "from": "Siquijor",
+      "to": "Manila (via Cebu)",
+      "depart": {
+        "date": "2028-06-06",
+        "time": null,
+        "tz": "Asia/Manila"
+      }
+    },
+    {
+      "id": "f-mnl-xmn",
+      "type": "flight",
+      "status": "planned",
+      "from": "Manila (MNL)",
+      "to": "Xiamen (XMN)",
+      "depart": {
+        "date": "2028-06-07",
+        "time": "21:15",
+        "tz": "Asia/Manila"
+      },
+      "arrive": {
+        "date": "2028-06-07",
+        "time": null,
+        "tz": "Asia/Shanghai"
+      }
+    },
+    {
+      "id": "f-xmn-ams",
+      "type": "flight",
+      "status": "planned",
+      "from": "Xiamen (XMN)",
+      "to": "Amsterdam (AMS)",
+      "depart": {
+        "date": "2028-06-08",
+        "time": null,
+        "tz": "Asia/Shanghai"
+      },
+      "arrive": {
+        "date": "2028-06-08",
+        "time": "17:30",
+        "tz": "Europe/Amsterdam"
+      }
+    }
+  ],
+  "days": [
+    {
+      "date": "2028-03-11",
+      "country": "NL",
+      "place": "Amsterdam"
+    },
+    {
+      "date": "2028-03-12",
+      "country": "CN",
+      "place": "Fuzhou"
+    },
+    {
+      "date": "2028-03-13",
+      "country": "JP",
+      "place": "Tokyo"
+    },
+    {
+      "date": "2028-03-14",
+      "country": "JP",
+      "place": "Tokyo"
+    },
+    {
+      "date": "2028-03-15",
+      "country": "JP",
+      "place": "Tokyo"
+    },
+    {
+      "date": "2028-03-16",
+      "country": "JP",
+      "place": "Tokyo"
+    },
+    {
+      "date": "2028-03-17",
+      "country": "JP",
+      "place": "Tokyo"
+    },
+    {
+      "date": "2028-03-18",
+      "country": "JP",
+      "place": "Kamikochi / Matsumoto"
+    },
+    {
+      "date": "2028-03-19",
+      "country": "JP",
+      "place": "Kamikochi"
+    },
+    {
+      "date": "2028-03-20",
+      "country": "JP",
+      "place": "Kamikochi"
+    },
+    {
+      "date": "2028-03-21",
+      "country": "JP",
+      "place": "Kyoto"
+    },
+    {
+      "date": "2028-03-22",
+      "country": "JP",
+      "place": "Kyoto"
+    },
+    {
+      "date": "2028-03-23",
+      "country": "JP",
+      "place": "Kyoto"
+    },
+    {
+      "date": "2028-03-24",
+      "country": "JP",
+      "place": "Osaka"
+    },
+    {
+      "date": "2028-03-25",
+      "country": "JP",
+      "place": "Osaka"
+    },
+    {
+      "date": "2028-03-26",
+      "country": "JP",
+      "place": "Nachikatsuura"
+    },
+    {
+      "date": "2028-03-27",
+      "country": "JP",
+      "place": "Yoshino-Kumano National Park"
+    },
+    {
+      "date": "2028-03-28",
+      "country": "JP",
+      "place": "Travel to Fukuoka"
+    },
+    {
+      "date": "2028-03-29",
+      "country": "JP",
+      "place": "Fukuoka"
+    },
+    {
+      "date": "2028-03-30",
+      "country": "JP",
+      "place": "Fukuoka → Okinawa"
+    },
+    {
+      "date": "2028-03-31",
+      "country": "JP",
+      "place": "Okinawa"
+    },
+    {
+      "date": "2028-04-01",
+      "country": "JP",
+      "place": "Tokashiki island"
+    },
+    {
+      "date": "2028-04-02",
+      "country": "JP",
+      "place": "Okinawa → Naha"
+    },
+    {
+      "date": "2028-04-03",
+      "country": "JP",
+      "place": "Naha → Fukuoka"
+    },
+    {
+      "date": "2028-04-04",
+      "country": "VN",
+      "place": "Hanoi"
+    },
+    {
+      "date": "2028-04-05",
+      "country": "VN",
+      "place": "Hanoi"
+    },
+    {
+      "date": "2028-04-06",
+      "country": "VN",
+      "place": "Hanoi"
+    },
+    {
+      "date": "2028-04-07",
+      "country": "VN",
+      "place": "Ha Long Bay"
+    },
+    {
+      "date": "2028-04-08",
+      "country": "VN",
+      "place": "Ha Long Bay"
+    },
+    {
+      "date": "2028-04-09",
+      "country": "VN",
+      "place": "Ha Long Bay"
+    },
+    {
+      "date": "2028-04-10",
+      "country": "VN",
+      "place": "Ha Long Bay"
+    },
+    {
+      "date": "2028-04-11",
+      "country": "VN",
+      "place": "Ninh Binh"
+    },
+    {
+      "date": "2028-04-12",
+      "country": "VN",
+      "place": "Ninh Binh"
+    },
+    {
+      "date": "2028-04-13",
+      "country": "VN",
+      "place": "Ninh Binh"
+    },
+    {
+      "date": "2028-04-14",
+      "country": "VN",
+      "place": "Sapa"
+    },
+    {
+      "date": "2028-04-15",
+      "country": "VN",
+      "place": "Sapa"
+    },
+    {
+      "date": "2028-04-16",
+      "country": "VN",
+      "place": "Sapa"
+    },
+    {
+      "date": "2028-04-17",
+      "country": "VN",
+      "place": "Sapa → Ban Gioc"
+    },
+    {
+      "date": "2028-04-18",
+      "country": "VN",
+      "place": "Ban Gioc"
+    },
+    {
+      "date": "2028-04-19",
+      "country": "VN",
+      "place": "Ban Gioc"
+    },
+    {
+      "date": "2028-04-20",
+      "country": "VN",
+      "place": null
+    },
+    {
+      "date": "2028-04-21",
+      "country": "VN",
+      "place": null
+    },
+    {
+      "date": "2028-04-22",
+      "country": "VN",
+      "place": "Cao Bang → Hanoi"
+    },
+    {
+      "date": "2028-04-23",
+      "country": "TH",
+      "place": "Chiang Rai"
+    },
+    {
+      "date": "2028-04-24",
+      "country": "LA",
+      "place": "Huay Xai"
+    },
+    {
+      "date": "2028-04-25",
+      "country": "LA",
+      "place": "Gibbon Experience"
+    },
+    {
+      "date": "2028-04-26",
+      "country": "LA",
+      "place": "Gibbon Experience"
+    },
+    {
+      "date": "2028-04-27",
+      "country": "LA",
+      "place": "Slow boat (Pakbeng)"
+    },
+    {
+      "date": "2028-04-28",
+      "country": "LA",
+      "place": "Slow boat → Luang Prabang"
+    },
+    {
+      "date": "2028-04-29",
+      "country": "LA",
+      "place": "Luang Prabang"
+    },
+    {
+      "date": "2028-04-30",
+      "country": "LA",
+      "place": "Luang Prabang"
+    },
+    {
+      "date": "2028-05-01",
+      "country": "LA",
+      "place": "Luang Prabang"
+    },
+    {
+      "date": "2028-05-02",
+      "country": "LA",
+      "place": "Nong Khiaw"
+    },
+    {
+      "date": "2028-05-03",
+      "country": "LA",
+      "place": "Nong Khiaw"
+    },
+    {
+      "date": "2028-05-04",
+      "country": "LA",
+      "place": "Nong Khiaw"
+    },
+    {
+      "date": "2028-05-05",
+      "country": "LA",
+      "place": "Vang Vieng"
+    },
+    {
+      "date": "2028-05-06",
+      "country": "LA",
+      "place": "Vang Vieng"
+    },
+    {
+      "date": "2028-05-07",
+      "country": "LA",
+      "place": "Vientiane"
+    },
+    {
+      "date": "2028-05-08",
+      "country": "LA",
+      "place": "Vientiane → Thakhek"
+    },
+    {
+      "date": "2028-05-09",
+      "country": "LA",
+      "place": "Thakhek Loop"
+    },
+    {
+      "date": "2028-05-10",
+      "country": "LA",
+      "place": "Thakhek Loop"
+    },
+    {
+      "date": "2028-05-11",
+      "country": "LA",
+      "place": "Thakhek Loop"
+    },
+    {
+      "date": "2028-05-12",
+      "country": "LA",
+      "place": "Thakhek Loop"
+    },
+    {
+      "date": "2028-05-13",
+      "country": "LA",
+      "place": "Thakhek Loop"
+    },
+    {
+      "date": "2028-05-14",
+      "country": "LA",
+      "place": "Night bus to Pakse"
+    },
+    {
+      "date": "2028-05-15",
+      "country": "LA",
+      "place": "Pakse"
+    },
+    {
+      "date": "2028-05-16",
+      "country": "LA",
+      "place": "Night bus Pakse → Vientiane"
+    },
+    {
+      "date": "2028-05-17",
+      "country": "PH",
+      "place": "Manila"
+    },
+    {
+      "date": "2028-05-18",
+      "country": "PH",
+      "place": "Manila"
+    },
+    {
+      "date": "2028-05-19",
+      "country": "PH",
+      "place": "Manila"
+    },
+    {
+      "date": "2028-05-20",
+      "country": "PH",
+      "place": "Coron"
+    },
+    {
+      "date": "2028-05-21",
+      "country": "PH",
+      "place": "Coron"
+    },
+    {
+      "date": "2028-05-22",
+      "country": "PH",
+      "place": "Coron"
+    },
+    {
+      "date": "2028-05-23",
+      "country": "PH",
+      "place": "Coron"
+    },
+    {
+      "date": "2028-05-24",
+      "country": "PH",
+      "place": "Coron"
+    },
+    {
+      "date": "2028-05-25",
+      "country": "PH",
+      "place": "Coron Island"
+    },
+    {
+      "date": "2028-05-26",
+      "country": "PH",
+      "place": "Coron Island"
+    },
+    {
+      "date": "2028-05-27",
+      "country": "PH",
+      "place": "Cebu"
+    },
+    {
+      "date": "2028-05-28",
+      "country": "PH",
+      "place": "Cebu"
+    },
+    {
+      "date": "2028-05-29",
+      "country": "PH",
+      "place": "Cebu → Bohol"
+    },
+    {
+      "date": "2028-05-30",
+      "country": "PH",
+      "place": "Bohol"
+    },
+    {
+      "date": "2028-05-31",
+      "country": "PH",
+      "place": "Bohol"
+    },
+    {
+      "date": "2028-06-01",
+      "country": "PH",
+      "place": "Bohol"
+    },
+    {
+      "date": "2028-06-02",
+      "country": "PH",
+      "place": "Bohol"
+    },
+    {
+      "date": "2028-06-03",
+      "country": "PH",
+      "place": "Bohol → Siquijor"
+    },
+    {
+      "date": "2028-06-04",
+      "country": "PH",
+      "place": "Siquijor"
+    },
+    {
+      "date": "2028-06-05",
+      "country": "PH",
+      "place": "Siquijor"
+    },
+    {
+      "date": "2028-06-06",
+      "country": "PH",
+      "place": "Siquijor → Manila"
+    },
+    {
+      "date": "2028-06-07",
+      "country": "CN",
+      "place": "Manila → Xiamen"
+    },
+    {
+      "date": "2028-06-08",
+      "country": "NL",
+      "place": "Xiamen → Amsterdam"
+    }
+  ],
+  "demo": true
+}

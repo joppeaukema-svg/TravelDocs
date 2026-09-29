@@ -1,0 +1,75 @@
+{
+  "country": "LA",
+  "iso3": "LAO",
+  "name": "Laos",
+  "timeZone": "Asia/Vientiane",
+  "currency": "LAK",
+  "adviceUrl": "https://www.nederlandwereldwijd.nl/reisadvies/laos",
+  "emergencyNumbers": [
+    {
+      "id": "la-emergency",
+      "label": "General emergency",
+      "number": "1191",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "la-ambulance",
+      "label": "Ambulance",
+      "number": "1623",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "la-fire",
+      "label": "Fire",
+      "number": "1190",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "la-police",
+      "label": "Police",
+      "number": "212703",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-29",
+      "note": "Listed in the Dutch travel advice without an area code; check how to dial it from a mobile phone.",
+      "unverified": true
+    },
+    {
+      "id": "la-tourist-police-vientiane",
+      "label": "Tourist police (Vientiane)",
+      "number": "251128",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-29",
+      "note": "Listed in the Dutch travel advice without an area code; check how to dial it from a mobile phone.",
+      "unverified": true
+    }
+  ],
+  "facts": []
+}

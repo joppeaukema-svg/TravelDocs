@@ -1,0 +1,35 @@
+{
+  "country": "JP",
+  "iso3": "JPN",
+  "name": "Japan",
+  "timeZone": "Asia/Tokyo",
+  "currency": "JPY",
+  "adviceUrl": "https://www.nederlandwereldwijd.nl/reisadvies/japan",
+  "emergencyNumbers": [
+    {
+      "id": "jp-police",
+      "label": "Police",
+      "number": "110",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "jp-ambulance-fire",
+      "label": "Ambulance and fire",
+      "number": "119",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    }
+  ],
+  "facts": []
+}

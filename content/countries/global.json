@@ -1,0 +1,32 @@
+{
+  "country": "GLOBAL",
+  "emergencyNumbers": [
+    {
+      "id": "nl-bz-24-7",
+      "label": "Dutch Ministry of Foreign Affairs (24/7)",
+      "number": "+31 247 247 247",
+      "kind": "phone",
+      "sources": [
+        {
+          "title": "Contact met het 24/7 BZ Contactcenter — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/contact/contact-met-het-24-7-bz-contactcenter"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "nl-bz-whatsapp",
+      "label": "Dutch Ministry of Foreign Affairs (WhatsApp)",
+      "number": "+31 857 737 400",
+      "kind": "whatsapp",
+      "sources": [
+        {
+          "title": "Contact met het 24/7 BZ Contactcenter — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/contact/contact-met-het-24-7-bz-contactcenter"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    }
+  ],
+  "facts": []
+}

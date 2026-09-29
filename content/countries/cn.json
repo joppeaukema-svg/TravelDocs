@@ -1,0 +1,60 @@
+{
+  "country": "CN",
+  "iso3": "CHN",
+  "name": "China",
+  "timeZone": "Asia/Shanghai",
+  "currency": "CNY",
+  "adviceUrl": "https://www.nederlandwereldwijd.nl/reisadvies/china",
+  "emergencyNote": "Little English is spoken on emergency lines.",
+  "emergencyNumbers": [
+    {
+      "id": "cn-police",
+      "label": "Police",
+      "number": "110",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "cn-ambulance",
+      "label": "Ambulance",
+      "number": "120",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "cn-fire",
+      "label": "Fire",
+      "number": "119",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    },
+    {
+      "id": "cn-traffic",
+      "label": "Traffic accidents",
+      "number": "122",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-29"
+    }
+  ],
+  "facts": []
+}
