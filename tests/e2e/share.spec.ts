@@ -16,8 +16,9 @@ test('share the trip with a travel companion and merge their changes back', asyn
   await page.getByRole('button', { name: 'Create a trip code' }).click();
   const code = (await page.getByTestId('trip-code').textContent())!.trim();
   expect(code).toMatch(/^\w{4}-\w{4}-\w{4}$/);
+  await page.getByRole('button', { name: 'Prepare trip to send' }).click();
   const sent = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Send trip' }).click();
+  await page.getByRole('button', { name: 'Send trip file' }).click();
   const fileA = testInfo.outputPath('from-a.tcshare');
   await (await sent).saveAs(fileA);
   expect(readFileSync(fileA).toString('latin1')).not.toContain('Tokashiki');
@@ -46,8 +47,9 @@ test('share the trip with a travel companion and merge their changes back', asyn
   await expect(b.getByRole('button', { name: 'Saved' })).toBeVisible();
   await b.goto('/#/trip');
   await expect(b.getByTestId('trip-code')).toHaveText(code);
+  await b.getByRole('button', { name: 'Prepare trip to send' }).click();
   const back = b.waitForEvent('download');
-  await b.getByRole('button', { name: 'Send trip' }).click();
+  await b.getByRole('button', { name: 'Send trip file' }).click();
   const fileB = testInfo.outputPath('from-b.tcshare');
   await (await back).saveAs(fileB);
   await phoneB.close();

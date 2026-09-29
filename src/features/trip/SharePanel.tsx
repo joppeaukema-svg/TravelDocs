@@ -17,7 +17,7 @@ import {
 } from '../../trip/share';
 import { applySharedTrip, getTombstones, loadTrip } from '../../trip/store';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
-import { ShareIcon, UploadIcon } from '../../ui/icons';
+import { DownloadIcon, ShareIcon, UploadIcon } from '../../ui/icons';
 import { Button, Card, ErrorText, inputClass, Notice } from '../../ui/kit';
 
 const pretty = (code: string) => normaliseCode(code).replace(/(.{4})(?=.)/g, '$1-');
@@ -35,20 +35,38 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
   const code = useTripCode();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const [ready, setReady] = useState<{ blob: Blob; name: string } | null>(null);
+  const [sent, setSent] = useState('');
 
-  async function send() {
+  // Two taps on purpose: phones only open the share sheet right after a tap, and
+  // encrypting takes a moment. Tap 1 prepares the file, tap 2 shares it.
+  async function prepare() {
     if (!code) return;
     setBusy(true);
     setError('');
+    setSent('');
     try {
       const trip = await loadTrip();
       if (!trip) return;
-      const blob = await encryptShare(sharePayload(trip, await getTombstones()), code);
-      await shareFile(blob, shareFileName());
+      setReady({ blob: await encryptShare(sharePayload(trip, await getTombstones()), code), name: shareFileName() });
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function send(mode: 'share' | 'download') {
+    if (!ready) return;
+    setError('');
+    try {
+      const result = await shareFile(ready.blob, ready.name, mode);
+      if (result !== 'cancelled') {
+        setSent(result === 'shared' ? 'Sent. Your companion taps “Receive a shared trip”.' : `Saved ${ready.name} — send it to your companion.`);
+        setReady(null);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     }
   }
 
@@ -69,9 +87,21 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
                 {pretty(code)}
               </p>
               <p className="text-sm text-muted">Tell it to your companion in person. It is never sent with the file.</p>
-              <Button variant="primary" className="mt-3 w-full" disabled={busy} onClick={() => void send()}>
-                <ShareIcon /> {busy ? 'Encrypting…' : 'Send trip'}
-              </Button>
+              {ready ? (
+                <div className="mt-3 flex gap-2">
+                  <Button variant="primary" className="flex-1" onClick={() => void send('share')}>
+                    <ShareIcon /> Send trip file
+                  </Button>
+                  <Button className="flex-1" onClick={() => void send('download')}>
+                    <DownloadIcon /> Save file
+                  </Button>
+                </div>
+              ) : (
+                <Button variant="primary" className="mt-3 w-full" disabled={busy} onClick={() => void prepare()}>
+                  <ShareIcon /> {busy ? 'Encrypting…' : 'Prepare trip to send'}
+                </Button>
+              )}
+              {sent && <p className="mt-2 font-bold text-ok">{sent}</p>}
             </>
           ) : (
             <Button variant="primary" className="w-full" onClick={() => void setMeta(META.shareCode, newTripCode())}>
