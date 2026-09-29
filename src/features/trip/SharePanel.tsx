@@ -17,10 +17,10 @@ import {
   WrongTripCodeError,
   type MergeStats,
 } from '../../trip/share';
-import { applySharedTrip, getTombstones, loadTrip } from '../../trip/store';
+import { applySharedTrip, getTombstones, loadTrip, markReceived, markSent, unlinkShare, useShareStatus } from '../../trip/store';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
 import { DownloadIcon, FileIcon, ShareIcon } from '../../ui/icons';
-import { Button, Card, ErrorText, inputClass, Notice } from '../../ui/kit';
+import { Button, Card, ErrorText, inputClass, Notice, Pill } from '../../ui/kit';
 
 const pretty = (code: string) => normaliseCode(code).replace(/(.{4})(?=.)/g, '$1-');
 
@@ -75,6 +75,7 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
       beginExternalPick();
       try {
         await navigator.share({ text: message });
+        await markSent();
         setSent('Sent. Your companion copies the whole message and pastes it under “Receive a shared trip”.');
         return;
       } catch (err) {
@@ -84,7 +85,9 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
       }
     }
     // No share sheet (or it was refused): copy instead.
-    setSent((await copy(message)) ? 'Copied. Paste it into WhatsApp (or any chat) and send it.' : 'Select the text below, copy it and paste it into a chat.');
+    const copied = await copy(message);
+    if (copied) await markSent();
+    setSent(copied ? 'Copied. Paste it into WhatsApp (or any chat) and send it.' : 'Select the text below, copy it and paste it into a chat.');
   }
 
   if (code === undefined) return null;
@@ -99,18 +102,19 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
         <div className="mt-3">
           {code ? (
             <>
-              <p className="text-sm font-bold uppercase tracking-wide text-muted">Trip code</p>
-              <p className="font-mono text-2xl font-medium tracking-wider" data-testid="trip-code">
-                {pretty(code)}
-              </p>
-              <p className="text-sm text-muted">Tell it to your companion in person. It is never sent with the trip.</p>
+              <LinkStatus code={code} />
               {message ? (
                 <>
                   <div className="mt-3 flex gap-2">
                     <Button variant="primary" className="flex-1" onClick={() => void sendMessage()}>
                       <ShareIcon /> Send as message
                     </Button>
-                    <Button className="flex-1" onClick={() => void copy(message).then((ok) => setSent(ok ? 'Copied. Paste it into a chat and send it.' : 'Copying failed — select the text below and copy it.'))}>
+                    <Button className="flex-1" onClick={() =>
+                        void copy(message).then(async (ok) => {
+                          if (ok) await markSent();
+                          setSent(ok ? 'Copied. Paste it into a chat and send it.' : 'Copying failed — select the text below and copy it.');
+                        })
+                      }>
                       Copy
                     </Button>
                   </div>
@@ -123,7 +127,7 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
                     onFocus={(e) => e.currentTarget.select()}
                     className={`${inputClass} mt-2 font-mono text-xs`}
                   />
-                  <Button variant="ghost" className="w-full" onClick={() => void shareFile(new Blob([message], { type: 'text/plain' }), shareFileName(), 'download')}>
+                  <Button variant="ghost" className="w-full" onClick={() => void shareFile(new Blob([message], { type: 'text/plain' }), shareFileName(), 'download').then(() => markSent())}>
                     <DownloadIcon /> Save as a text file instead
                   </Button>
                 </>
@@ -167,6 +171,7 @@ function ReceiveTrip({ knownCode }: { knownCode: string | null }) {
       const { payload, createdAt } = await decryptShare(bytes, useCode);
       const stats = await applySharedTrip(payload);
       await setMeta(META.shareCode, normaliseCode(useCode));
+      await markReceived(createdAt);
       setDone({ stats, sentAt: createdAt });
       setFile(null);
       setPasted('');
@@ -262,5 +267,48 @@ function ReceiveTrip({ knownCode }: { knownCode: string | null }) {
         </div>
       )}
     </form>
+  );
+}
+
+function LinkStatus({ code }: { code: string }) {
+  const status = useShareStatus();
+  return (
+    <div data-testid="share-status">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-sm font-bold uppercase tracking-wide text-muted">Trip code</p>
+        <Pill tone="ok">Linked</Pill>
+      </div>
+      <p className="font-mono text-2xl font-medium tracking-wider" data-testid="trip-code">
+        {pretty(code)}
+      </p>
+      <p className="text-sm text-muted">
+        Both phones keep this code. It's not a live connection: after a change, send the trip again and your companion
+        receives it.
+      </p>
+      <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 text-sm">
+        <dt className="text-muted">Last sent</dt>
+        <dd>{status?.lastSentAt ? formatDateTime(status.lastSentAt) : 'not yet'}</dd>
+        <dt className="text-muted">Last received</dt>
+        <dd>
+          {status?.lastReceivedAt
+            ? `${formatDateTime(status.lastReceivedAt)}${status.receivedShareAt ? ` (sent ${formatDateTime(status.receivedShareAt)})` : ''}`
+            : 'not yet'}
+        </dd>
+      </dl>
+      {!!status?.unsent && (
+        <p className="mt-2 font-bold text-warn" data-testid="unsent">
+          {plural(status.unsent, 'change')} on this phone not sent yet.
+        </p>
+      )}
+      <button
+        type="button"
+        className="mt-1 min-h-10 text-sm font-bold text-muted underline"
+        onClick={async () => {
+          if (window.confirm('Unlink? This phone forgets the trip code. Your trip stays; you can link again with the code.')) await unlinkShare();
+        }}
+      >
+        Unlink
+      </button>
+    </div>
   );
 }

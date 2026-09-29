@@ -99,6 +99,8 @@ export const META = {
   tripDeleted: 'tripDeleted',
   /** The trip code shared with a travel companion. */
   shareCode: 'shareCode',
+  /** { lastSentAt, lastReceivedAt, receivedShareAt, unsent } for the Travelling together status. */
+  shareStatus: 'shareStatus',
 } as const;
 
 /** Deletes every row in every table (the schema itself stays). */

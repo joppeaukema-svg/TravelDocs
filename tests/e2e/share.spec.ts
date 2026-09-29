@@ -45,11 +45,22 @@ test('share the trip with a travel companion and merge their changes back', asyn
   await expect(b.getByRole('button', { name: 'Saved' })).toBeVisible();
   await b.goto('/#/trip');
   await expect(b.getByTestId('trip-code')).toHaveText(code);
+  // The status shows the link, what was received and what hasn't been sent yet.
+  const status = b.getByTestId('share-status');
+  await expect(status.getByText('Linked')).toBeVisible();
+  await expect(status.getByText('Last received')).toBeVisible();
+  await expect(status.getByText('not yet')).toHaveCount(1); // last sent
+  await expect(b.getByTestId('unsent')).toHaveText('1 change on this phone not sent yet.');
+  await b.goto('/#/today');
+  await expect(b.getByText('1 trip change not shared with your travel companion')).toBeVisible();
+  await b.goto('/#/trip');
   await b.getByRole('button', { name: 'Prepare trip to send' }).click();
   const back = b.waitForEvent('download');
   await b.getByRole('button', { name: 'Save as a text file instead' }).click();
   const fileB = testInfo.outputPath('from-b.txt');
   await (await back).saveAs(fileB);
+  await expect(b.getByTestId('unsent')).toHaveCount(0);
+  await expect(status.getByText('not yet')).toHaveCount(0);
   await phoneB.close();
 
   // Phone A merges: B's booking arrives, A's personal booking is still there.

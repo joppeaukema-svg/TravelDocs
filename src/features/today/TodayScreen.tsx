@@ -16,7 +16,7 @@ import { addDays } from '../../rules/itinerary';
 import { itemStatus } from '../../rules/status';
 import { useCurrentCountry, useRules } from '../../rules/useRules';
 import { BOOKING_TYPE_LABELS, bookingLabel } from '../../trip/schema';
-import { usePrepStates, useTrip } from '../../trip/store';
+import { usePrepStates, useShareStatus, useTrip } from '../../trip/store';
 import { formatLocal, toInstant, zoneCity } from '../../trip/time';
 import { CheckCard, PrepItemRow, StayCard } from '../trip/parts';
 
@@ -118,6 +118,8 @@ function TripToday() {
   const rules = useRules();
   const states = usePrepStates();
   const now = useNow();
+  const shareStatus = useShareStatus();
+  const linked = useLiveQuery(async () => !!(await db.meta.get(META.shareCode)), []);
   if (rules === undefined) return null;
   if (rules === null) {
     return (
@@ -140,9 +142,17 @@ function TripToday() {
   const soonLimit = addDays(today, 7);
   const soon = result.prep.filter((p) => itemStatus(p, states.get(p.id), today) === 'upcoming' && p.remindOn <= soonLimit);
   const important = result.checks.filter((c) => c.severity !== 'info');
+  const unsent = shareStatus?.unsent ?? 0;
 
   return (
     <>
+      {linked && unsent > 0 && (
+        <div className="mt-3">
+          <Notice title={`${plural(unsent, 'trip change')} not shared with your travel companion`} action={<LinkButton href="#/trip">Send trip</LinkButton>}>
+            Send the trip again so both phones have the same plan.
+          </Notice>
+        </div>
+      )}
       {current && (
         <>
           <SectionTitle>Stay</SectionTitle>
