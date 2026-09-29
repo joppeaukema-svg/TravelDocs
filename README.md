@@ -72,9 +72,10 @@ Google Calendar also updates events when you re-import into the same calendar.
 
 Two people each use the app on their own phone and share the trip, without accounts or a server:
 
-1. One of you: **Trip → Travelling together → Create a trip code**, then **Prepare trip to send** → **Send trip file** (AirDrop, messenger, email).
-   Tell the other person the trip code in person — it is never sent with the file.
-2. The other: install the app, **Trip → Receive a shared trip**, pick the file, type the code.
+1. One of you: **Trip → Travelling together → Create a trip code**, then **Prepare trip to send** → **Send as
+   message** (WhatsApp, Signal, iMessage, email). The trip travels as an encrypted block of text, so chat apps don't
+   mangle it. Tell the other person the trip code in person — it is never sent with the trip.
+2. The other: install the app, copy the whole message, **Trip → Receive a shared trip**, paste it, type the code.
 3. After changes, either of you sends again (Prepare → Send); the other receives it the same way. The newest edit of each stay or
    booking wins, and deletions carry over.
 
