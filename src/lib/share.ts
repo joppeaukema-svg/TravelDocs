@@ -35,7 +35,9 @@ export async function shareFile(blob: Blob, name: string, mode: 'share' | 'downl
       return 'shared';
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') return 'cancelled';
-      throw err;
+      // NotAllowedError: the browser refused the share sheet (e.g. iOS when too much time passed
+      // since the tap). Saving the file still works, so fall back to a download.
+      if (!(err instanceof DOMException && err.name === 'NotAllowedError')) throw err;
     } finally {
       endExternalPick();
     }
