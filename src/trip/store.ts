@@ -15,6 +15,48 @@ function stable(v: unknown): string {
   );
 }
 
+// --- Share status -----------------------------------------------------------
+
+export interface ShareStatus {
+  lastSentAt?: string;
+  lastReceivedAt?: string;
+  /** When the companion made the share that was last received. */
+  receivedShareAt?: string;
+  /** Edits on this phone since the last send. */
+  unsent: number;
+}
+
+export async function getShareStatus(): Promise<ShareStatus> {
+  return { unsent: 0, ...((await getMeta(META.shareStatus)) as Partial<ShareStatus> | undefined) };
+}
+
+async function updateShareStatus(patch: Partial<ShareStatus>): Promise<void> {
+  await setMeta(META.shareStatus, { ...(await getShareStatus()), ...patch });
+}
+
+/** A shared edit happened on this phone: counts until the next send. */
+async function markUnsent(): Promise<void> {
+  const s = await getShareStatus();
+  await updateShareStatus({ unsent: s.unsent + 1 });
+}
+
+export async function markSent(at = now()): Promise<void> {
+  await updateShareStatus({ lastSentAt: at, unsent: 0 });
+}
+
+export async function markReceived(shareCreatedAt: string): Promise<void> {
+  await updateShareStatus({ lastReceivedAt: now(), receivedShareAt: shareCreatedAt });
+}
+
+export function useShareStatus(): ShareStatus | undefined {
+  return useLiveQuery(getShareStatus, []);
+}
+
+/** Forget the trip code and the share history (the trip itself stays). */
+export async function unlinkShare(): Promise<void> {
+  await Promise.all([db.meta.delete(META.shareCode), db.meta.delete(META.shareStatus)]);
+}
+
 export async function getTombstones(): Promise<Tombstones> {
   return ((await getMeta(META.tripDeleted)) as Tombstones | undefined) ?? {};
 }
@@ -53,6 +95,7 @@ export async function replaceTrip(data: TripData): Promise<void> {
       ...before.days.filter((d) => !days.has(d.date)).map((d) => `day:${d.date}`),
     ]);
   }
+  await markUnsent();
 }
 
 /** Merges a travel companion's shared trip into this phone's. */
@@ -72,7 +115,7 @@ export async function applySharedTrip(payload: SharePayload): Promise<MergeStats
 export async function deleteTrip(): Promise<void> {
   await db.transaction('rw', db.stays, db.bookings, db.days, db.meta, db.prepState, async () => {
     await Promise.all([db.stays.clear(), db.bookings.clear(), db.days.clear(), db.prepState.clear()]);
-    await Promise.all([META.trip, META.tripDeleted].map((k) => db.meta.delete(k)));
+    await Promise.all([META.trip, META.tripDeleted, META.shareStatus].map((k) => db.meta.delete(k)));
   });
 }
 
@@ -100,6 +143,7 @@ export async function saveStay(stay: Stay): Promise<void> {
   const { stampedUntil: _c, updatedAt: _d, ...prev } = before ?? ({} as Stay);
   const sharedChange = !before || stable(Stay.parse({ ...next })) !== stable(Stay.parse({ ...prev }));
   await db.stays.put(Stay.parse({ ...stay, updatedAt: sharedChange ? now() : before?.updatedAt }));
+  if (sharedChange) await markUnsent();
 }
 
 /** Saves a booking. Changing only linked documents or the private note doesn't count as a shared edit. */
@@ -111,17 +155,23 @@ export async function saveBooking(booking: Booking): Promise<void> {
   };
   const sharedChange = !before || strip(Booking.parse(booking)) !== strip(before);
   await db.bookings.put(Booking.parse({ ...booking, updatedAt: sharedChange ? now() : before?.updatedAt }));
+  // Edits to a "just me" booking that stays "just me" aren't shared.
+  if (sharedChange && !(booking.who === 'me' && (!before || before.who === 'me'))) await markUnsent();
 }
 
 export async function deleteBooking(id: string): Promise<void> {
   const b = await db.bookings.get(id);
   await db.bookings.delete(id);
-  if (b && b.who !== 'me') await addTombstones([`booking:${id}`]);
+  if (b && b.who !== 'me') {
+    await addTombstones([`booking:${id}`]);
+    await markUnsent();
+  }
 }
 
 export async function updateTripMeta(patch: Partial<TripMeta>): Promise<void> {
   const current = TripMeta.parse(await getMeta(META.trip));
   await setMeta(META.trip, TripMeta.parse({ ...current, ...patch, updatedAt: now() }));
+  await markUnsent();
 }
 
 export async function setPrepState(id: string, status: PrepStateRow['status'] | null, snoozedUntil?: string) {
