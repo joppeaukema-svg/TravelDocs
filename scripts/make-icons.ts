@@ -13,7 +13,16 @@ const mark = `
 const rounded = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#16213A"/>${mark}</svg>`;
 const fullBleed = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" fill="#16213A"/>${mark}</svg>`;
 
+// Notification badge (Android status bar): only the shape counts, drawn white on transparent.
+// Bolder than the icon and without the dotted ring, so it reads at 24 px.
+const badge = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <circle cx="256" cy="256" r="190" fill="none" stroke="#fff" stroke-width="44"/>
+  <path d="M160 316 C 214 186, 298 352, 352 204" fill="none" stroke="#fff" stroke-width="44" stroke-linecap="round"/>
+  <circle cx="160" cy="316" r="40" fill="#fff"/>
+  <circle cx="352" cy="204" r="40" fill="#fff"/></svg>`;
+
 const outputs: { file: string; svg: string; size: number }[] = [
+  { file: 'public/icons/badge-96.png', svg: badge, size: 96 },
   { file: 'public/icons/icon-192.png', svg: rounded, size: 192 },
   { file: 'public/icons/icon-512.png', svg: rounded, size: 512 },
   { file: 'public/icons/icon-maskable-512.png', svg: fullBleed, size: 512 },

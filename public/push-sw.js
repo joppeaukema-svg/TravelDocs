@@ -12,7 +12,8 @@ self.addEventListener('push', (event) => {
     self.registration.showNotification(data.title || 'Travel Companion', {
       body: data.body || '',
       icon: 'icons/icon-192.png',
-      badge: 'icons/icon-192.png',
+      // Android draws the badge as a silhouette from its transparency: a white mark, not the full icon.
+      badge: 'icons/badge-96.png',
       tag: url,
       data: { url },
     }),
