@@ -12,7 +12,7 @@ import { FactList, UnverifiedBadge } from '../content/Facts';
 import { CallButton } from '../emergency/CallButton';
 import { PhraseList } from '../phrases/PhrasesScreen';
 import { SourceLinks } from '../trip/parts';
-import { MiniConverter } from '../money/MoneyScreen';
+import { MiniConverter } from '../money/Converter';
 import { AdviceBadge, AdvicePanel, ColourChips, Representations, useCountryAdvice } from './LiveAdvice';
 import { useAdvice } from '../../live/useLive';
 import type { z } from 'zod';

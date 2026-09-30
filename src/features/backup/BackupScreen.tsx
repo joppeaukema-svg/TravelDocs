@@ -17,7 +17,7 @@ import { formatBytes, formatDateTime } from '../../lib/format';
 import { canShareFiles, shareFile } from '../../lib/share';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
 import { DownloadIcon, ShareIcon, UploadIcon } from '../../ui/icons';
-import { Button, Card, ErrorText, inputClass, Notice, PageTitle, SectionTitle } from '../../ui/kit';
+import { Button, Card, ErrorText, inputClass, LinkButton, Notice, PageTitle, SectionTitle } from '../../ui/kit';
 import { VaultGate } from '../vault/VaultGate';
 
 export function BackupScreen() {
@@ -40,6 +40,14 @@ export function BackupScreen() {
 
       <SectionTitle>Restore</SectionTitle>
       <RestorePanel />
+
+      <SectionTitle>On paper</SectionTitle>
+      <Card>
+        <p>Emergency numbers, insurance, embassies and booking references on one page — print it or save it as a PDF.</p>
+        <LinkButton href="#/print" className="mt-3 w-full">
+          Paper backup
+        </LinkButton>
+      </Card>
     </>
   );
 }

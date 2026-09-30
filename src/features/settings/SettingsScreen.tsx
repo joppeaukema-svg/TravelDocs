@@ -18,6 +18,7 @@ import {
   TextField,
 } from '../../ui/kit';
 import { vaultSession } from '../../vault/session';
+import { DemoCard } from '../../demo/DemoBanner';
 import { changePassphrase } from '../../vault/vault';
 
 const LOCK_OPTIONS = [1, 2, 5, 10, 15, 30].map((m) => ({ value: String(m), label: `After ${m} min without use` }));
@@ -79,6 +80,9 @@ export function SettingsScreen() {
 
       <SectionTitle>Storage</SectionTitle>
       <StoragePanel />
+
+      <SectionTitle>Demo</SectionTitle>
+      <DemoCard />
 
       <SectionTitle>Data</SectionTitle>
       <Card>

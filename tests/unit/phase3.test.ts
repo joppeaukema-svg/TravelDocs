@@ -4,7 +4,7 @@ import { allCountries, factById, globalContent, packingTemplate, phrasebook } fr
 import { PackingFile, PhraseLang, PhrasesFile, SourcesFile } from '../../src/content/schema';
 import { AdviceFile, RatesFile, type Advice } from '../../src/live/schema';
 import { adviceState, changedParts, partHashes, SUMMARY_PART, type Seen } from '../../src/live/useLive';
-import { convert } from '../../src/features/money/MoneyScreen';
+import { convert } from '../../src/features/money/Converter';
 import { currentAndNext, describe as describeWeather, stops } from '../../src/weather/weather';
 import { rulesContent } from '../../src/rules/content';
 import type { TripData } from '../../src/trip/io';

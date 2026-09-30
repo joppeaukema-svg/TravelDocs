@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import {
   DownloadIcon,
+  FileIcon,
   GearIcon,
   GlobeIcon,
   HeartIcon,
@@ -24,10 +25,11 @@ export function MoreScreen() {
         <RowLink href="#/personal" icon={<PersonIcon />} title="Personal details" sub="ICE contacts, medical info" />
         <RowLink href="#/emergency" icon={<PhoneIcon />} title="Emergency card" sub="Readable while locked" />
         <RowLink href="#/backup" icon={<DownloadIcon />} title="Backup & restore" sub="One encrypted file" />
+        <RowLink href="#/print" icon={<FileIcon />} title="Paper backup" sub="Print or save as PDF" />
         <RowLink href="#/settings" icon={<GearIcon />} title="Settings" sub="Lock, appearance, storage" />
       </Card>
       <Card className="mt-4 py-1">
-        <RowLink href="#/money" icon={<WalletIcon />} title="Money" sub="Currency converter, offline" />
+        <RowLink href="#/money" icon={<WalletIcon />} title="Money" sub="Expenses, daily budgets, converter" />
         <RowLink href="#/phrases" icon={<SpeechIcon />} title="Phrases" sub="Key phrases and “show this” cards" />
         <RowLink href="#/weather" icon={<GlobeIcon />} title="Weather" sub="7-day forecast, seasons" />
         <RowLink href="#/sources" icon={<ListIcon />} title="Sources" sub="Where every fact comes from" />

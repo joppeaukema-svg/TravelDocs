@@ -121,7 +121,7 @@ export function useForecasts(list: Stop[]): (Forecast | undefined)[] | undefined
   return useLiveQuery(async () => {
     const store = await readStore();
     return list.map((s) => store[keyOf(s)]);
-  }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [key]);
 }
 
 export async function clearForecasts(): Promise<void> {

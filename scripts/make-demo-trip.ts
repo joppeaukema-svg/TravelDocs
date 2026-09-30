@@ -9,29 +9,13 @@
 import { randomInt } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { Temporal } from 'temporal-polyfill';
+import { shiftDates } from '../src/trip/shift';
 
 const [input = 'my-trip.json', output = 'demo/trip.demo.json'] = process.argv.slice(2);
 const days = randomInt(10, 81) * 7;
-const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const DROP = new Set(['note', 'entryNote', 'private']);
 
-function transform(value: unknown): unknown {
-  if (typeof value === 'string' && DATE.test(value)) {
-    return Temporal.PlainDate.from(value).add({ days }).toString();
-  }
-  if (Array.isArray(value)) return value.map(transform);
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(
-      Object.entries(value)
-        .filter(([k]) => !DROP.has(k))
-        .map(([k, v]) => [k, transform(v)]),
-    );
-  }
-  return value;
-}
-
-const trip = transform(JSON.parse(readFileSync(input, 'utf8'))) as Record<string, unknown>;
+const trip = shiftDates(JSON.parse(readFileSync(input, 'utf8')), days, DROP) as Record<string, unknown>;
 const demo = {
   ...trip,
   demo: true,

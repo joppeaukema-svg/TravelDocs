@@ -53,7 +53,7 @@ test('country guide: tabs, live advice with change highlighting, embassies, sour
 });
 
 test('money: converter with downloaded rates and your own rate', async ({ page }) => {
-  await page.goto('/#/money');
+  await page.goto('/#/money/convert');
   await expect(page.locator('[data-currency=THB]')).not.toHaveText('—');
   await page.getByLabel('Amount').fill('10');
   await page.getByRole('listitem').filter({ hasText: 'Thai baht' }).first().waitFor();

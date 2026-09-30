@@ -10,7 +10,7 @@ export function UpdatePrompt() {
 
   if (!needRefresh) return null;
   return (
-    <div className="fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 px-4">
+    <div className="no-print fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 px-4">
       <div className="mx-auto flex max-w-xl items-center gap-3 rounded-2xl border border-line bg-card p-3 shadow-lg">
         <p className="flex-1">A new version is ready.</p>
         <Button variant="ghost" onClick={() => setNeedRefresh(false)}>

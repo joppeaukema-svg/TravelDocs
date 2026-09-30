@@ -116,3 +116,42 @@
 @utility safe-bottom {
   padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
 }
+
+/* Paper backup and anything else printed: black on white, no app chrome. */
+@media print {
+  :root,
+  :root[data-theme='dark'],
+  :root[data-theme='system'] {
+    --color-paper: #fff;
+    --color-card: #fff;
+    --color-sunk: #fff;
+    --color-ink: #000;
+    --color-muted: #333;
+    --color-line: #999;
+    --color-accent: #000;
+    color-scheme: light;
+  }
+  html,
+  body {
+    background: #fff;
+    font-size: 11pt;
+  }
+  .no-print {
+    display: none !important;
+  }
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  section,
+  tr {
+    break-inside: avoid;
+  }
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+  @page {
+    margin: 12mm;
+  }
+}

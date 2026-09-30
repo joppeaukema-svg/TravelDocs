@@ -21,6 +21,7 @@ import { formatLocal, toInstant, zoneCity } from '../../trip/time';
 import { CheckCard, PrepItemRow, StayCard } from '../trip/parts';
 import { WeatherCard } from '../weather/WeatherScreen';
 import { AdviceChanges } from './AdviceChanges';
+import { DemoCard } from '../../demo/DemoBanner';
 
 const HOME_TZ = 'Europe/Amsterdam';
 
@@ -318,6 +319,11 @@ function SetupSteps() {
         <p className="mt-2 text-sm text-muted">
           iPhone: Safari → Share → Add to Home Screen. Android: Chrome menu → Add to Home screen / Install app.
         </p>
+      )}
+      {vault === 'none' && (
+        <div className="mt-4">
+          <DemoCard />
+        </div>
       )}
     </>
   );

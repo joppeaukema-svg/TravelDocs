@@ -13,7 +13,7 @@ export function Header({ emergencyActive }: { emergencyActive: boolean }) {
   const now = useNow();
 
   return (
-    <header className="safe-top sticky top-0 z-30 border-b border-line bg-paper/92 backdrop-blur">
+    <header className="no-print safe-top sticky top-0 z-30 border-b border-line bg-paper/92 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-xl items-center gap-2 px-4">
         <a href="#/today" className="flex min-w-0 items-center gap-2 text-ink no-underline" aria-label="Today">
           {country ? (
