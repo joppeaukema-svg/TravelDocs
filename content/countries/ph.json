@@ -209,20 +209,6 @@
       "verifiedAt": "2026-09-30"
     },
     {
-      "id": "ph-emergency-info",
-      "country": "PH",
-      "topic": "emergency",
-      "title": "Emergency numbers",
-      "body": "911 (ambulance and fire), police 117.",
-      "sources": [
-        {
-          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
-          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
-        }
-      ],
-      "verifiedAt": "2026-09-30"
-    },
-    {
       "id": "ph-hospitals",
       "country": "PH",
       "topic": "health",

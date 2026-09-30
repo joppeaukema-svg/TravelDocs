@@ -4,13 +4,17 @@ An offline-first travel companion for one long trip: documents, bookings, visas,
 place, checked against each country's entry rules and linked to official sources. It is an installable web app
 (PWA): no app store, no account, no server holding your data.
 
-**Status:** Phase 2 — on top of phase 1 (offline shell, encrypted vault, documents, insurance, emergency card, backup):
-trip import/export, stays with counters, time-zone-aware bookings, timeline with gap detection, the rules engine
-(section 7 of the brief, 14 rules), prep checklists and the `.ics` calendar export with alarms.
+**Status:** Phase 3 — country guides with sources, the live Dutch travel advice (with change highlighting) and
+embassies, currency converter, weather, phrasebook with "show this" cards and a packing list. On top of phase 2 (trip
+import, rules engine, prep checklists, `.ics` reminders) and phase 1 (offline shell, encrypted vault, documents,
+insurance, emergency card, backup).
 
 ## Privacy
 
 - Everything you enter stays on the phone, in the browser's IndexedDB. Nothing is sent anywhere.
+- The app downloads the travel advice and exchange rates from its own site (they're published with it daily), so
+  those requests say nothing about you. **Weather is off by default**: turning it on sends the names of your current
+  and next stop — no dates, nothing else — to Open-Meteo.
 - **Vault:** document titles, numbers, notes and files, personal and medical details and insurance details are
   encrypted with AES-256-GCM. The key is random; it's wrapped with a key derived from your passphrase
   (PBKDF2-SHA256, 600,000 iterations) and only ever unwrapped into memory. The vault locks after 5 minutes without use
@@ -86,6 +90,27 @@ vault (documents, passport, insurance, personal details), the emergency card, pr
 stamped in your passport, documents linked to a booking, bookings marked **Just me** and each booking's **private
 note**.
 
+## Country guides and live data
+
+Countries → a country has tabs for entry and forms, safety and the live advice, emergency (numbers and the Dutch
+embassy or consulates), health, money, transport, connectivity, laws and culture, phrases, apps and sources. Every
+fact shows its sources and the date it was checked; facts that only a traveller guide or reference site backs are
+marked **unverified**. More → Sources lists everything, with the date the live data was downloaded.
+
+- **Travel advice and embassies:** `npm run sync-live` fetches the Dutch government's open data (CC0) and exchange
+  rates into `public/live/`. `.github/workflows/sync-live.yml` does this daily at 04:17 UTC, commits only real
+  changes and then redeploys. The app stores the last copy for offline use. When the advice for a country still ahead
+  on your route changes after you've read it, Today and the guide say so and the changed sections are marked.
+- **Money:** converter for EUR, CNY, JPY, VND, THB, LAK, PHP and USD with the last downloaded rates; set your own rate
+  per currency.
+- **Weather:** More → Weather. 7-day forecast for where you are and your next stop (from the places per day in your
+  trip), plus seasonal notes.
+- **Phrases:** key phrases with romanisation and read-aloud where the phone has a voice; full-screen cards for your
+  address (taken from the accommodation's local address when the booking has one), "use the meter", "where is the
+  hospital?" and allergies. Not checked by native speakers — the English is always shown too.
+- **Packing:** Checklists → Packing, with destination items for the countries on your route, each linked to the fact
+  that explains it.
+
 ## Development
 
 Needs Node 22.
@@ -111,7 +136,12 @@ anywhere.
 
 Country content lives in `content/countries/{cc}.json` (one file per country, plus `global.json`). Every fact and
 emergency number needs at least one source URL and a `verifiedAt` date; `unverified: true` shows a warning in the app.
-Adding a country means adding a file — the app picks it up automatically.
+Adding a country means adding a file — the app picks it up automatically. Also in `content/`: `sources.json`
+(official links per country and topic), `rules.json` (entry-rule parameters), `phrases.json` and `packing.json`.
+
+`npm run verify-sources` checks that every source URL still responds and lists items checked more than 30 days ago
+and everything marked unverified. Government sites often block scripts or time out from data centres; those show as
+*check by hand* rather than broken.
 
 ## Deploying
 
@@ -122,9 +152,10 @@ repository.
 ## Layout
 
 ```
-content/          country content (sourced facts, emergency numbers)
+content/          country facts, official links, rules, phrases, packing template
+public/live/      travel advice, embassies, rates and maps (written by the daily sync)
 demo/             anonymised demo trip
-scripts/          icon and demo-trip generators
+scripts/          live-data sync, source checker, icon and demo-trip generators
 src/app/          shell, routing, header, tabs
 src/crypto/       key derivation, AES-GCM
 src/vault/        vault session, encrypted records and files, auto-lock
@@ -134,6 +165,8 @@ src/profile/      personal details and insurance
 src/emergency/    emergency card
 src/trip/         trip format, import/export, storage, time zones
 src/rules/        rules engine, prep scheduling, .ics
+src/live/         live data: schema, refresh, what you've read, own rates
+src/weather/      Open-Meteo forecasts
 src/features/     screens
 tests/unit/       Vitest (one test file per rule group)
 tests/golden/     the brief's golden trip test (demo trip; also my-trip.json when present locally)

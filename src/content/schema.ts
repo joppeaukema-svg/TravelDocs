@@ -73,3 +73,30 @@ export type SourceLink = z.infer<typeof SourceLink>;
 
 export const SourcesFile = z.record(z.union([countryCode, z.literal('GLOBAL')]), z.array(SourceLink));
 export type SourcesFile = z.infer<typeof SourcesFile>;
+
+/** content/phrases.json */
+export const PhraseLang = z.enum(['zh', 'ja', 'vi', 'th', 'lo', 'fil']);
+export type PhraseLang = z.infer<typeof PhraseLang>;
+
+export const PhrasesFile = z.object({
+  note: z.string(),
+  languages: z.record(PhraseLang, z.object({ name: z.string(), speech: z.string(), countries: z.array(countryCode), note: z.string().optional() })),
+  phrases: z.array(z.object({ id: z.string(), en: z.string(), t: z.record(PhraseLang, z.object({ text: z.string(), roman: z.string().optional() })) })),
+  cards: z.array(z.object({ id: z.string(), en: z.string(), t: z.record(PhraseLang, z.string()) })),
+  allergens: z.array(z.object({ id: z.string(), en: z.string(), t: z.record(PhraseLang, z.string()) })),
+});
+export type PhrasesFile = z.infer<typeof PhrasesFile>;
+
+/** content/packing.json: the packing template. */
+export const PackingItem = z.object({
+  id: z.string(),
+  title: z.string(),
+  /** Only when the route includes one of these countries. */
+  countries: z.array(countryCode).optional(),
+  /** Only when this profile flag is set. */
+  flag: z.string().optional(),
+  /** The sourced facts that explain why. */
+  factIds: z.array(z.string()).optional(),
+});
+export type PackingItem = z.infer<typeof PackingItem>;
+export const PackingFile = z.object({ items: z.array(PackingItem) });

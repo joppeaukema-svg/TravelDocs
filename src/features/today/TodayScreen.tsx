@@ -19,6 +19,8 @@ import { BOOKING_TYPE_LABELS, bookingLabel } from '../../trip/schema';
 import { usePrepStates, useShareStatus, useTrip } from '../../trip/store';
 import { formatLocal, toInstant, zoneCity } from '../../trip/time';
 import { CheckCard, PrepItemRow, StayCard } from '../trip/parts';
+import { WeatherCard } from '../weather/WeatherScreen';
+import { AdviceChanges } from './AdviceChanges';
 
 const HOME_TZ = 'Europe/Amsterdam';
 
@@ -326,7 +328,11 @@ export function TodayScreen() {
     <>
       <PageTitle>Today</PageTitle>
       <CountryClock />
+      <AdviceChanges />
       <TripToday />
+      <div className="mt-3">
+        <WeatherCard />
+      </div>
       <Warnings />
       <SetupSteps />
     </>

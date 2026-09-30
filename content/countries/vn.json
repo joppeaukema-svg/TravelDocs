@@ -189,20 +189,6 @@
       "verifiedAt": "2026-09-30"
     },
     {
-      "id": "vn-emergency-info",
-      "country": "VN",
-      "topic": "emergency",
-      "title": "Emergency numbers",
-      "body": "Police 113, fire 114, ambulance 115.",
-      "sources": [
-        {
-          "title": "Reisadvies Vietnam — NederlandWereldwijd",
-          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
-        }
-      ],
-      "verifiedAt": "2026-09-30"
-    },
-    {
       "id": "vn-health",
       "country": "VN",
       "topic": "health",

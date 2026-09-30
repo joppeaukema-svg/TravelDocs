@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import {
   DownloadIcon,
   GearIcon,
+  GlobeIcon,
   HeartIcon,
   ListIcon,
   PersonIcon,
@@ -26,8 +27,10 @@ export function MoreScreen() {
         <RowLink href="#/settings" icon={<GearIcon />} title="Settings" sub="Lock, appearance, storage" />
       </Card>
       <Card className="mt-4 py-1">
-        <RowLink href="#/money" icon={<WalletIcon />} title="Money" trailing={<Pill tone="muted">Phase 3</Pill>} />
-        <RowLink href="#/phrases" icon={<SpeechIcon />} title="Phrases" trailing={<Pill tone="muted">Phase 3</Pill>} />
+        <RowLink href="#/money" icon={<WalletIcon />} title="Money" sub="Currency converter, offline" />
+        <RowLink href="#/phrases" icon={<SpeechIcon />} title="Phrases" sub="Key phrases and “show this” cards" />
+        <RowLink href="#/weather" icon={<GlobeIcon />} title="Weather" sub="7-day forecast, seasons" />
+        <RowLink href="#/sources" icon={<ListIcon />} title="Sources" sub="Where every fact comes from" />
       </Card>
       <p className="mt-6 flex items-center justify-center gap-1.5 text-sm text-muted">
         <HeartIcon size={16} /> Everything stays on this phone.

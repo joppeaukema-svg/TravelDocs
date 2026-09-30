@@ -9,6 +9,8 @@ export const Settings = z.object({
   theme: z.enum(['system', 'light', 'dark']).default('system'),
   /** Manual override for "where am I now"; null follows the itinerary. */
   countryOverride: countryCode.nullable().default(null),
+  /** Weather forecasts: sends the names of your stops (no dates) to Open-Meteo. Off until you turn it on. */
+  weather: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof Settings>;
 
