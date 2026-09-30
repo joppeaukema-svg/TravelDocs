@@ -1,4 +1,5 @@
-import { CountryContent, GlobalContent, type CountryCode } from './schema';
+import rawSources from '../../content/sources.json';
+import { CountryContent, GlobalContent, SourcesFile, type CountryCode, type SourceLink } from './schema';
 
 // Every file in content/countries is bundled; adding a country means adding a file.
 const files = import.meta.glob<unknown>('/content/countries/*.json', { eager: true, import: 'default' });
@@ -25,4 +26,11 @@ export function getCountry(code: CountryCode | null | undefined): CountryContent
 
 export function globalContent(): GlobalContent {
   return global;
+}
+
+const sources = SourcesFile.parse(rawSources);
+
+/** Official links for a country (or 'GLOBAL'). */
+export function officialLinks(code: CountryCode | 'GLOBAL'): SourceLink[] {
+  return sources[code] ?? [];
 }

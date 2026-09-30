@@ -23,9 +23,9 @@
     "cn-nia-transit": { "title": "National Immigration Administration of China (confirm the 240-hour transit rules and ports)", "url": "https://en.nia.gov.cn", "verifiedAt": "2026-09-29", "unverified": true },
     "cn-arrival-card": { "title": "China online arrival card — National Immigration Administration", "url": "https://s.nia.gov.cn/ArrivalCardFillingPC/", "verifiedAt": "2026-09-29" },
     "jp-vjw": { "title": "Visit Japan Web — Digital Agency", "url": "https://services.digital.go.jp/en/visit-japan-web/", "verifiedAt": "2026-09-29" },
-    "jp-mhlw-meds": { "title": "Bringing medicines into Japan — MHLW Q&A (PDF)", "url": "https://www.mhlw.go.jp/english/policy/health-medical/pharmaceuticals/dl/qa_01.pdf", "verifiedAt": "2026-09-29" },
+    "jp-mhlw-meds": { "title": "Bringing medicines for personal use into Japan — MHLW", "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iyakuhin/kojinyunyu/topics/tp010401-1_00001.html", "verifiedAt": "2026-09-30" },
     "jp-impconf": { "title": "Import Confirmation (Yunyu Kakunin-sho) — MHLW", "url": "https://impconf.mhlw.go.jp", "verifiedAt": "2026-09-29" },
-    "jp-taxfree": { "title": "Japan's tax exemption — JNTO", "url": "https://www.japan.travel/en/plan/japans-tax-exemption/", "verifiedAt": "2026-09-29", "unverified": true },
+    "jp-taxfree": { "title": "Tax-free shopping (refund method from 1 Nov 2026) — Japan Tourism Agency", "url": "https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html", "verifiedAt": "2026-09-30" },
     "jp-holidays": { "title": "国民の祝日について — Cabinet Office", "url": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html", "verifiedAt": "2026-09-29", "unverified": true },
     "anwb-japan": { "title": "Reisdocumenten Japan — ANWB", "url": "https://www.anwb.nl/vakantie/japan/reisvoorbereiding/reisdocumenten", "verifiedAt": "2026-09-29" },
     "vn-exemption": { "title": "New visa exemption policies from 15 August 2025 — Vietnam National Authority of Tourism", "url": "https://vietnam.travel/things-to-do/new-visa-exemption-policies-effective-15-august-2025", "verifiedAt": "2026-09-29" },
@@ -36,7 +36,7 @@
     "la-evisa": { "title": "Lao e-visa — official portal", "url": "https://laoevisa.gov.la", "verifiedAt": "2026-09-29" },
     "la-checkpoints": { "title": "Lao immigration checkpoints (visa on arrival)", "url": "https://immigration.gov.la/en/checkpoint", "verifiedAt": "2026-09-29" },
     "la-voa-duration": { "title": "Lao immigration checkpoints — confirm the visa-on-arrival stay", "url": "https://immigration.gov.la/en/checkpoint", "verifiedAt": "2026-09-29", "unverified": true },
-    "la-ldif": { "title": "Laos Digital Immigration Form — Immigration Department", "url": "https://www.immigration.gov.la/en/home", "verifiedAt": "2026-09-29", "unverified": true },
+    "la-ldif": { "title": "Laos Digital Immigration Form — Immigration Department (linked from the Dutch advice)", "url": "https://www.immigration.gov.la/en/home", "verifiedAt": "2026-09-30" },
     "la-lcr": { "title": "Laos–China Railway online booking (KPL news agency)", "url": "https://kpl.gov.la/En/detail.aspx?id=71839", "verifiedAt": "2026-09-29", "unverified": true },
     "ph-etravel": { "title": "eTravel — Government of the Philippines", "url": "https://etravel.gov.ph", "verifiedAt": "2026-09-29" },
     "ph-bi": { "title": "Bureau of Immigration Philippines", "url": "https://immigration.gov.ph", "verifiedAt": "2026-09-29" },
@@ -107,8 +107,8 @@
     { "id": "jp-vjw", "country": "JP", "name": "Visit Japan Web", "direction": "arrival", "modes": ["air", "sea"], "opensDaysBefore": 14, "deadline": "day-before-travel", "preferAtHomeWithinDays": 7, "mandatory": false, "url": "https://services.digital.go.jp/en/visit-japan-web/", "detail": "Recommended: one QR code covers immigration and customs. Save a screenshot of it; paper forms are still accepted.", "sourceIds": ["jp-vjw"] },
     { "id": "vn-prearrival", "country": "VN", "name": "Vietnam pre-arrival form", "direction": "arrival", "modes": ["air"], "entryPointMatch": "\\b(HAN|SGN|DAD|PQC)\\b|noi bai|tan son nhat|ho chi minh|hanoi|da nang|phu quoc", "opensDaysBefore": 3, "deadline": "day-before-travel", "mandatory": true, "url": "https://prearrival.immigration.gov.vn", "detail": "Mandatory when landing at Ho Chi Minh City, Hanoi, Da Nang or Phu Quoc.", "sourceIds": ["vn-prearrival", "nl-advice-vn"] },
     { "id": "th-tdac", "country": "TH", "name": "Thailand Digital Arrival Card (TDAC)", "direction": "arrival", "modes": ["air", "land", "sea"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://tdac.immigration.go.th", "detail": "Free, for air and land arrivals, within 3 days before arrival. Only at tdac.immigration.go.th — ignore paid lookalike sites. It's done at the first Thai airport, also on a connection.", "sourceIds": ["th-tdac"] },
-    { "id": "la-ldif-arrival", "country": "LA", "name": "Laos Digital Immigration Form (arrival)", "direction": "arrival", "modes": ["air", "land"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://www.immigration.gov.la/en/home", "detail": "Within 3 days before arrival. Keep the QR code offline.", "sourceIds": ["la-ldif"] },
-    { "id": "la-ldif-departure", "country": "LA", "name": "Laos Digital Immigration Form (departure)", "direction": "departure", "modes": ["air", "land"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://www.immigration.gov.la/en/home", "detail": "Again within 3 days before leaving Laos. Keep the QR code offline.", "sourceIds": ["la-ldif"] },
+    { "id": "la-ldif-arrival", "country": "LA", "name": "Laos Digital Immigration Form (arrival)", "direction": "arrival", "modes": ["air", "land"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://www.immigration.gov.la/en/home", "detail": "Within 3 days before arrival. Keep the QR code offline.", "sourceIds": ["la-ldif", "nl-advice-la"] },
+    { "id": "la-ldif-departure", "country": "LA", "name": "Laos Digital Immigration Form (departure)", "direction": "departure", "modes": ["air", "land"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://www.immigration.gov.la/en/home", "detail": "Again within 3 days before leaving Laos. Keep the QR code offline.", "sourceIds": ["la-ldif", "nl-advice-la"] },
     { "id": "ph-etravel-arrival", "country": "PH", "name": "eTravel (arrival)", "direction": "arrival", "modes": ["air", "sea"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://etravel.gov.ph", "detail": "Free, within 72 hours before arrival; the QR code is shown at check-in. Ignore paid lookalike sites.", "sourceIds": ["ph-etravel", "nl-advice-ph"] },
     { "id": "ph-etravel-departure", "country": "PH", "name": "eTravel (departure)", "direction": "departure", "modes": ["air", "sea"], "opensDaysBefore": 3, "deadline": "event-day", "mandatory": true, "url": "https://etravel.gov.ph", "detail": "The Dutch advice says to fill it in before departure too.", "sourceIds": ["nl-advice-ph", "ph-etravel"] }
   ],
@@ -156,7 +156,10 @@
   "driving": [
     { "country": "JP", "idpModel": "1949", "detail": "A Dutch licence is only valid together with an IDP of the 1949 model. The ANWB issues it in person at its stores (bring your licence, proof of address and a passport photo; you get it on the spot), so arrange it before leaving the Netherlands.", "sourceIds": ["anwb-japan"] },
     { "country": "VN", "detail": "The Dutch advice: only ride under 50 cc, have an IDP, and make sure insurance covers vehicle accidents.", "sourceIds": ["nl-advice-vn"] },
-    { "country": "PH", "detail": "An IDP is required; it is valid for at most 90 days.", "sourceIds": ["nl-advice-ph"] }
+    { "country": "PH", "detail": "An IDP is required; it is valid for at most 90 days.", "sourceIds": ["nl-advice-ph"] },
+    { "country": "LA", "detail": "The Dutch advice: a Dutch licence is only valid together with a valid IDP.", "sourceIds": ["nl-advice-la"] },
+    { "country": "CN", "detail": "The Dutch advice: a Dutch licence is not valid in China, not even with an IDP; you need a local Chinese licence.", "sourceIds": ["nl-advice-cn"] },
+    { "country": "TH", "detail": "The Dutch advice: almost all scooters in Thailand count as motorbikes. Without a valid (international) motorcycle licence your travel insurance often won't pay. Never hand over your passport or licence as a deposit.", "sourceIds": ["nl-advice-th"] }
   ],
 
   "predeparture": [

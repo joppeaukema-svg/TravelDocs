@@ -1,0 +1,262 @@
+{
+  "GLOBAL": [
+    {
+      "topic": "emergency",
+      "title": "24/7 BZ Contactcenter",
+      "url": "https://www.nederlandwereldwijd.nl/contact/contact-met-het-24-7-bz-contactcenter",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "safety",
+      "title": "BZ Informatieservice",
+      "url": "https://informatieservice.nederlandwereldwijd.nl",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "safety",
+      "title": "Open data — NederlandWereldwijd (travel advice API, CC0)",
+      "url": "https://opendata.nederlandwereldwijd.nl/v2/sources/nederlandwereldwijd/infotypes/countries",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "health",
+      "title": "Medicijnen mee op reis — CAK",
+      "url": "https://www.hetcak.nl/medicijnen-mee-op-reis/",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "health",
+      "title": "Landelijk Coördinatiecentrum Reizigersadvisering",
+      "url": "https://www.lcr.nl",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "entry",
+      "title": "Veilige kopie identiteitsbewijs — Rijksoverheid",
+      "url": "https://www.rijksoverheid.nl/vraag-en-antwoord/identiteitsfraude/veilige-kopie-identiteitsbewijs",
+      "verifiedAt": "2026-09-30"
+    }
+  ],
+  "CN": [
+    {
+      "topic": "safety",
+      "title": "Reisadvies China — NederlandWereldwijd",
+      "url": "https://www.nederlandwereldwijd.nl/reisadvies/china",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "entry",
+      "title": "Visa exemption notice — Chinese embassy in the Netherlands",
+      "url": "https://nl.china-embassy.gov.cn/eng/ls/zytz/202511/t20251104_11746916.htm",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "entry",
+      "title": "National Immigration Administration",
+      "url": "https://en.nia.gov.cn",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "forms",
+      "title": "Online arrival card — NIA",
+      "url": "https://s.nia.gov.cn/ArrivalCardFillingPC/",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "emergency",
+      "title": "Consulate-general Guangzhou (covers Fujian)",
+      "url": "https://netherlandsandyou.nl/web/china-en/about-us/consulate-general-guangzhou-",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "health",
+      "title": "GGD reisvaccinaties",
+      "url": "https://www.ggdreisvaccinaties.nl/land/china",
+      "verifiedAt": "2026-09-30"
+    }
+  ],
+  "JP": [
+    {
+      "topic": "safety",
+      "title": "Reisadvies Japan — NederlandWereldwijd",
+      "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "forms",
+      "title": "Visit Japan Web — Digital Agency",
+      "url": "https://services.digital.go.jp/en/visit-japan-web/",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "health",
+      "title": "Bringing medicines into Japan — MHLW",
+      "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iyakuhin/kojinyunyu/topics/tp010401-1_00001.html",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "health",
+      "title": "Import Confirmation — MHLW",
+      "url": "https://impconf.mhlw.go.jp",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "money",
+      "title": "Tax-free shopping — Japan Tourism Agency",
+      "url": "https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "emergency",
+      "title": "Japan Visitor Hotline — JNTO",
+      "url": "https://www.japan.travel/en/plan/hotline/",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "weather",
+      "title": "Japan Meteorological Agency",
+      "url": "https://www.jma.go.jp/jma/indexe.html",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "transport",
+      "title": "Reisdocumenten Japan — ANWB",
+      "url": "https://www.anwb.nl/vakantie/japan/reisvoorbereiding/reisdocumenten",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "health",
+      "title": "GGD reisvaccinaties",
+      "url": "https://www.ggdreisvaccinaties.nl/land/japan",
+      "verifiedAt": "2026-09-30"
+    }
+  ],
+  "VN": [
+    {
+      "topic": "safety",
+      "title": "Reisadvies Vietnam — NederlandWereldwijd",
+      "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "entry",
+      "title": "Vietnam e-visa — official portal",
+      "url": "https://evisa.gov.vn",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "entry",
+      "title": "Visa exemption — Vietnam National Authority of Tourism",
+      "url": "https://vietnam.travel/things-to-do/new-visa-exemption-policies-effective-15-august-2025",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "forms",
+      "title": "Pre-arrival form — Immigration Department",
+      "url": "https://prearrival.immigration.gov.vn",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "health",
+      "title": "GGD reisvaccinaties",
+      "url": "https://www.ggdreisvaccinaties.nl/land/vietnam",
+      "verifiedAt": "2026-09-30"
+    }
+  ],
+  "TH": [
+    {
+      "topic": "safety",
+      "title": "Reisadvies Thailand — NederlandWereldwijd",
+      "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "forms",
+      "title": "Thailand Digital Arrival Card",
+      "url": "https://tdac.immigration.go.th",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "weather",
+      "title": "Thai Meteorological Department",
+      "url": "https://www.tmd.go.th/en",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "health",
+      "title": "GGD reisvaccinaties",
+      "url": "https://www.ggdreisvaccinaties.nl/land/thailand",
+      "verifiedAt": "2026-09-30"
+    }
+  ],
+  "LA": [
+    {
+      "topic": "safety",
+      "title": "Reisadvies Laos — NederlandWereldwijd",
+      "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "entry",
+      "title": "Lao e-visa — official portal",
+      "url": "https://laoevisa.gov.la",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "entry",
+      "title": "Immigration checkpoints (visa on arrival, e-visa ports)",
+      "url": "https://immigration.gov.la/en/checkpoint",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "forms",
+      "title": "Laos Digital Immigration Form — Immigration Department",
+      "url": "https://www.immigration.gov.la/en/home",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "health",
+      "title": "GGD reisvaccinaties",
+      "url": "https://www.ggdreisvaccinaties.nl/land/laos",
+      "verifiedAt": "2026-09-30"
+    }
+  ],
+  "PH": [
+    {
+      "topic": "safety",
+      "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+      "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "forms",
+      "title": "eTravel — Government of the Philippines",
+      "url": "https://etravel.gov.ph",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "entry",
+      "title": "Bureau of Immigration",
+      "url": "https://immigration.gov.ph",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "weather",
+      "title": "PAGASA",
+      "url": "https://www.pagasa.dost.gov.ph",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "safety",
+      "title": "PHIVOLCS (volcanoes, tsunamis)",
+      "url": "https://www.phivolcs.dost.gov.ph",
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "topic": "health",
+      "title": "GGD reisvaccinaties",
+      "url": "https://www.ggdreisvaccinaties.nl/land/filipijnen",
+      "verifiedAt": "2026-09-30"
+    }
+  ]
+}

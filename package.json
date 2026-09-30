@@ -17,7 +17,9 @@
     "e2e": "playwright test",
     "check": "npm run typecheck && npm run lint && npm run test",
     "icons": "tsx scripts/make-icons.ts",
-    "demo-trip": "tsx scripts/make-demo-trip.ts"
+    "demo-trip": "tsx scripts/make-demo-trip.ts",
+    "sync-live": "tsx scripts/sync-live.ts",
+    "verify-sources": "tsx scripts/verify-sources.ts"
   },
   "dependencies": {
     "@fontsource/atkinson-hyperlegible-next": "^5.3.0",
