@@ -32,7 +32,7 @@ test('works in airplane mode after the first load', async ({ page, context }) =>
   // Live data downloaded while online is still there.
   await page.goto('/#/countries/LA/safety');
   await expect(page.getByText(/Dutch travel advice, last changed/)).toBeVisible();
-  await page.goto('/#/money');
+  await page.goto('/#/money/convert');
   await expect(page.getByText(/offline, using the last rates/).first()).toBeVisible();
   await expect(page.locator('[data-currency=THB]')).not.toHaveText('—');
   await page.goto('/#/phrases/th');

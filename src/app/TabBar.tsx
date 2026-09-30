@@ -14,7 +14,7 @@ const tabs: { id: Tab; label: string; href: string; Icon: ComponentType<{ size?:
 
 export function TabBar({ active }: { active: Tab | null }) {
   return (
-    <nav className="safe-bottom fixed inset-x-0 bottom-0 z-30 border-t border-line bg-card/95 backdrop-blur" aria-label="Main">
+    <nav className="no-print safe-bottom fixed inset-x-0 bottom-0 z-30 border-t border-line bg-card/95 backdrop-blur" aria-label="Main">
       <ul className="mx-auto flex max-w-xl">
         {tabs.map(({ id, label, href, Icon }) => {
           const isActive = id === active;

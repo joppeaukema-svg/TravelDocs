@@ -4,10 +4,14 @@ An offline-first travel companion for one long trip: documents, bookings, visas,
 place, checked against each country's entry rules and linked to official sources. It is an installable web app
 (PWA): no app store, no account, no server holding your data.
 
-**Status:** Phase 3 — country guides with sources, the live Dutch travel advice (with change highlighting) and
-embassies, currency converter, weather, phrasebook with "show this" cards and a packing list. On top of phase 2 (trip
-import, rules engine, prep checklists, `.ics` reminders) and phase 1 (offline shell, encrypted vault, documents,
-insurance, emergency card, backup).
+**Status:** Phase 4 — complete: encrypted vault and documents, emergency card, backups (file and paper), trip import
+with the entry-rules engine, prep checklists and calendar reminders, sharing with a travel companion, country guides
+with sources and the live Dutch travel advice, money (expenses, budgets, converter), weather, phrases, packing and a
+demo mode. Phase 5 (web push) is optional and not built.
+
+**Just want to look?** Open the app and choose *Try demo mode* on Today or in Settings — a sample trip three weeks in,
+with documents, insurance and expenses. It lives in a separate store; *Leave demo* throws it away and brings your own
+data back.
 
 ## Privacy
 
@@ -20,7 +24,8 @@ insurance, emergency card, backup).
   (PBKDF2-SHA256, 600,000 iterations) and only ever unwrapped into memory. The vault locks after 5 minutes without use
   (configurable) and shortly after the app goes to the background — but not while you're picking a photo or file.
 - **Readable without the passphrase** (so warnings and the emergency card work while locked): document types and
-  expiry dates, the fields you choose for the emergency card, insurance coverage limits, settings.
+  expiry dates, the fields you choose for the emergency card, insurance coverage limits, the itinerary, expenses,
+  settings.
 - **Backups** are one encrypted file with everything. They open with the passphrase that was in use when you made them.
   There is no reset: a forgotten passphrase means the vault and its backups can't be opened.
 - The repository holds code, public content and fake demo data only. `my-trip.json`, the brief and backup files are
@@ -47,6 +52,24 @@ Then, in the app:
 
 To move to a new phone: install the app there, then **Backup & restore → Choose backup file** and enter the
 passphrase.
+
+## Backups
+
+- **Backup file** (More → Backup & restore): one encrypted file with everything — vault, documents and their files,
+  trip, checklists, expenses, settings. Keep it off the phone (your own cloud drive or email). Today reminds you when
+  the last backup is more than 7 days old. Restoring replaces everything on the phone with the backup's contents and
+  needs the passphrase that was in use when it was made.
+- **Paper backup** (More → Paper backup): one page with the Dutch 24/7 numbers, your insurer and policy number, ICE
+  contacts, emergency numbers per country, the Dutch embassies and consulates, your itinerary and booking
+  references. *Print or save as PDF*. Unlock the vault first to include insurance and ICE details; document numbers
+  are only included when you switch them on. Keep the printout apart from your passport.
+
+## Money
+
+More → Money: log expenses in any of the route's currencies with a category and country; the EUR value is fixed with
+the rate of the day you enter it. Set a daily budget per country to see today's spending and each country's average
+per day against it. **CSV** exports everything for a spreadsheet. The **converter** works offline with the last
+downloaded rates, and you can set your own rate per currency.
 
 ## Trip, rules and reminders
 
@@ -130,7 +153,38 @@ existing Chromium binary: `PW_CHROMIUM_EXECUTABLE=/path/to/chromium`.
 
 `demo/trip.demo.json` is a copy of a real itinerary with every date moved by a random number of weeks and all notes
 removed. Regenerate it from a private trip file with `npm run demo-trip -- my-trip.json`. The offset isn't stored
-anywhere.
+anywhere. Demo mode moves it again (by whole weeks) so that today is about three weeks into the trip, and adds
+made-up documents, insurance and expenses; its vault passphrase is `demo demo demo`. Open `…/?demo` to start the app
+straight in demo mode.
+
+### Updating content and rules
+
+- **A country fact:** edit `content/countries/{cc}.json`. Each fact has an `id`, `topic` (entry, forms, safety,
+  emergency, health, laws, money, transport, connectivity, culture, weather, holidays, apps), a short `title` and
+  `body`, optional `severity` (info, important, critical), `sources` and `verifiedAt`. Prefer the Dutch government
+  advice and official portals; never cite visa agencies. Can't confirm it officially? Keep it with
+  `"unverified": true`.
+- **An entry rule:** edit `content/rules.json` — stay limits (`stayRegimes`), passport validity, onward tickets,
+  e-visa ports, arrival forms and their windows, booking windows, border crossings, holidays, driving, and the
+  pre-departure and per-country prep templates. Every rule points at entries in its `sources` map, each with a
+  `verifiedAt` date. `npm run check` validates the file and the golden trip test shows the effect on the demo trip.
+- **Live data** (advice, embassies, rates) updates itself daily; to refresh by hand run `npm run sync-live` or start
+  the *Sync live data* workflow on GitHub.
+- Run `npm run verify-sources` now and then, and re-check anything older than 30 days.
+- Content ships with the app: commit and push to `main`, and phones pick it up the next time the app opens online.
+
+### Adding a country
+
+1. Create `content/countries/{cc}.json` with `country` (ISO alpha-2), `iso3`, `name`, `timeZone` (IANA),
+   `currency`, `adviceUrl` (its NederlandWereldwijd page), `emergencyNumbers` and `facts` — copy an existing file as
+   the template.
+2. Add its official links to `content/sources.json`.
+3. Add its rules to `content/rules.json`: at least a `stayRegimes` entry and a `passport` entry, plus forms, e-visa
+   ports and driving rules where they apply. Add an `nl-advice-{cc}` source.
+4. Optional: a language in `content/phrases.json` (every phrase, card and allergen needs a translation — the tests
+   check) and destination items in `content/packing.json`.
+5. Add the currency to `CURRENCIES` in `src/features/money/Converter.tsx` if it's new.
+6. `npm run sync-live` (fetches its advice, embassies and exchange rate), `npm run check`, `npm run e2e`, commit.
 
 ### Content
 
@@ -167,6 +221,8 @@ src/trip/         trip format, import/export, storage, time zones
 src/rules/        rules engine, prep scheduling, .ics
 src/live/         live data: schema, refresh, what you've read, own rates
 src/weather/      Open-Meteo forecasts
+src/money/        expenses and budgets
+src/demo/         demo mode (separate database, sample data)
 src/features/     screens
 tests/unit/       Vitest (one test file per rule group)
 tests/golden/     the brief's golden trip test (demo trip; also my-trip.json when present locally)

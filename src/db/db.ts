@@ -1,5 +1,6 @@
 import { Dexie, type EntityTable } from 'dexie';
 import type { Bytes } from '../crypto/bytes';
+import type { Expense } from '../money/expenses';
 import type { Booking, Day, Stay } from '../trip/schema';
 
 /** Small key/value rows: settings, vault key material, emergency card, timestamps. */
@@ -60,6 +61,7 @@ export class AppDB extends Dexie {
   bookings!: EntityTable<Booking, 'id'>;
   days!: EntityTable<Day, 'date'>;
   prepState!: EntityTable<PrepStateRow, 'id'>;
+  expenses!: EntityTable<Expense, 'id'>;
 
   constructor(name = 'travel-companion') {
     super(name);
@@ -75,10 +77,42 @@ export class AppDB extends Dexie {
       days: '&date',
       prepState: '&id',
     });
+    this.version(3).stores({
+      expenses: '&id, date, country',
+    });
   }
 }
 
-export const db = new AppDB();
+export const DB_NAME = 'travel-companion';
+export const DEMO_DB_NAME = 'travel-companion-demo';
+const DEMO_FLAG = 'tc-demo';
+
+/**
+ * Demo mode uses its own database, so exploring with sample data never
+ * touches your own. It's remembered per browser; `?demo` in the URL turns it on.
+ */
+function readDemoFlag(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    if (new URLSearchParams(window.location.search).has('demo')) window.localStorage.setItem(DEMO_FLAG, '1');
+    return window.localStorage.getItem(DEMO_FLAG) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function setDemoFlag(on: boolean): void {
+  try {
+    if (on) window.localStorage.setItem(DEMO_FLAG, '1');
+    else window.localStorage.removeItem(DEMO_FLAG);
+  } catch {
+    // Storage blocked: demo mode can't be remembered, so it stays off.
+  }
+}
+
+export const isDemo = readDemoFlag();
+
+export const db = new AppDB(isDemo ? DEMO_DB_NAME : DB_NAME);
 
 export async function getMeta(key: string): Promise<unknown> {
   return (await db.meta.get(key))?.value;

@@ -5,12 +5,15 @@ import { DocScreen, DocsScreen, NewDocScreen } from '../features/docs/DocsScreen
 import { EmergencyEditScreen, EmergencyScreen } from '../features/emergency/EmergencyScreens';
 import { InsuranceScreen } from '../features/insurance/InsuranceScreen';
 import { MoreScreen } from '../features/more/MoreScreen';
-import { MoneyScreen } from '../features/money/MoneyScreen';
+import { ConverterScreen } from '../features/money/Converter';
+import { ExpenseScreen, MoneyScreen } from '../features/money/MoneyScreen';
 import { LanguageScreen, PhrasesScreen } from '../features/phrases/PhrasesScreen';
 import { SourcesScreen } from '../features/sources/SourcesScreen';
+import { PrintScreen } from '../features/print/PrintScreen';
 import { WeatherScreen } from '../features/weather/WeatherScreen';
 import { useLiveRefresh } from '../live/useLive';
 import { useTrip } from '../trip/store';
+import { DemoBanner } from '../demo/DemoBanner';
 import { PersonalScreen } from '../features/personal/PersonalScreen';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { TodayScreen } from '../features/today/TodayScreen';
@@ -51,10 +54,14 @@ const routes: Route[] = [
   { pattern: '/personal', tab: 'more', render: () => <PersonalScreen /> },
   { pattern: '/backup', tab: 'more', render: () => <BackupScreen /> },
   { pattern: '/settings', tab: 'more', render: () => <SettingsScreen /> },
+  { pattern: '/print', tab: 'more', render: () => <PrintScreen /> },
   { pattern: '/checklists', tab: 'more', render: () => <ChecklistsScreen /> },
   { pattern: '/checklists/:group', tab: 'more', render: ({ group }) => <ChecklistScreen group={group!} /> },
   { pattern: '/profile', tab: 'more', render: () => <ProfileScreen /> },
   { pattern: '/money', tab: 'more', render: () => <MoneyScreen /> },
+  { pattern: '/money/add', tab: 'more', render: () => <ExpenseScreen /> },
+  { pattern: '/money/convert', tab: 'more', render: () => <ConverterScreen /> },
+  { pattern: '/money/expense/:id', tab: 'more', render: ({ id }) => <ExpenseScreen id={id!} /> },
   { pattern: '/phrases', tab: 'more', render: () => <PhrasesScreen /> },
   { pattern: '/phrases/:lang', tab: 'more', render: ({ lang }) => <LanguageScreen lang={lang!} /> },
   { pattern: '/emergency', tab: null, render: () => <EmergencyScreen /> },
@@ -107,6 +114,7 @@ export function App() {
 
   return (
     <div className="flex min-h-dvh flex-col">
+      <DemoBanner />
       <Header emergencyActive={route.pattern.startsWith('/emergency')} />
       <main className="mx-auto w-full max-w-xl flex-1 px-4 pb-32 pt-2">{route.render(params)}</main>
       <UpdatePrompt />
