@@ -18,6 +18,23 @@ test('country guide: tabs, live advice with change highlighting, embassies, sour
 
   // Pretend the advice changed since it was read: that section gets highlighted.
   await page.getByRole('link', { name: 'Emergency', exact: true }).first().click(); // leave: marks as read
+  // Marking as read is written in the background: wait for it.
+  await expect
+    .poll(() =>
+      page.evaluate(async () => {
+        const db = await new Promise<IDBDatabase>((resolve) => {
+          const r = indexedDB.open('travel-companion');
+          r.onsuccess = () => resolve(r.result);
+        });
+        const row = await new Promise<{ value?: Record<string, unknown> } | undefined>((resolve) => {
+          const r = db.transaction('meta').objectStore('meta').get('adviceSeen');
+          r.onsuccess = () => resolve(r.result);
+        });
+        db.close();
+        return !!row?.value?.LA;
+      }),
+    )
+    .toBe(true);
   await page.evaluate(async () => {
     const db = await new Promise<IDBDatabase>((resolve) => {
       const r = indexedDB.open('travel-companion');
