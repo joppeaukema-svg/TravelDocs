@@ -94,6 +94,13 @@ export function ChecklistsScreen() {
   );
 }
 
+export function ChecklistByIndex({ index }: { index: number }) {
+  const rules = useRules();
+  if (rules === undefined) return null;
+  const id = rules?.result.stays[index]?.stay.id;
+  return id ? <ChecklistScreen group={id} /> : <ChecklistsScreen />;
+}
+
 export function ChecklistScreen({ group }: { group: string }) {
   if (group === 'packing') return <PackingScreen />;
   return <GroupChecklist group={group} />;

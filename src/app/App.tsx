@@ -14,10 +14,11 @@ import { WeatherScreen } from '../features/weather/WeatherScreen';
 import { useLiveRefresh } from '../live/useLive';
 import { useTrip } from '../trip/store';
 import { DemoBanner } from '../demo/DemoBanner';
+import { usePushSync } from '../push/usePush';
 import { PersonalScreen } from '../features/personal/PersonalScreen';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { TodayScreen } from '../features/today/TodayScreen';
-import { ChecklistScreen, ChecklistsScreen } from '../features/checklists/ChecklistScreens';
+import { ChecklistByIndex, ChecklistScreen, ChecklistsScreen } from '../features/checklists/ChecklistScreens';
 import { ProfileScreen } from '../features/profile/ProfileScreen';
 import { BookingScreen, StayScreen } from '../features/trip/EditScreens';
 import { TripScreen } from '../features/trip/TripScreen';
@@ -57,6 +58,8 @@ const routes: Route[] = [
   { pattern: '/print', tab: 'more', render: () => <PrintScreen /> },
   { pattern: '/checklists', tab: 'more', render: () => <ChecklistsScreen /> },
   { pattern: '/checklists/:group', tab: 'more', render: ({ group }) => <ChecklistScreen group={group!} /> },
+  // Links from push notifications name the stay by its position, not its id.
+  { pattern: '/checklists/n/:index', tab: 'more', render: ({ index }) => <ChecklistByIndex index={Number(index)} /> },
   { pattern: '/profile', tab: 'more', render: () => <ProfileScreen /> },
   { pattern: '/money', tab: 'more', render: () => <MoneyScreen /> },
   { pattern: '/money/add', tab: 'more', render: () => <ExpenseScreen /> },
@@ -107,6 +110,7 @@ export function App() {
   useAutoLock();
   useTheme();
   useLiveData();
+  usePushSync();
 
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -17,6 +17,9 @@ function appVersion(): string {
   }
 }
 
+// The push sender (push/), when the build is configured with one.
+const pushOrigin = process.env.VITE_PUSH_URL ? new URL(process.env.VITE_PUSH_URL).origin : '';
+
 // GitHub Pages can't send response headers, so the policy ships as a <meta> tag.
 // Only added to production builds: the dev server relies on inline scripts.
 export const CONTENT_SECURITY_POLICY = [
@@ -25,7 +28,7 @@ export const CONTENT_SECURITY_POLICY = [
   "style-src 'self'",
   "img-src 'self' blob: data:",
   "font-src 'self'",
-  "connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com",
+  `connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com${pushOrigin ? ` ${pushOrigin}` : ''}`,
   "media-src 'self' blob:",
   "frame-src blob:",
   "object-src 'none'",
@@ -85,6 +88,8 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,png,svg,woff2,webmanifest}'],
         // Live data changes daily and the maps are large: cached at runtime instead of precached.
         globIgnores: ['live/**'],
+        // Push and notification-click handlers (public/push-sw.js).
+        importScripts: ['push-sw.js'],
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
         runtimeCaching: [
