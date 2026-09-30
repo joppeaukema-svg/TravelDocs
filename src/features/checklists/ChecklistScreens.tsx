@@ -5,6 +5,7 @@ import { useRules, type Rules } from '../../rules/useRules';
 import { usePrepStates } from '../../trip/store';
 import { Card, LinkButton, Notice, PageTitle, Pill, RowLink, SectionTitle } from '../../ui/kit';
 import { PrepItemRow } from '../trip/parts';
+import { packingId, PackingScreen, usePackingList } from './Packing';
 
 function groupTitle(rules: Rules, group: string): { title: string; sub: string } {
   if (group === 'predeparture') return { title: 'Before you leave', sub: `Due by ${formatDate(rules.data.meta.depart)}` };
@@ -22,7 +23,24 @@ function NoTrip() {
       <Notice title="Import your trip first" action={<LinkButton href="#/trip">Go to Trip</LinkButton>}>
         The checklists are built from your itinerary and the entry rules.
       </Notice>
+      <Card className="mt-4 py-1">
+        <RowLink href="#/checklists/packing" title="Packing" sub="The general packing list" />
+      </Card>
     </>
+  );
+}
+
+function PackingRow() {
+  const items = usePackingList();
+  const states = usePrepStates();
+  const open = items.filter((i) => states.get(packingId(i))?.status !== 'done').length;
+  return (
+    <RowLink
+      href="#/checklists/packing"
+      title="Packing"
+      sub="Includes items for the countries on your route"
+      trailing={open ? <Pill tone="muted">{open} open</Pill> : <Pill tone="ok">Done</Pill>}
+    />
   );
 }
 
@@ -68,11 +86,20 @@ export function ChecklistsScreen() {
           );
         })}
       </Card>
+      <SectionTitle>Packing</SectionTitle>
+      <Card className="py-1">
+        <PackingRow />
+      </Card>
     </>
   );
 }
 
 export function ChecklistScreen({ group }: { group: string }) {
+  if (group === 'packing') return <PackingScreen />;
+  return <GroupChecklist group={group} />;
+}
+
+function GroupChecklist({ group }: { group: string }) {
   const rules = useRules();
   const states = usePrepStates();
   if (rules === undefined) return null;

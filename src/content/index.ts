@@ -1,5 +1,17 @@
+import rawPacking from '../../content/packing.json';
+import rawPhrases from '../../content/phrases.json';
 import rawSources from '../../content/sources.json';
-import { CountryContent, GlobalContent, SourcesFile, type CountryCode, type SourceLink } from './schema';
+import {
+  CountryContent,
+  GlobalContent,
+  PackingFile,
+  PhrasesFile,
+  SourcesFile,
+  type CountryCode,
+  type Fact,
+  type PackingItem,
+  type SourceLink,
+} from './schema';
 
 // Every file in content/countries is bundled; adding a country means adding a file.
 const files = import.meta.glob<unknown>('/content/countries/*.json', { eager: true, import: 'default' });
@@ -33,4 +45,23 @@ const sources = SourcesFile.parse(rawSources);
 /** Official links for a country (or 'GLOBAL'). */
 export function officialLinks(code: CountryCode | 'GLOBAL'): SourceLink[] {
   return sources[code] ?? [];
+}
+
+const phrases = PhrasesFile.parse(rawPhrases);
+export function phrasebook(): PhrasesFile {
+  return phrases;
+}
+
+const packing = PackingFile.parse(rawPacking);
+export function packingTemplate(): PackingItem[] {
+  return packing.items;
+}
+
+/** Every fact, country and global, by id. */
+export function factById(id: string): Fact | undefined {
+  for (const c of [...countries.values(), global]) {
+    const f = c.facts.find((x) => x.id === id);
+    if (f) return f;
+  }
+  return undefined;
 }

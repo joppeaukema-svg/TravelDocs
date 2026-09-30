@@ -37,3 +37,12 @@ export function dateRanges(dates: string[]): [string, string][] {
   }
   return ranges;
 }
+
+/** The accommodation you sleep in on a night (the check-in date up to the day before check-out). */
+export function accommodationOn(data: TripData, night: string): Booking | undefined {
+  return data.bookings.find((b) => {
+    if (b.type !== 'accommodation' || b.status === 'idea' || !b.depart) return false;
+    const end = b.arrive?.date ?? b.depart.date;
+    return b.depart.date <= night && (end > night || end === b.depart.date);
+  });
+}

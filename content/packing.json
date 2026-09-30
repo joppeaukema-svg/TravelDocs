@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "id": "passport",
+      "title": "Passport (and a safe copy on your phone)",
+      "factIds": [
+        "global-passport-copy"
+      ]
+    },
+    {
+      "id": "cards",
+      "title": "Two bank cards (enabled outside Europe) and some euros"
+    },
+    {
+      "id": "adapter",
+      "title": "Universal plug adapter",
+      "factIds": [
+        "cn-plugs",
+        "jp-plugs",
+        "vn-plugs",
+        "th-plugs",
+        "la-plugs",
+        "ph-plugs"
+      ]
+    },
+    {
+      "id": "chargers",
+      "title": "Chargers and a power bank (in your cabin bag)"
+    },
+    {
+      "id": "meds",
+      "title": "Medicines in the original packaging, plus the medicine statement",
+      "factIds": [
+        "global-meds",
+        "jp-meds"
+      ]
+    },
+    {
+      "id": "first-aid",
+      "title": "Small first-aid kit (plasters, painkillers, ORS)"
+    },
+    {
+      "id": "repellent",
+      "title": "Mosquito repellent",
+      "countries": [
+        "VN",
+        "TH",
+        "LA",
+        "PH"
+      ],
+      "factIds": [
+        "th-care",
+        "la-care",
+        "ph-hospitals"
+      ]
+    },
+    {
+      "id": "sunscreen",
+      "title": "Sunscreen and a hat"
+    },
+    {
+      "id": "rain",
+      "title": "Rain jacket or poncho",
+      "countries": [
+        "CN",
+        "VN",
+        "TH",
+        "LA",
+        "PH"
+      ],
+      "factIds": [
+        "la-monsoon",
+        "th-rain",
+        "ph-typhoons"
+      ]
+    },
+    {
+      "id": "dry-bag",
+      "title": "Dry bag for boats and rain",
+      "countries": [
+        "VN",
+        "TH",
+        "LA",
+        "PH"
+      ],
+      "factIds": [
+        "la-monsoon",
+        "ph-ferries"
+      ]
+    },
+    {
+      "id": "temple",
+      "title": "Clothes that cover shoulders and knees for temples",
+      "countries": [
+        "TH",
+        "LA",
+        "VN",
+        "JP"
+      ],
+      "factIds": [
+        "la-temples"
+      ]
+    },
+    {
+      "id": "photos",
+      "title": "Two spare passport photos (4×6 cm)",
+      "countries": [
+        "LA"
+      ],
+      "factIds": [
+        "la-voa"
+      ]
+    },
+    {
+      "id": "usd",
+      "title": "Clean US dollar notes for the Lao visa on arrival",
+      "countries": [
+        "LA"
+      ],
+      "factIds": [
+        "la-voa"
+      ]
+    },
+    {
+      "id": "mask",
+      "title": "A few KN95 masks for smoggy days",
+      "countries": [
+        "TH",
+        "VN"
+      ],
+      "factIds": [
+        "th-air",
+        "vn-health"
+      ]
+    },
+    {
+      "id": "cash-jp",
+      "title": "Cash for Japan (cards aren't accepted everywhere)",
+      "countries": [
+        "JP"
+      ],
+      "factIds": [
+        "jp-cash"
+      ]
+    },
+    {
+      "id": "pay-app",
+      "title": "Alipay or WeChat Pay set up and tested",
+      "countries": [
+        "CN"
+      ],
+      "factIds": [
+        "cn-payments"
+      ]
+    },
+    {
+      "id": "idp",
+      "title": "International driving permit, if you'll drive",
+      "factIds": [
+        "jp-driving",
+        "vn-driving",
+        "la-driving"
+      ]
+    },
+    {
+      "id": "no-vape",
+      "title": "Leave vapes and refills at home",
+      "countries": [
+        "VN",
+        "TH",
+        "LA"
+      ],
+      "flag": "vape",
+      "factIds": [
+        "vn-vapes",
+        "th-vapes",
+        "la-vapes"
+      ]
+    },
+    {
+      "id": "dive",
+      "title": "Dive certification card and logbook",
+      "countries": [
+        "PH"
+      ],
+      "flag": "diving",
+      "factIds": [
+        "ph-hospitals"
+      ]
+    },
+    {
+      "id": "earplugs",
+      "title": "Earplugs and an eye mask (night buses and trains)"
+    },
+    {
+      "id": "towel",
+      "title": "Quick-dry towel"
+    },
+    {
+      "id": "lock",
+      "title": "Small padlock"
+    }
+  ]
+}

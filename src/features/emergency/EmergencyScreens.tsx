@@ -14,6 +14,7 @@ import { EditIcon, ExternalIcon } from '../../ui/icons';
 import { Button, Card, cx, LinkButton, Notice, PageTitle, SectionTitle, Toggle } from '../../ui/kit';
 import { VaultGate } from '../vault/VaultGate';
 import { CallButton } from './CallButton';
+import { Representations, useCountryAdvice } from '../countries/LiveAdvice';
 
 function Detail({ label, value }: { label: string; value: string | undefined }) {
   if (!value) return null;
@@ -33,6 +34,7 @@ export function EmergencyScreen() {
   const card = parseCard(useLiveQuery(() => db.meta.get(META.emergencyCard), [])?.value);
   const bz = globalContent().emergencyNumbers;
   const medical = [card.bloodType, card.allergies, card.medication, card.medicalNotes].some(Boolean);
+  const { advice } = useCountryAdvice(code);
 
   return (
     <>
@@ -83,7 +85,13 @@ export function EmergencyScreen() {
           <CallButton key={n.id} label={n.label} number={n.number} kind={n.kind} />
         ))}
       </div>
-      {country && (
+      {country && advice && advice.representations.length > 0 && (
+        <>
+          <SectionTitle>Dutch embassy and consulates for {country.name}</SectionTitle>
+          <Representations reps={advice.representations} />
+        </>
+      )}
+      {country && !advice && (
         <LinkButton href={country.adviceUrl} external variant="ghost" className="mt-1 w-full">
           Dutch embassy details in the travel advice <ExternalIcon size={18} />
         </LinkButton>

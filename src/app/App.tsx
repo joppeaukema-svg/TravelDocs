@@ -4,7 +4,13 @@ import { CountriesScreen, CountryScreen } from '../features/countries/CountriesS
 import { DocScreen, DocsScreen, NewDocScreen } from '../features/docs/DocsScreens';
 import { EmergencyEditScreen, EmergencyScreen } from '../features/emergency/EmergencyScreens';
 import { InsuranceScreen } from '../features/insurance/InsuranceScreen';
-import { ComingSoon, MoreScreen } from '../features/more/MoreScreen';
+import { MoreScreen } from '../features/more/MoreScreen';
+import { MoneyScreen } from '../features/money/MoneyScreen';
+import { LanguageScreen, PhrasesScreen } from '../features/phrases/PhrasesScreen';
+import { SourcesScreen } from '../features/sources/SourcesScreen';
+import { WeatherScreen } from '../features/weather/WeatherScreen';
+import { useLiveRefresh } from '../live/useLive';
+import { useTrip } from '../trip/store';
 import { PersonalScreen } from '../features/personal/PersonalScreen';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { TodayScreen } from '../features/today/TodayScreen';
@@ -37,6 +43,9 @@ const routes: Route[] = [
   { pattern: '/docs/:id', tab: 'docs', render: ({ id }) => <DocScreen id={id!} /> },
   { pattern: '/countries', tab: 'countries', render: () => <CountriesScreen /> },
   { pattern: '/countries/:code', tab: 'countries', render: ({ code }) => <CountryScreen code={code!} /> },
+  { pattern: '/countries/:code/:tab', tab: 'countries', render: ({ code, tab }) => <CountryScreen code={code!} tab={tab} /> },
+  { pattern: '/sources', tab: 'countries', render: () => <SourcesScreen /> },
+  { pattern: '/weather', tab: 'today', render: () => <WeatherScreen /> },
   { pattern: '/more', tab: 'more', render: () => <MoreScreen /> },
   { pattern: '/insurance', tab: 'more', render: () => <InsuranceScreen /> },
   { pattern: '/personal', tab: 'more', render: () => <PersonalScreen /> },
@@ -45,24 +54,9 @@ const routes: Route[] = [
   { pattern: '/checklists', tab: 'more', render: () => <ChecklistsScreen /> },
   { pattern: '/checklists/:group', tab: 'more', render: ({ group }) => <ChecklistScreen group={group!} /> },
   { pattern: '/profile', tab: 'more', render: () => <ProfileScreen /> },
-  {
-    pattern: '/money',
-    tab: 'more',
-    render: () => (
-      <ComingSoon title="Money" phase={3}>
-        Offline currency converter, then expenses and daily budgets in Phase 4.
-      </ComingSoon>
-    ),
-  },
-  {
-    pattern: '/phrases',
-    tab: 'more',
-    render: () => (
-      <ComingSoon title="Phrases" phase={3}>
-        Key phrases with romanisation and big “show this” cards.
-      </ComingSoon>
-    ),
-  },
+  { pattern: '/money', tab: 'more', render: () => <MoneyScreen /> },
+  { pattern: '/phrases', tab: 'more', render: () => <PhrasesScreen /> },
+  { pattern: '/phrases/:lang', tab: 'more', render: ({ lang }) => <LanguageScreen lang={lang!} /> },
   { pattern: '/emergency', tab: null, render: () => <EmergencyScreen /> },
   { pattern: '/emergency/edit', tab: null, render: () => <EmergencyEditScreen /> },
 ];
@@ -95,11 +89,17 @@ function useTheme() {
   }, [theme]);
 }
 
+function useLiveData() {
+  const trip = useTrip();
+  useLiveRefresh([...new Set(trip?.stays.map((s) => s.country) ?? [])]);
+}
+
 export function App() {
   const path = usePath();
   const { route, params } = resolve(path);
   useAutoLock();
   useTheme();
+  useLiveData();
 
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -250,20 +250,6 @@
       "verifiedAt": "2026-09-30"
     },
     {
-      "id": "th-emergency-info",
-      "country": "TH",
-      "topic": "emergency",
-      "title": "Emergency numbers",
-      "body": "General 191, (tourist) police 1155, medical 1669 (Bangkok region 1646), fire 199.",
-      "sources": [
-        {
-          "title": "Reisadvies Thailand — NederlandWereldwijd",
-          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
-        }
-      ],
-      "verifiedAt": "2026-09-30"
-    },
-    {
       "id": "th-care",
       "country": "TH",
       "topic": "health",

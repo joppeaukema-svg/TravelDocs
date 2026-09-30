@@ -67,7 +67,28 @@ export function useRates(): RatesFile | null | undefined {
 
 // --- What you've read ---------------------------------------------------------
 
-export type Seen = Record<string, { hash: string; lastModified: string; at: string }>;
+export type Seen = Record<string, { hash: string; lastModified: string; at: string; parts?: Record<string, string> }>;
+
+/** Small stable hash (FNV-1a) — only used to spot changed text. */
+function fnv(text: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(36);
+}
+
+export const SUMMARY_PART = 'In het kort';
+
+/** A hash per piece of the advice: the summary and every section part. */
+export function partHashes(a: Advice): Record<string, string> {
+  const out: Record<string, string> = { [SUMMARY_PART]: fnv(JSON.stringify(a.summary)) };
+  for (const s of a.sections) for (const p of s.parts) out[partKey(s.title, p.title)] = fnv(JSON.stringify(p.blocks));
+  return out;
+}
+
+export const partKey = (section: string, part: string) => `${section} / ${part}`;
 
 export function useAdviceSeen(): Seen | undefined {
   return useLiveQuery(async () => ((await getMeta(KEYS.seen)) as Seen | undefined) ?? {}, []);
@@ -75,8 +96,11 @@ export function useAdviceSeen(): Seen | undefined {
 
 export async function markAdviceSeen(a: Advice): Promise<void> {
   const seen = ((await getMeta(KEYS.seen)) as Seen | undefined) ?? {};
-  if (seen[a.country]?.hash === a.hash) return;
-  await setMeta(KEYS.seen, { ...seen, [a.country]: { hash: a.hash, lastModified: a.lastModified, at: new Date().toISOString() } });
+  if (seen[a.country]?.hash === a.hash && seen[a.country]?.parts) return;
+  await setMeta(KEYS.seen, {
+    ...seen,
+    [a.country]: { hash: a.hash, lastModified: a.lastModified, at: new Date().toISOString(), parts: partHashes(a) },
+  });
 }
 
 /** changed: read before, and it changed since. unread: never opened. */
@@ -84,6 +108,15 @@ export function adviceState(a: Advice, seen: Seen | undefined): 'current' | 'cha
   const s = seen?.[a.country];
   if (!s) return 'unread';
   return s.hash === a.hash ? 'current' : 'changed';
+}
+
+/** The parts that are new or different since you last read the advice. */
+export function changedParts(a: Advice, seen: Seen | undefined): string[] {
+  const before = seen?.[a.country]?.parts;
+  if (!before || seen[a.country]!.hash === a.hash) return [];
+  return Object.entries(partHashes(a))
+    .filter(([k, h]) => before[k] !== h)
+    .map(([k]) => k);
 }
 
 // --- Manual rates ---------------------------------------------------------------

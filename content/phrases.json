@@ -1,0 +1,476 @@
+{
+  "note": "Phrases are not country facts; they were written for this app and not checked by native speakers. The English is always shown too.",
+  "languages": {
+    "zh": {
+      "name": "Mandarin",
+      "speech": "zh-CN",
+      "countries": [
+        "CN"
+      ]
+    },
+    "ja": {
+      "name": "Japanese",
+      "speech": "ja-JP",
+      "countries": [
+        "JP"
+      ]
+    },
+    "vi": {
+      "name": "Vietnamese",
+      "speech": "vi-VN",
+      "countries": [
+        "VN"
+      ]
+    },
+    "th": {
+      "name": "Thai",
+      "speech": "th-TH",
+      "countries": [
+        "TH"
+      ],
+      "note": "Men end polite sentences with khráp, women with khâ."
+    },
+    "lo": {
+      "name": "Lao",
+      "speech": "lo-LA",
+      "countries": [
+        "LA"
+      ]
+    },
+    "fil": {
+      "name": "Filipino",
+      "speech": "fil-PH",
+      "countries": [
+        "PH"
+      ],
+      "note": "English is widely spoken; adding \"po\" makes a sentence polite."
+    }
+  },
+  "phrases": [
+    {
+      "id": "hello",
+      "en": "Hello",
+      "t": {
+        "zh": {
+          "text": "你好",
+          "roman": "nǐ hǎo"
+        },
+        "ja": {
+          "text": "こんにちは",
+          "roman": "konnichiwa"
+        },
+        "vi": {
+          "text": "Xin chào"
+        },
+        "th": {
+          "text": "สวัสดีครับ / ค่ะ",
+          "roman": "sà-wàt-dee khráp / khâ"
+        },
+        "lo": {
+          "text": "ສະບາຍດີ",
+          "roman": "sa-bai-dee"
+        },
+        "fil": {
+          "text": "Kumusta"
+        }
+      }
+    },
+    {
+      "id": "thanks",
+      "en": "Thank you",
+      "t": {
+        "zh": {
+          "text": "谢谢",
+          "roman": "xièxie"
+        },
+        "ja": {
+          "text": "ありがとうございます",
+          "roman": "arigatō gozaimasu"
+        },
+        "vi": {
+          "text": "Cảm ơn"
+        },
+        "th": {
+          "text": "ขอบคุณครับ / ค่ะ",
+          "roman": "khàwp khun khráp / khâ"
+        },
+        "lo": {
+          "text": "ຂອບໃຈ",
+          "roman": "khàwp jai"
+        },
+        "fil": {
+          "text": "Salamat po"
+        }
+      }
+    },
+    {
+      "id": "sorry",
+      "en": "Sorry / excuse me",
+      "t": {
+        "zh": {
+          "text": "不好意思",
+          "roman": "bù hǎoyìsi"
+        },
+        "ja": {
+          "text": "すみません",
+          "roman": "sumimasen"
+        },
+        "vi": {
+          "text": "Xin lỗi"
+        },
+        "th": {
+          "text": "ขอโทษครับ / ค่ะ",
+          "roman": "khǎw thôht khráp / khâ"
+        },
+        "lo": {
+          "text": "ຂໍໂທດ",
+          "roman": "khǎw thôht"
+        },
+        "fil": {
+          "text": "Paumanhin po"
+        }
+      }
+    },
+    {
+      "id": "yes",
+      "en": "Yes",
+      "t": {
+        "zh": {
+          "text": "对",
+          "roman": "duì"
+        },
+        "ja": {
+          "text": "はい",
+          "roman": "hai"
+        },
+        "vi": {
+          "text": "Vâng"
+        },
+        "th": {
+          "text": "ใช่",
+          "roman": "châi"
+        },
+        "lo": {
+          "text": "ແມ່ນ",
+          "roman": "maen"
+        },
+        "fil": {
+          "text": "Oo / Opo"
+        }
+      }
+    },
+    {
+      "id": "no",
+      "en": "No",
+      "t": {
+        "zh": {
+          "text": "不是",
+          "roman": "bú shì"
+        },
+        "ja": {
+          "text": "いいえ",
+          "roman": "iie"
+        },
+        "vi": {
+          "text": "Không"
+        },
+        "th": {
+          "text": "ไม่ใช่",
+          "roman": "mâi châi"
+        },
+        "lo": {
+          "text": "ບໍ່",
+          "roman": "bo"
+        },
+        "fil": {
+          "text": "Hindi"
+        }
+      }
+    },
+    {
+      "id": "how-much",
+      "en": "How much?",
+      "t": {
+        "zh": {
+          "text": "多少钱？",
+          "roman": "duōshao qián?"
+        },
+        "ja": {
+          "text": "いくらですか？",
+          "roman": "ikura desu ka?"
+        },
+        "vi": {
+          "text": "Bao nhiêu tiền?"
+        },
+        "th": {
+          "text": "เท่าไหร่",
+          "roman": "thâo rài?"
+        },
+        "lo": {
+          "text": "ເທົ່າໃດ",
+          "roman": "thao dai?"
+        },
+        "fil": {
+          "text": "Magkano?"
+        }
+      }
+    },
+    {
+      "id": "toilet",
+      "en": "Where is the toilet?",
+      "t": {
+        "zh": {
+          "text": "厕所在哪里？",
+          "roman": "cèsuǒ zài nǎlǐ?"
+        },
+        "ja": {
+          "text": "トイレはどこですか？",
+          "roman": "toire wa doko desu ka?"
+        },
+        "vi": {
+          "text": "Nhà vệ sinh ở đâu?"
+        },
+        "th": {
+          "text": "ห้องน้ำอยู่ที่ไหน",
+          "roman": "hâwng náam yùu thîi nǎi?"
+        },
+        "lo": {
+          "text": "ຫ້ອງນ້ຳຢູ່ໃສ",
+          "roman": "hàwng nâm yuu sǎi?"
+        },
+        "fil": {
+          "text": "Nasaan ang CR?",
+          "roman": "CR = comfort room"
+        }
+      }
+    },
+    {
+      "id": "not-understand",
+      "en": "I don't understand",
+      "t": {
+        "zh": {
+          "text": "我听不懂",
+          "roman": "wǒ tīng bu dǒng"
+        },
+        "ja": {
+          "text": "わかりません",
+          "roman": "wakarimasen"
+        },
+        "vi": {
+          "text": "Tôi không hiểu"
+        },
+        "th": {
+          "text": "ไม่เข้าใจ",
+          "roman": "mâi khâo jai"
+        },
+        "lo": {
+          "text": "ບໍ່ເຂົ້າໃຈ",
+          "roman": "bo khao jai"
+        },
+        "fil": {
+          "text": "Hindi ko maintindihan"
+        }
+      }
+    },
+    {
+      "id": "water",
+      "en": "Water",
+      "t": {
+        "zh": {
+          "text": "水",
+          "roman": "shuǐ"
+        },
+        "ja": {
+          "text": "水",
+          "roman": "mizu"
+        },
+        "vi": {
+          "text": "Nước"
+        },
+        "th": {
+          "text": "น้ำ",
+          "roman": "náam"
+        },
+        "lo": {
+          "text": "ນ້ຳ",
+          "roman": "nâm"
+        },
+        "fil": {
+          "text": "Tubig"
+        }
+      }
+    },
+    {
+      "id": "not-spicy",
+      "en": "Not spicy, please",
+      "t": {
+        "zh": {
+          "text": "不要辣",
+          "roman": "bú yào là"
+        },
+        "ja": {
+          "text": "辛くしないでください",
+          "roman": "karaku shinaide kudasai"
+        },
+        "vi": {
+          "text": "Không cay"
+        },
+        "th": {
+          "text": "ไม่เผ็ด",
+          "roman": "mâi phèt"
+        },
+        "lo": {
+          "text": "ບໍ່ເຜັດ",
+          "roman": "bo phet"
+        },
+        "fil": {
+          "text": "Hindi maanghang"
+        }
+      }
+    },
+    {
+      "id": "delicious",
+      "en": "Delicious",
+      "t": {
+        "zh": {
+          "text": "好吃",
+          "roman": "hǎochī"
+        },
+        "ja": {
+          "text": "おいしい",
+          "roman": "oishii"
+        },
+        "vi": {
+          "text": "Ngon quá"
+        },
+        "th": {
+          "text": "อร่อย",
+          "roman": "à-ròi"
+        },
+        "lo": {
+          "text": "ແຊບ",
+          "roman": "saep"
+        },
+        "fil": {
+          "text": "Masarap"
+        }
+      }
+    },
+    {
+      "id": "help",
+      "en": "Help!",
+      "t": {
+        "zh": {
+          "text": "救命！",
+          "roman": "jiùmìng!"
+        },
+        "ja": {
+          "text": "助けて！",
+          "roman": "tasukete!"
+        },
+        "vi": {
+          "text": "Cứu tôi với!"
+        },
+        "th": {
+          "text": "ช่วยด้วย",
+          "roman": "chûay dûay!"
+        },
+        "lo": {
+          "text": "ຊ່ວຍແດ່",
+          "roman": "suay dae!"
+        },
+        "fil": {
+          "text": "Tulong!"
+        }
+      }
+    }
+  ],
+  "cards": [
+    {
+      "id": "take-me",
+      "en": "Please take me to this address:",
+      "t": {
+        "zh": "请带我去这个地址：",
+        "ja": "この住所までお願いします：",
+        "vi": "Làm ơn đưa tôi đến địa chỉ này:",
+        "th": "กรุณาพาไปที่อยู่นี้",
+        "lo": "ກະລຸນາພາຂ້ອຍໄປທີ່ຢູ່ນີ້",
+        "fil": "Pakihatid po ako sa address na ito:"
+      }
+    },
+    {
+      "id": "meter",
+      "en": "Please use the meter.",
+      "t": {
+        "zh": "请打表。",
+        "ja": "メーターを使ってください。",
+        "vi": "Làm ơn bật đồng hồ tính tiền.",
+        "th": "กรุณาเปิดมิเตอร์",
+        "lo": "ກະລຸນາເປີດແມັດເຕີ",
+        "fil": "Pakigamit po ang metro."
+      }
+    },
+    {
+      "id": "hospital",
+      "en": "Where is the hospital?",
+      "t": {
+        "zh": "医院在哪里？",
+        "ja": "病院はどこですか？",
+        "vi": "Bệnh viện ở đâu?",
+        "th": "โรงพยาบาลอยู่ที่ไหน",
+        "lo": "ໂຮງໝໍຢູ່ໃສ",
+        "fil": "Nasaan ang ospital?"
+      }
+    },
+    {
+      "id": "allergic",
+      "en": "I am allergic to {item}.",
+      "t": {
+        "zh": "我对{item}过敏。",
+        "ja": "私は{item}アレルギーがあります。",
+        "vi": "Tôi bị dị ứng với {item}.",
+        "th": "ฉันแพ้{item}",
+        "lo": "ຂ້ອຍແພ້{item}",
+        "fil": "May allergy ako sa {item}."
+      }
+    }
+  ],
+  "allergens": [
+    {
+      "id": "peanuts",
+      "en": "peanuts",
+      "t": {
+        "zh": "花生",
+        "ja": "ピーナッツ",
+        "vi": "đậu phộng",
+        "th": "ถั่วลิสง",
+        "lo": "ຖົ່ວດິນ",
+        "fil": "mani"
+      }
+    },
+    {
+      "id": "shellfish",
+      "en": "shrimp and crab",
+      "t": {
+        "zh": "虾和蟹",
+        "ja": "えびとかに",
+        "vi": "tôm và cua",
+        "th": "กุ้งและปู",
+        "lo": "ກຸ້ງ ແລະ ປູ",
+        "fil": "hipon at alimango"
+      }
+    },
+    {
+      "id": "penicillin",
+      "en": "penicillin",
+      "t": {
+        "zh": "青霉素",
+        "ja": "ペニシリン",
+        "vi": "penicillin",
+        "th": "เพนิซิลลิน",
+        "lo": "ເປນີຊີລິນ",
+        "fil": "penicillin"
+      }
+    }
+  ]
+}
