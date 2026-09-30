@@ -6,7 +6,7 @@
  * documents, bookings or places beyond the country. Every few minutes the
  * cron trigger sends what's due and forgets it.
  */
-import { sendPush, type PushSubscriptionJSON, type VapidKeys } from './webpush';
+import { generateVapidKeys, sendPush, type PushSubscriptionJSON, type VapidKeys } from './webpush';
 
 export interface KV {
   get(key: string): Promise<string | null>;
@@ -17,8 +17,9 @@ export interface KV {
 
 export interface Env {
   SUBS: KV;
-  VAPID_PUBLIC_KEY: string;
-  VAPID_PRIVATE_KEY: string;
+  /** Optional: fixed keys. Without them the worker makes a key pair once and keeps it in SUBS. */
+  VAPID_PUBLIC_KEY?: string;
+  VAPID_PRIVATE_KEY?: string;
   VAPID_SUBJECT: string;
   /** The app's origin, e.g. https://you.github.io — the only site allowed to call the API. */
   ALLOWED_ORIGIN: string;
@@ -50,8 +51,20 @@ async function sha256(text: string): Promise<string> {
   return [...d].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-function vapid(env: Env): VapidKeys {
-  return { publicKey: env.VAPID_PUBLIC_KEY, privateKey: env.VAPID_PRIVATE_KEY, subject: env.VAPID_SUBJECT };
+const VAPID_KEY = 'config:vapid';
+
+/** The VAPID keys: from the environment, else made on first use and stored (never returned) in KV. */
+async function vapid(env: Env): Promise<VapidKeys> {
+  if (env.VAPID_PUBLIC_KEY && env.VAPID_PRIVATE_KEY) {
+    return { publicKey: env.VAPID_PUBLIC_KEY, privateKey: env.VAPID_PRIVATE_KEY, subject: env.VAPID_SUBJECT };
+  }
+  const stored = await env.SUBS.get(VAPID_KEY);
+  let keys = stored ? (JSON.parse(stored) as { publicKey: string; privateKey: string }) : null;
+  if (!keys) {
+    keys = await generateVapidKeys();
+    await env.SUBS.put(VAPID_KEY, JSON.stringify(keys));
+  }
+  return { ...keys, subject: env.VAPID_SUBJECT };
 }
 
 class HttpError extends Error {
@@ -103,7 +116,7 @@ async function handle(req: Request, env: Env): Promise<Response> {
   const url = new URL(req.url);
   const json = (body: unknown, status = 200) => Response.json(body, { status });
 
-  if (req.method === 'GET' && url.pathname === '/vapid') return json({ publicKey: env.VAPID_PUBLIC_KEY });
+  if (req.method === 'GET' && url.pathname === '/vapid') return json({ publicKey: (await vapid(env)).publicKey });
 
   const m = /^\/subscriptions\/([A-Za-z0-9_-]{16,64})(\/test)?$/.exec(url.pathname);
   if (!m) throw new HttpError(404, 'Not found');
@@ -132,7 +145,7 @@ async function handle(req: Request, env: Env): Promise<Response> {
   if (req.method === 'POST' && m[2]) {
     const rec = await authorised(env, id, bearer(req));
     if (!rec) throw new HttpError(404, 'Unknown subscription');
-    const status = await sendPush(rec.subscription, { title: 'Travel Companion', body: 'Test notification — push works on this phone.', url: '#/today' }, vapid(env));
+    const status = await sendPush(rec.subscription, { title: 'Travel Companion', body: 'Test notification — push works on this phone.', url: '#/today' }, await vapid(env));
     if (status === 404 || status === 410) await env.SUBS.delete(keyOf(id));
     return json({ ok: status < 300, status }, status < 300 ? 200 : 502);
   }
@@ -155,6 +168,7 @@ export async function sendDue(env: Env, now = Date.now(), fetchImpl: typeof fetc
   let sent = 0;
   let removed = 0;
   let cursor: string | undefined;
+  let keys: VapidKeys | undefined;
   do {
     const page = await env.SUBS.list({ prefix: 'sub:', ...(cursor ? { cursor } : {}) });
     for (const { name } of page.keys) {
@@ -167,7 +181,7 @@ export async function sendDue(env: Env, now = Date.now(), fetchImpl: typeof fetc
       let gone = false;
       // Several due at once (a missed run): send the latest few, not a burst.
       for (const e of due.filter((x) => now - Date.parse(x.at) < 86400_000).slice(-3)) {
-        const status = await sendPush(rec.subscription, { title: e.title, body: 'Open your checklist', url: e.url }, vapid(env), fetchImpl);
+        const status = await sendPush(rec.subscription, { title: e.title, body: 'Open your checklist', url: e.url }, (keys ??= await vapid(env)), fetchImpl);
         if (status === 404 || status === 410) {
           gone = true;
           break;

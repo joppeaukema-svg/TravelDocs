@@ -108,26 +108,30 @@ schedule up to date whenever the trip or a checklist changes; reminders never fa
 and tapping one opens that country's checklist. Without a sender everything else still works, and the calendar export
 gives the same reminders as alarms.
 
-**Setting up the sender** (once; needs a free Cloudflare account):
+**Setting up the sender** (once; only a browser needed — the commands run on GitHub's servers):
 
-1. `npm run vapid-keys` — prints a public and a private key.
-2. In `push/wrangler.toml`, put the public key in `VAPID_PUBLIC_KEY` and check `ALLOWED_ORIGIN` (your Pages origin).
-3. In `push/`:
-   ```sh
-   npx wrangler@4 login
-   npx wrangler@4 kv namespace create SUBS      # paste the id into wrangler.toml
-   npx wrangler@4 secret put VAPID_PRIVATE_KEY  # paste the private key
-   npx wrangler@4 deploy                        # prints https://travel-companion-push.<you>.workers.dev
-   ```
-4. On GitHub: *Settings → Secrets and variables → Actions → Variables → New variable* `PUSH_URL` = that URL, then
-   re-run the *Deploy to GitHub Pages* workflow. The build adds the URL to the app and its Content Security Policy.
+1. Create a free Cloudflare account at dash.cloudflare.com/sign-up.
+2. In Cloudflare: profile icon (top right) → *My Profile* → *API Tokens* → *Create Token* → template **Edit
+   Cloudflare Workers** → *Use template*. Under *Account Resources* pick your account; *Zone Resources* can be
+   *All zones*. *Continue to summary* → *Create Token* → copy the token (it's shown once).
+3. Copy your **Account ID**: Cloudflare home → *Workers & Pages* → it's on the right (“Account details”), or the long
+   code in the address bar after `dash.cloudflare.com/`.
+4. On GitHub: repo → *Settings* → *Secrets and variables* → *Actions* → *Secrets* → *New repository secret*, twice:
+   `CLOUDFLARE_API_TOKEN` (the token) and `CLOUDFLARE_ACCOUNT_ID` (the account ID).
+5. Repo → *Actions* → **Set up push sender** → *Run workflow*. It creates the storage, deploys the sender (it makes
+   its own VAPID keys and keeps them in its private storage), checks that it answers and redeploys the app with push
+   switched on. The run's summary shows the sender's address.
+
+Run the workflow again after changes to `push/`. To use your own keys instead, set `VAPID_PUBLIC_KEY` and
+`VAPID_PRIVATE_KEY` on the Worker (`npm run vapid-keys` makes a pair); to point the app at another sender, set a
+`PUSH_URL` repository variable.
 
 **On the phone:** iPhone needs the app on the Home Screen (iOS 16.4+) — Safari won't offer push in a normal tab.
 Open **Settings → Notifications**, switch *Push notifications* on, allow notifications, then *Send a test
 notification*. Android (Chrome) works from the installed app or the browser. Push is disabled in demo mode.
 
 The free Cloudflare plan is plenty for this: one cron run every 5 minutes and a handful of storage operations a day.
-The private key only lives in the Worker's secrets; don't commit it.
+The private key never leaves the Worker's storage on your Cloudflare account.
 
 ## Travelling together
 

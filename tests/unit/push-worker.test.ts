@@ -143,6 +143,18 @@ describe('push worker API', () => {
     expect((await worker.fetch(new Request('https://w/subscriptions/x', { method: 'OPTIONS' }), e)).status).toBe(204);
     expect(await (await call(e, 'GET', '/vapid')).json()).toEqual({ publicKey: e.VAPID_PUBLIC_KEY });
   });
+
+  it('makes its own VAPID keys once when none are configured, and never hands out the private one', async () => {
+    const e = await env();
+    delete e.VAPID_PUBLIC_KEY;
+    delete e.VAPID_PRIVATE_KEY;
+    const first = (await (await call(e, 'GET', '/vapid')).json()) as { publicKey: string; privateKey?: string };
+    const second = (await (await call(e, 'GET', '/vapid')).json()) as { publicKey: string };
+    expect(first.publicKey).toMatch(/^B[A-Za-z0-9_-]{86}$/);
+    expect(second.publicKey).toBe(first.publicKey);
+    expect(first.privateKey).toBeUndefined();
+    expect(JSON.parse(e.SUBS.data.get('config:vapid')!).publicKey).toBe(first.publicKey);
+  });
 });
 
 describe('scheduled sender', () => {

@@ -1,8 +1,10 @@
 # Cloudflare Worker that sends Travel Companion push notifications.
-# Setup: see "Push notifications" in the README.
+# Set up and deployed by .github/workflows/push-setup.yml (see README → Push notifications),
+# which fills in ALLOWED_ORIGIN, VAPID_SUBJECT and the storage id.
 name = "travel-companion-push"
 main = "src/worker.ts"
 compatibility_date = "2026-09-01"
+workers_dev = true
 
 [triggers]
 crons = ["*/5 * * * *"]
@@ -11,11 +13,8 @@ crons = ["*/5 * * * *"]
 # The site that hosts the app (no path, no trailing slash).
 ALLOWED_ORIGIN = "https://joppeaukema-svg.github.io"
 VAPID_SUBJECT = "https://joppeaukema-svg.github.io/TravelDocs/"
-# VAPID_PUBLIC_KEY is set here too; VAPID_PRIVATE_KEY only as a secret:
-#   npx wrangler secret put VAPID_PRIVATE_KEY
-VAPID_PUBLIC_KEY = ""
+# The VAPID key pair is made by the worker on first use and kept in SUBS.
 
 [[kv_namespaces]]
 binding = "SUBS"
-# Fill in after: npx wrangler kv namespace create SUBS
-id = ""
+id = "REPLACED_BY_THE_SETUP_WORKFLOW"

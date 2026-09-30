@@ -26,11 +26,28 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      - name: Find the push sender
+        id: push
+        env:
+          PUSH_URL: ${{ vars.PUSH_URL }}
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          # A PUSH_URL variable wins; otherwise the sender made by "Set up push sender", if it exists.
+          url="$PUSH_URL"
+          if [ -z "$url" ] && [ -n "$CF_TOKEN" ]; then
+            api() { curl -fsS -H "Authorization: Bearer $CF_TOKEN" "https://api.cloudflare.com/client/v4/accounts/$CF_ACCOUNT$1"; }
+            if api /workers/scripts/travel-companion-push/settings > /dev/null 2>&1; then
+              sub=$(api /workers/subdomain | jq -r '.result.subdomain // empty') || sub=""
+              if [ -n "$sub" ]; then url="https://travel-companion-push.$sub.workers.dev"; fi
+            fi
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          if [ -n "$url" ]; then echo "Push sender: $url"; else echo "No push sender: push stays off."; fi
       - run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
-          # URL of the push worker (Settings → Secrets and variables → Actions → Variables). Empty: push stays off.
-          VITE_PUSH_URL: ${{ vars.PUSH_URL }}
+          VITE_PUSH_URL: ${{ steps.push.outputs.url }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

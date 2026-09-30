@@ -1,0 +1,94 @@
+name: Set up push sender
+
+# Creates or updates the push-notification sender on your Cloudflare account and
+# then redeploys the app with push switched on. Run it from the Actions tab.
+# Needs two repository secrets: CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID
+# (see README → Push notifications). Safe to run again at any time.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write # to start the app deploy afterwards
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - name: Check the Cloudflare secrets
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::Add the repository secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID first (README → Push notifications)."
+            exit 1
+          fi
+          status=$(curl -sS -o /tmp/verify.json -w '%{http_code}' -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" https://api.cloudflare.com/client/v4/user/tokens/verify)
+          if [ "$status" != 200 ]; then
+            echo "::error::Cloudflare doesn't accept CLOUDFLARE_API_TOKEN (HTTP $status). Make a new token from the “Edit Cloudflare Workers” template."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Storage for subscriptions
+        id: kv
+        run: |
+          api() { curl -fsS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H "Content-Type: application/json" "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID$1" "${@:2}"; }
+          id=$(api "/storage/kv/namespaces?per_page=100" | jq -r '.result[] | select(.title == "travel-companion-push-subs") | .id')
+          if [ -z "$id" ]; then
+            id=$(api /storage/kv/namespaces -X POST -d '{"title":"travel-companion-push-subs"}' | jq -r .result.id)
+            echo "Created the storage."
+          fi
+          echo "id=$id" >> "$GITHUB_OUTPUT"
+
+      - name: workers.dev address
+        id: sub
+        run: |
+          api() { curl -fsS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H "Content-Type: application/json" "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID$1" "${@:2}"; }
+          sub=$(api /workers/subdomain | jq -r '.result.subdomain // empty') || sub=""
+          if [ -z "$sub" ]; then
+            want=$(echo "${GITHUB_REPOSITORY_OWNER}-trip" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9\n' '-' | cut -c1-40)
+            sub=$(api /workers/subdomain -X PUT -d "{\"subdomain\":\"$want\"}" | jq -r .result.subdomain)
+            echo "Registered $sub.workers.dev."
+          fi
+          echo "subdomain=$sub" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy the sender
+        working-directory: push
+        run: |
+          owner=$(echo "$GITHUB_REPOSITORY_OWNER" | tr 'A-Z' 'a-z')
+          repo=${GITHUB_REPOSITORY#*/}
+          sed -i \
+            -e "s|REPLACED_BY_THE_SETUP_WORKFLOW|${{ steps.kv.outputs.id }}|" \
+            -e "s|^ALLOWED_ORIGIN = .*|ALLOWED_ORIGIN = \"https://$owner.github.io\"|" \
+            -e "s|^VAPID_SUBJECT = .*|VAPID_SUBJECT = \"https://$owner.github.io/$repo/\"|" \
+            wrangler.toml
+          npx --yes wrangler@4 deploy
+
+      - name: Check it answers
+        run: |
+          url="https://travel-companion-push.${{ steps.sub.outputs.subdomain }}.workers.dev"
+          # A new workers.dev address can take a minute or two to come online.
+          for i in $(seq 1 18); do
+            if curl -fsS "$url/vapid"; then
+              echo
+              echo "### Push sender is live: $url" >> "$GITHUB_STEP_SUMMARY"
+              echo "The app is being redeployed with push switched on. Then: Settings → Notifications on your phone." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::$url doesn't answer yet. Wait a few minutes and run this workflow again."
+          exit 1
+
+      - name: Redeploy the app with push switched on
+        run: gh workflow run deploy.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}
