@@ -7,7 +7,8 @@ place, checked against each country's entry rules and linked to official sources
 **Status:** Phase 4 — complete: encrypted vault and documents, emergency card, backups (file and paper), trip import
 with the entry-rules engine, prep checklists and calendar reminders, sharing with a travel companion, country guides
 with sources and the live Dutch travel advice, money (expenses, budgets, converter), weather, phrases, packing and a
-demo mode. Phase 5 (web push) is optional and not built.
+demo mode. Phase 5 adds optional push notifications through a tiny sender you host yourself (see *Push
+notifications*).
 
 **Just want to look?** Open the app and choose *Try demo mode* on Today or in Settings — a sample trip three weeks in,
 with documents, insurance and expenses. It lives in a separate store; *Leave demo* throws it away and brings your own
@@ -19,6 +20,9 @@ data back.
 - The app downloads the travel advice and exchange rates from its own site (they're published with it daily), so
   those requests say nothing about you. **Weather is off by default**: turning it on sends the names of your current
   and next stop — no dates, nothing else — to Open-Meteo.
+- **Push notifications are off by default** and only exist if you set up the sender. Turning them on sends your
+  phone's push address and a list of times with titles like “Laos prep: 3 tasks due” to that sender — no names,
+  documents, bookings or places beyond the country. Turning them off deletes it there.
 - **Vault:** document titles, numbers, notes and files, personal and medical details and insurance details are
   encrypted with AES-256-GCM. The key is random; it's wrapped with a key derived from your passphrase
   (PBKDF2-SHA256, 600,000 iterations) and only ever unwrapped into memory. The vault locks after 5 minutes without use
@@ -94,6 +98,36 @@ in, never between 22:00 and 08:00 (earlier alarms ring the evening before). Ever
 When the plan changes, replace the old import: delete the “Trip prep” calendar (iPhone: Calendars → ⓘ → Delete
 Calendar; Google: Settings → the calendar → Remove) and import the new file into a fresh one. Event IDs are stable, so
 Google Calendar also updates events when you re-import into the same calendar.
+
+## Push notifications
+
+Browsers can't schedule notifications on their own, so real reminders need a small sender. It lives in `push/`: a
+Cloudflare Worker (no dependencies) that stores each phone's push subscription and `{time, title, link}` entries, and
+every 5 minutes sends what's due, encrypted end-to-end to the phone (Web Push, RFC 8291/8292). The app keeps the
+schedule up to date whenever the trip or a checklist changes; reminders never fall between 22:00 and 08:00 local time,
+and tapping one opens that country's checklist. Without a sender everything else still works, and the calendar export
+gives the same reminders as alarms.
+
+**Setting up the sender** (once; needs a free Cloudflare account):
+
+1. `npm run vapid-keys` — prints a public and a private key.
+2. In `push/wrangler.toml`, put the public key in `VAPID_PUBLIC_KEY` and check `ALLOWED_ORIGIN` (your Pages origin).
+3. In `push/`:
+   ```sh
+   npx wrangler@4 login
+   npx wrangler@4 kv namespace create SUBS      # paste the id into wrangler.toml
+   npx wrangler@4 secret put VAPID_PRIVATE_KEY  # paste the private key
+   npx wrangler@4 deploy                        # prints https://travel-companion-push.<you>.workers.dev
+   ```
+4. On GitHub: *Settings → Secrets and variables → Actions → Variables → New variable* `PUSH_URL` = that URL, then
+   re-run the *Deploy to GitHub Pages* workflow. The build adds the URL to the app and its Content Security Policy.
+
+**On the phone:** iPhone needs the app on the Home Screen (iOS 16.4+) — Safari won't offer push in a normal tab.
+Open **Settings → Notifications**, switch *Push notifications* on, allow notifications, then *Send a test
+notification*. Android (Chrome) works from the installed app or the browser. Push is disabled in demo mode.
+
+The free Cloudflare plan is plenty for this: one cron run every 5 minutes and a handful of storage operations a day.
+The private key only lives in the Worker's secrets; don't commit it.
 
 ## Travelling together
 
@@ -223,6 +257,8 @@ src/live/         live data: schema, refresh, what you've read, own rates
 src/weather/      Open-Meteo forecasts
 src/money/        expenses and budgets
 src/demo/         demo mode (separate database, sample data)
+src/push/         push schedule, subscription and sync
+push/             the push sender (Cloudflare Worker)
 src/features/     screens
 tests/unit/       Vitest (one test file per rule group)
 tests/golden/     the brief's golden trip test (demo trip; also my-trip.json when present locally)

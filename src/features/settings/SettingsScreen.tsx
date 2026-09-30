@@ -19,6 +19,7 @@ import {
 } from '../../ui/kit';
 import { vaultSession } from '../../vault/session';
 import { DemoCard } from '../../demo/DemoBanner';
+import { PushSettings } from './PushSettings';
 import { changePassphrase } from '../../vault/vault';
 
 const LOCK_OPTIONS = [1, 2, 5, 10, 15, 30].map((m) => ({ value: String(m), label: `After ${m} min without use` }));
@@ -80,6 +81,9 @@ export function SettingsScreen() {
 
       <SectionTitle>Storage</SectionTitle>
       <StoragePanel />
+
+      <SectionTitle>Notifications</SectionTitle>
+      <PushSettings />
 
       <SectionTitle>Demo</SectionTitle>
       <DemoCard />
