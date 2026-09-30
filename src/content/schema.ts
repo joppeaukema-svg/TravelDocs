@@ -62,3 +62,14 @@ export const GlobalContent = z.object({
   facts: z.array(Fact),
 });
 export type GlobalContent = z.infer<typeof GlobalContent>;
+
+/** content/sources.json: the official links per country and topic. */
+export const SourceLink = Source.extend({
+  topic: FactTopic,
+  verifiedAt: isoDate,
+  unverified: z.boolean().optional(),
+});
+export type SourceLink = z.infer<typeof SourceLink>;
+
+export const SourcesFile = z.record(z.union([countryCode, z.literal('GLOBAL')]), z.array(SourceLink));
+export type SourcesFile = z.infer<typeof SourcesFile>;

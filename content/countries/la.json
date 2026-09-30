@@ -16,7 +16,8 @@
           "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
         }
       ],
-      "verifiedAt": "2026-09-29"
+      "verifiedAt": "2026-09-29",
+      "note": "The Dutch advice also lists 241162, 241163 and 241164 as general emergency numbers."
     },
     {
       "id": "la-ambulance",
@@ -71,5 +72,368 @@
       "unverified": true
     }
   ],
-  "facts": []
+  "facts": [
+    {
+      "id": "la-visa",
+      "country": "LA",
+      "topic": "entry",
+      "title": "Visa required",
+      "body": "Apply for a tourist e-visa at laoevisa.gov.la before you go — it only works at specific ports (see Entry). Some airports and borders issue a visa on arrival.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        },
+        {
+          "title": "Lao e-visa — official portal",
+          "url": "https://laoevisa.gov.la"
+        },
+        {
+          "title": "Lao immigration checkpoints",
+          "url": "https://immigration.gov.la/en/checkpoint"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-voa",
+      "country": "LA",
+      "topic": "entry",
+      "title": "Visa on arrival: bring USD and a photo",
+      "body": "Per travel guides: about US$30–42 depending on nationality, paid in US dollars, plus a 4×6 cm passport photo; a small overtime fee applies outside office hours. Check the official checkpoint list.",
+      "sources": [
+        {
+          "title": "Lao immigration checkpoints",
+          "url": "https://immigration.gov.la/en/checkpoint"
+        },
+        {
+          "title": "Laos visa and entry requirements — Rough Guides",
+          "url": "https://www.roughguides.com/laos/visas-entry-requirements/"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    },
+    {
+      "id": "la-passport",
+      "country": "LA",
+      "topic": "entry",
+      "title": "Passport ≥6 months on departure, 2 blank pages",
+      "body": "Valid for at least 6 months when you leave Laos, with at least 2 blank pages.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-ldif",
+      "country": "LA",
+      "topic": "forms",
+      "title": "Laos Digital Immigration Form (LDIF)",
+      "body": "Fill in within 3 days before arrival and again within 3 days before departure, at the Immigration Department site. Keep the QR code offline.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        },
+        {
+          "title": "Laos Digital Immigration Form — Immigration Department",
+          "url": "https://www.immigration.gov.la/en/home"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-orange",
+      "country": "LA",
+      "topic": "safety",
+      "title": "Orange: Xaysomboune and the Myanmar border (Bokeo)",
+      "body": "Rebels are active in Xaysomboune — stay on main roads, don't travel after dark. Armed gangs around the Laos–Myanmar border in Bokeo and the Golden Triangle Special Economic Zone.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-methanol",
+      "country": "LA",
+      "topic": "safety",
+      "title": "Methanol poisoning",
+      "body": "Tourists died in Vang Vieng in Nov 2024 after drinking alcohol likely contaminated with methanol. No free drinks; only from sealed bottles or cans — everywhere in Laos.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-spiking",
+      "country": "LA",
+      "topic": "safety",
+      "title": "Drink spiking and robbery",
+      "body": "Foreigners are sometimes drugged in bars or taxis and then robbed or assaulted. Keep your food and drink in sight.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-vang-vieng-drugs",
+      "country": "LA",
+      "topic": "safety",
+      "title": "\"Happy\" menus in Vang Vieng",
+      "body": "Some bars sell drug-laced \"happy\" or \"special\" items; people working with police offer drugs to trap tourists.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-uxo",
+      "country": "LA",
+      "topic": "safety",
+      "title": "Unexploded ordnance",
+      "body": "Xiang Khouang and Luang Prabang provinces, and along the Vietnam border (Attapeu, Sekong, Salavan, Savannakhet, south Khammouane). Don't leave main roads.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-monsoon",
+      "country": "LA",
+      "topic": "weather",
+      "title": "Monsoon May–October",
+      "body": "Landslides and mudflows damage roads; water-sport accidents around Vang Vieng, some fatal.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-emergency-info",
+      "country": "LA",
+      "topic": "emergency",
+      "title": "No Dutch embassy in Laos",
+      "body": "The Dutch embassy in Bangkok covers Laos (+66 2 309 5200); there is an honorary consul in Vientiane. 24/7: +31 247 247 247.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-care",
+      "country": "LA",
+      "topic": "health",
+      "title": "Very limited healthcare",
+      "body": "Basic care in Vientiane; almost no reliable care elsewhere. Serious cases need evacuation abroad — your insurance must cover it. GGD: dengue, chikungunya, malaria, rabies.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        },
+        {
+          "title": "GGD reisvaccinaties",
+          "url": "https://www.ggdreisvaccinaties.nl/land/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-drugs",
+      "country": "LA",
+      "topic": "laws",
+      "title": "Drugs",
+      "body": "Soft drugs included; up to life or death penalty. One ecstasy pill for own use already means life imprisonment.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-vapes",
+      "country": "LA",
+      "topic": "laws",
+      "title": "Vapes and shisha banned",
+      "body": "Using, possessing or importing them: high fine and prison.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-passport-carry",
+      "country": "LA",
+      "topic": "laws",
+      "title": "Always carry your passport",
+      "body": "Authorities can ask for it; a high fine if you don't have it. Keep a photo of it on your phone too.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-gambling",
+      "country": "LA",
+      "topic": "laws",
+      "title": "No card or dice games in public",
+      "body": "They can be treated as gambling: high fine.",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-temples",
+      "country": "LA",
+      "topic": "culture",
+      "title": "Temples",
+      "body": "No public affection on or around temple grounds — you can be arrested and deported.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-photos",
+      "country": "LA",
+      "topic": "laws",
+      "title": "No photos of military, police or protests",
+      "body": "Risk of arrest or prison.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-relationships",
+      "country": "LA",
+      "topic": "laws",
+      "title": "Relationships with Lao nationals",
+      "body": "Sexual relations between unmarried foreigners and Lao nationals are prohibited: fine or prison.",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-driving",
+      "country": "LA",
+      "topic": "transport",
+      "title": "Driving needs an IDP",
+      "body": "A Dutch licence is only valid together with a valid IDP.",
+      "sources": [
+        {
+          "title": "Reisadvies Laos — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/laos"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "la-lcr",
+      "country": "LA",
+      "topic": "transport",
+      "title": "Laos–China Railway",
+      "body": "Vientiane – Vang Vieng – Luang Prabang – Boten. Tickets in the official LCR Ticket app; domestic sales open about 7 days ahead and sell out fast in Dec–Feb. Station security bans aerosols and knives.",
+      "sources": [
+        {
+          "title": "Laos–China Railway online booking — KPL",
+          "url": "https://kpl.gov.la/En/detail.aspx?id=71839"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    },
+    {
+      "id": "la-no-grab",
+      "country": "LA",
+      "topic": "apps",
+      "title": "No Grab in Laos",
+      "body": "Grab does not operate in Laos (it lists eight other Southeast Asian countries). Use tuk-tuks or local ride apps and agree prices first.",
+      "sources": [
+        {
+          "title": "Grab — where we are",
+          "url": "https://www.grab.com/th/en/where-we-are/"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    },
+    {
+      "id": "la-plugs",
+      "country": "LA",
+      "topic": "connectivity",
+      "title": "Plugs: A, B, C, E, F; 230 V",
+      "body": "Mains is 230 V / 50 Hz. Dutch round-pin plugs usually fit; bring a universal adapter anyway.",
+      "sources": [
+        {
+          "title": "Plug and voltage — Laos (WorldStandards)",
+          "url": "https://www.worldstandards.eu/electricity/plug-voltage-by-country/laos/"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    }
+  ]
 }

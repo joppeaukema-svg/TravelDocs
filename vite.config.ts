@@ -25,7 +25,7 @@ export const CONTENT_SECURITY_POLICY = [
   "style-src 'self'",
   "img-src 'self' blob: data:",
   "font-src 'self'",
-  "connect-src 'self'",
+  "connect-src 'self' https://api.open-meteo.com https://geocoding-api.open-meteo.com",
   "media-src 'self' blob:",
   "frame-src blob:",
   "object-src 'none'",
@@ -83,8 +83,27 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,png,svg,woff2,webmanifest}'],
+        // Live data changes daily and the maps are large: cached at runtime instead of precached.
+        globIgnores: ['live/**'],
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => /\/live\/[^/]+\.json$/.test(url.pathname),
+            handler: 'NetworkFirst',
+            options: { cacheName: 'live-data', networkTimeoutSeconds: 4 },
+          },
+          {
+            urlPattern: ({ url }) => url.pathname.includes('/live/maps/'),
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'live-maps' },
+          },
+          {
+            urlPattern: ({ url }) => url.hostname === 'api.open-meteo.com',
+            handler: 'NetworkFirst',
+            options: { cacheName: 'weather', networkTimeoutSeconds: 5, expiration: { maxEntries: 30, maxAgeSeconds: 7 * 86400 } },
+          },
+        ],
       },
     }),
   ],

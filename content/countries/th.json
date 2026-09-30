@@ -43,6 +43,18 @@
       "verifiedAt": "2026-09-29"
     },
     {
+      "id": "th-medical-bangkok",
+      "label": "Medical emergency (Bangkok region)",
+      "number": "1646",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
       "id": "th-fire",
       "label": "Fire",
       "number": "199",
@@ -55,5 +67,337 @@
       "verifiedAt": "2026-09-29"
     }
   ],
-  "facts": []
+  "facts": [
+    {
+      "id": "th-visa-free",
+      "country": "TH",
+      "topic": "entry",
+      "title": "Visa-free: 30 days (arrivals from 15 Sep 2026)",
+      "body": "Tourists only. Your arrival stamp shows your leave-by date. You must be able to prove you'll leave within the period (e.g. an onward ticket). Repeated short visa-free visits can get you refused; visa runs are allowed at most twice a year.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-passport",
+      "country": "TH",
+      "topic": "entry",
+      "title": "Passport ≥6 months on arrival, undamaged",
+      "body": "At least 6 months valid on arrival. A damaged passport can be refused.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-tdac",
+      "country": "TH",
+      "topic": "forms",
+      "title": "Thailand Digital Arrival Card",
+      "body": "Required with a Dutch passport, from 3 days before arrival. Free, only at tdac.immigration.go.th.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        },
+        {
+          "title": "TDAC manual — Thai Immigration Bureau",
+          "url": "https://tdac.immigration.go.th/manual/en/index.html"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-cambodia-border",
+      "country": "TH",
+      "topic": "safety",
+      "title": "Cambodian border: red 0–5 km, orange 5–20 km",
+      "body": "Ceasefire since late 2025 but unpredictable; the border is closed, with army checkpoints and possible landmines.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-myanmar-border",
+      "country": "TH",
+      "topic": "safety",
+      "title": "Myanmar border strip (10 km) is orange",
+      "body": "Except the towns of Mae Sai, Mae Sot and Ranong. Armed drug and people smugglers are active near the Thailand–Laos–Myanmar tri-border (Golden Triangle). The Mae Sai and Mae Sot crossings are open only to Thai and Myanmar passports; don't cross into Myanmar.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-south",
+      "country": "TH",
+      "topic": "safety",
+      "title": "Deep south is orange",
+      "body": "Yala, Narathiwat, Pattani and the Songkhla districts Chana, Nathawi, Thepha and Saba Yoi: insurgent attacks, emergency rule in most districts.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-scooter-scam",
+      "country": "TH",
+      "topic": "safety",
+      "title": "Scooter rental scams",
+      "body": "Never hand over your passport or licence as a deposit (Thai authorities ban it) — give a copy or a cash deposit. Film the scooter before riding; lock it when parked. Many rental scooters are uninsured.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-traffic",
+      "country": "TH",
+      "topic": "safety",
+      "title": "Deadly roads; unsafe buses and ferries",
+      "body": "Thousands of road deaths a year, mostly on scooters. Almost all scooters are officially motorbikes: without a valid (international) motorcycle licence your travel insurance often won't pay. Buses and ferries are often poorly maintained; ferries overcrowded with too few life jackets.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-job-scams",
+      "country": "TH",
+      "topic": "safety",
+      "title": "Fake job offers",
+      "body": "Foreigners are lured with well-paid jobs and then trafficked into forced labour in neighbouring countries.",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-rain",
+      "country": "TH",
+      "topic": "weather",
+      "title": "Rainy season May–October",
+      "body": "May–October nationwide; October–January also in the south and the south-east coast (Surat Thani and further south, Koh Tao, Koh Pha Ngan, Koh Samui). Floods can cut power, phone and roads.",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-air",
+      "country": "TH",
+      "topic": "weather",
+      "title": "Air pollution December–March",
+      "body": "High PM2.5 especially December–March; wear a KN95 mask on bad days (check the World Air Quality Index).",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-currents",
+      "country": "TH",
+      "topic": "safety",
+      "title": "Strong currents",
+      "body": "Mostly May–October. Don't swim at a red flag; always wear a life jacket kayaking or rafting.",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-emergency-info",
+      "country": "TH",
+      "topic": "emergency",
+      "title": "Emergency numbers",
+      "body": "General 191, (tourist) police 1155, medical 1669 (Bangkok region 1646), fire 199.",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-care",
+      "country": "TH",
+      "topic": "health",
+      "title": "Good care, but prepay",
+      "body": "Healthcare is good and widely available, but costs can be high and sometimes must be paid in advance. GGD: malaria, dengue, rabies.",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        },
+        {
+          "title": "GGD reisvaccinaties",
+          "url": "https://www.ggdreisvaccinaties.nl/land/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-otc-meds",
+      "country": "TH",
+      "topic": "health",
+      "title": "No sleeping pills without prescription",
+      "body": "Buying (sleeping) medicine without a doctor's prescription, even at a pharmacy, risks arrest, a fine or prison.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-drugs",
+      "country": "TH",
+      "topic": "laws",
+      "title": "Drugs and cannabis",
+      "body": "Heavy penalties even for small amounts; some hard drugs carry the death penalty. Recreational cannabis is banned (tightened in 2025) and exports are checked on departure.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-vapes",
+      "country": "TH",
+      "topic": "laws",
+      "title": "Vapes banned; 200-cigarette limit",
+      "body": "Importing vapes or refills: high fine, up to 10 years in prison. Max 200 cigarettes per person — more means a fine and confiscation.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-beach-smoking",
+      "country": "TH",
+      "topic": "laws",
+      "title": "No smoking on many beaches",
+      "body": "Up to 1 year in prison or a fine up to 100,000 THB.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-monarchy",
+      "country": "TH",
+      "topic": "laws",
+      "title": "Lèse-majesté",
+      "body": "Criticising or insulting the royal family is punished severely. Avoid the subject altogether.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-drones",
+      "country": "TH",
+      "topic": "laws",
+      "title": "Drones",
+      "body": "Strict rules; high fines or prison if you break them.",
+      "sources": [
+        {
+          "title": "Reisadvies Thailand — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-grab",
+      "country": "TH",
+      "topic": "apps",
+      "title": "Grab",
+      "body": "Grab operates in Bangkok, Chiang Mai, Chiang Rai (incl. Mae Sai) and many other cities.",
+      "sources": [
+        {
+          "title": "Grab — where we are (Thailand)",
+          "url": "https://www.grab.com/th/en/locations/"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "th-plugs",
+      "country": "TH",
+      "topic": "connectivity",
+      "title": "Plugs: A, B, C, O; 230 V",
+      "body": "Mains is 230 V / 50 Hz. Most sockets take flat (A) and round (C) pins; a universal adapter covers it.",
+      "sources": [
+        {
+          "title": "Plug and voltage — Thailand (WorldStandards)",
+          "url": "https://www.worldstandards.eu/electricity/plug-voltage-by-country/thailand/"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    }
+  ]
 }

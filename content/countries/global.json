@@ -28,5 +28,85 @@
       "verifiedAt": "2026-09-29"
     }
   ],
-  "facts": []
+  "facts": [
+    {
+      "id": "global-informatieservice",
+      "country": "GLOBAL",
+      "topic": "safety",
+      "title": "BZ Informatieservice",
+      "body": "Sign up to get an email when the advice for your countries changes or in a crisis.",
+      "sources": [
+        {
+          "title": "BZ Informatieservice",
+          "url": "https://informatieservice.nederlandwereldwijd.nl"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "global-meds",
+      "country": "GLOBAL",
+      "topic": "health",
+      "title": "Medicine statements",
+      "body": "Check per country whether you need a medicine statement (CAK) and keep medicines in the original packaging.",
+      "sources": [
+        {
+          "title": "Medicijnen mee op reis — CAK",
+          "url": "https://www.hetcak.nl/medicijnen-mee-op-reis/"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "global-vaccinations",
+      "country": "GLOBAL",
+      "topic": "health",
+      "title": "Vaccinations",
+      "body": "Check the GGD advice per country and book at a travel clinic well before departure; other providers via LCR.",
+      "sources": [
+        {
+          "title": "GGD reisvaccinaties",
+          "url": "https://www.ggdreisvaccinaties.nl/"
+        },
+        {
+          "title": "LCR",
+          "url": "https://www.lcr.nl"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "global-insurance",
+      "country": "GLOBAL",
+      "topic": "health",
+      "title": "Insurance",
+      "body": "Basic Dutch health insurance does not always cover costs abroad in full. Many insurers change cover in orange and red areas. Check the maximum days per trip.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies"
+        },
+        {
+          "title": "Maximale reisduur — Poliswijzer",
+          "url": "https://www.poliswijzer.nl/reisverzekering/kennisbank/maximale-reisduur-doorlopende-reisverzekering"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "global-passport-copy",
+      "country": "GLOBAL",
+      "topic": "entry",
+      "title": "Safe passport copy",
+      "body": "Make a safe copy (KopieID app) and share it with family.",
+      "sources": [
+        {
+          "title": "Veilige kopie identiteitsbewijs — Rijksoverheid",
+          "url": "https://www.rijksoverheid.nl/vraag-en-antwoord/identiteitsfraude/veilige-kopie-identiteitsbewijs"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    }
+  ]
 }

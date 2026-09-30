@@ -31,5 +31,301 @@
       "verifiedAt": "2026-09-29"
     }
   ],
-  "facts": []
+  "facts": [
+    {
+      "id": "jp-visa-free",
+      "country": "JP",
+      "topic": "entry",
+      "title": "Visa-free for up to 90 days",
+      "body": "No visa needed with a Dutch passport for up to 90 days. The passport must be valid for the whole stay.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-vjw",
+      "country": "JP",
+      "topic": "forms",
+      "title": "Visit Japan Web",
+      "body": "Optional but recommended: one QR code for immigration and customs. Save a screenshot; paper forms still work.",
+      "sources": [
+        {
+          "title": "Visit Japan Web — Digital Agency",
+          "url": "https://services.digital.go.jp/en/visit-japan-web/"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-fukushima",
+      "country": "JP",
+      "topic": "safety",
+      "title": "Red zone in south-east Fukushima",
+      "body": "The nuclear exclusion area (towns such as Futaba, Iitate, Katsurao, Minamisōma, Namie, Okuma and Tomioka) is red: do not go. The rest of Japan is green.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-spiking",
+      "country": "JP",
+      "topic": "safety",
+      "title": "Drink spiking in nightlife areas",
+      "body": "Occasionally in Roppongi, Shibuya, Shinjuku and Kabukicho (Tokyo) or Namba (Osaka). Keep your drink in sight; accept nothing from strangers.",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-quakes",
+      "country": "JP",
+      "topic": "safety",
+      "title": "Earthquakes and tsunamis",
+      "body": "High chance of earthquakes, landslides and tsunamis. Install an alert app (see Useful apps).",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-typhoons",
+      "country": "JP",
+      "topic": "weather",
+      "title": "Typhoons",
+      "body": "Tropical storms and typhoons occur; follow local news and the Japan Meteorological Agency when one is forecast.",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-hotline",
+      "country": "JP",
+      "topic": "emergency",
+      "title": "Japan Visitor Hotline (JNTO), 24/7",
+      "body": "050-3816-2787 (+81 50 3816 2787 from abroad): tourist information and help with accidents, illness and disasters, in English, Chinese and Korean.",
+      "sources": [
+        {
+          "title": "Japan Visitor Hotline — JNTO",
+          "url": "https://www.japan.travel/en/plan/hotline/"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-arrest",
+      "country": "JP",
+      "topic": "laws",
+      "title": "Slow consular notice after arrest",
+      "body": "If you are arrested it can take a long time before the Dutch embassy is told.",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-drugs",
+      "country": "JP",
+      "topic": "laws",
+      "title": "Drugs",
+      "body": "Heavy fines and long prison sentences for using, possessing or selling drugs.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-tattoos",
+      "country": "JP",
+      "topic": "culture",
+      "title": "Tattoos",
+      "body": "Tattoos are associated with gangs; some pools, onsen, spas and gyms refuse entry. Look for tattoo-friendly places.",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-eliquid",
+      "country": "JP",
+      "topic": "laws",
+      "title": "E-liquid: 120 ml per month",
+      "body": "Maximum 120 ml of e-cigarette liquid per month for personal use; more risks a fine or prison. It isn't sold in Japan.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-meds",
+      "country": "JP",
+      "topic": "health",
+      "title": "Medicines: one-month rule",
+      "body": "Up to one month's supply of ordinary prescription medicine (two months over-the-counter) without paperwork; more needs an Import Confirmation (Yunyu Kakunin-sho) applied for online before arrival. Amphetamine-type ADHD medicine is prohibited; some substances (e.g. pseudoephedrine) are controlled. Keep medicines in the original packaging.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Bringing medicines for personal use into Japan — MHLW",
+          "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iyakuhin/kojinyunyu/topics/tp010401-1_00001.html"
+        },
+        {
+          "title": "Import Confirmation — MHLW",
+          "url": "https://impconf.mhlw.go.jp"
+        },
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-costs",
+      "country": "JP",
+      "topic": "health",
+      "title": "Expensive care, limited English",
+      "body": "Treatment and hospital stays can cost more than in the Netherlands, and staff speak less English. Good travel insurance matters.",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-cash",
+      "country": "JP",
+      "topic": "money",
+      "title": "Carry cash",
+      "body": "Cards (credit or debit) aren't accepted everywhere — always carry enough cash.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-taxfree",
+      "country": "JP",
+      "topic": "money",
+      "title": "Tax-free shopping becomes a refund (from 1 Nov 2026)",
+      "body": "From 1 November 2026 tax-free shops charge the full price including tax; you claim the tax back when you leave Japan, before checking in, at a customs terminal at the airport. Show your passport when buying; export the goods within 90 days. Items used up in Japan don't qualify.",
+      "sources": [
+        {
+          "title": "Tax-free shopping — Japan Tourism Agency",
+          "url": "https://www.mlit.go.jp/kankocho/tax-free/page01_000001_00028.html"
+        },
+        {
+          "title": "Changes are coming to Japan's tax-free shopping — JNTO",
+          "url": "https://www.japan.travel/en/ca/news/changes-are-coming-to-japans-tax-free-shopping/"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-suica",
+      "country": "JP",
+      "topic": "transport",
+      "title": "IC card: Welcome Suica",
+      "body": "Welcome Suica (card, or the Welcome Suica Mobile app on iPhone) is prepaid e-money for trains, buses and shops. The app can also hold JR East seat reservations. Some features only work once you are in Japan.",
+      "sources": [
+        {
+          "title": "Welcome Suica Mobile — JR East",
+          "url": "https://www.jreast.co.jp/multi/wsmlp/"
+        },
+        {
+          "title": "Welcome Suica — JR East",
+          "url": "https://www.jreast.co.jp/en/multi/welcomesuica/welcomesuica.html"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-driving",
+      "country": "JP",
+      "topic": "transport",
+      "title": "Driving needs an IDP (1949 model)",
+      "body": "A Dutch licence is only valid together with an IDP of the 1949 model, from an ANWB store before you leave.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisdocumenten Japan — ANWB",
+          "url": "https://www.anwb.nl/vakantie/japan/reisvoorbereiding/reisdocumenten"
+        },
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "jp-plugs",
+      "country": "JP",
+      "topic": "connectivity",
+      "title": "Plugs: type A/B, 100 V",
+      "body": "Mains is 100 V (50 Hz east, 60 Hz west) with flat two-pin type A sockets (some B). Most phone and laptop chargers handle 100–240 V; check hair dryers and the like.",
+      "sources": [
+        {
+          "title": "Plug and voltage — Japan (WorldStandards)",
+          "url": "https://www.worldstandards.eu/electricity/plug-voltage-by-country/japan/"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    },
+    {
+      "id": "jp-quake-apps",
+      "country": "JP",
+      "topic": "apps",
+      "title": "Earthquake alert apps",
+      "body": "The Dutch advice names Yurekuru Call, Japan Shelter Guide, Safetytips, NHK World-Japan and Tokyo Minato City.",
+      "sources": [
+        {
+          "title": "Reisadvies Japan — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    }
+  ]
 }

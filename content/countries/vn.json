@@ -43,5 +43,288 @@
       "verifiedAt": "2026-09-29"
     }
   ],
-  "facts": []
+  "facts": [
+    {
+      "id": "vn-visa-free",
+      "country": "VN",
+      "topic": "entry",
+      "title": "Visa-free for up to 45 days (tourism)",
+      "body": "Tourism only, up to 45 days (policy 15 Aug 2025 – 14 Aug 2028). You need a return or onward ticket and documents showing the purpose of your trip. Longer or other purposes: e-visa (up to 90 days) only via evisa.gov.vn.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        },
+        {
+          "title": "New visa exemption policies — Vietnam National Authority of Tourism",
+          "url": "https://vietnam.travel/things-to-do/new-visa-exemption-policies-effective-15-august-2025"
+        },
+        {
+          "title": "Vietnam e-visa — official portal",
+          "url": "https://evisa.gov.vn"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-passport",
+      "country": "VN",
+      "topic": "entry",
+      "title": "Passport ≥6 months on arrival",
+      "body": "Your passport must be valid for at least 6 months on arrival.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-overstay",
+      "country": "VN",
+      "topic": "entry",
+      "title": "Don't overstay",
+      "body": "An expired visa can mean a fine or prison. An extension is only possible before it expires — contact the immigration department in time.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-prearrival",
+      "country": "VN",
+      "topic": "forms",
+      "title": "Digital pre-arrival form",
+      "body": "Mandatory when landing at Ho Chi Minh City, Hanoi, Da Nang or Phu Quoc airports; optional elsewhere.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        },
+        {
+          "title": "Vietnam pre-arrival form",
+          "url": "https://prearrival.immigration.gov.vn"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-borders",
+      "country": "VN",
+      "topic": "entry",
+      "title": "Land borders not always open",
+      "body": "Border areas with neighbouring countries are not always open. Ask the local authorities (e.g. the police) about the current situation.",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-theft",
+      "country": "VN",
+      "topic": "safety",
+      "title": "Pickpockets",
+      "body": "Especially in busy city and tourist areas; avoid remote streets and parks.",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-landmines",
+      "country": "VN",
+      "topic": "safety",
+      "title": "Landmines and UXO",
+      "body": "Quang Tri province, central Vietnam and along the Laos border. Stay on main roads and marked paths, hike only with someone who knows the area, and never touch metal objects.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-traffic",
+      "country": "VN",
+      "topic": "safety",
+      "title": "Traffic accidents",
+      "body": "Many deaths and injuries every year, mostly on mopeds and scooters, tourists included. Consider a car with driver. If you ride: under 50 cc only, only with experience, and with insurance that covers vehicle accidents.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-weather",
+      "country": "VN",
+      "topic": "weather",
+      "title": "Typhoons May–November; northern landslides",
+      "body": "Tropical storms mainly May–November. After heavy rain, landslides and mudflows in the northern mountains (Dien Bien, Sapa, Ha Giang) can close roads.",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-emergency-info",
+      "country": "VN",
+      "topic": "emergency",
+      "title": "Emergency numbers",
+      "body": "Police 113, fire 114, ambulance 115.",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-health",
+      "country": "VN",
+      "topic": "health",
+      "title": "Limited healthcare; malaria, rabies, air pollution",
+      "body": "Serious cases may need transfer abroad. The GGD covers malaria and rabies; air pollution can cause respiratory problems.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        },
+        {
+          "title": "GGD reisvaccinaties",
+          "url": "https://www.ggdreisvaccinaties.nl/land/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-drugs",
+      "country": "VN",
+      "topic": "laws",
+      "title": "Drugs: death penalty possible; bar drug tests",
+      "body": "Soft drugs included. Police drug-test people in bars and clubs; a positive result from use weeks ago or abroad can still lead to arrest.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-vapes",
+      "country": "VN",
+      "topic": "laws",
+      "title": "Vapes banned",
+      "body": "Bringing, using or selling e-cigarettes and refills: high fine or 1–15 years in prison.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-photos",
+      "country": "VN",
+      "topic": "laws",
+      "title": "No photos of military or police",
+      "body": "Photographing military sites, soldiers, police or guards is forbidden and can lead to arrest.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-grab",
+      "country": "VN",
+      "topic": "apps",
+      "title": "Grab",
+      "body": "Grab (rides and food) operates in Hanoi, Ho Chi Minh City, Da Nang, Hoi An, Hue, Ninh Binh, Phu Quoc and many other cities.",
+      "sources": [
+        {
+          "title": "Grab — where we are (Vietnam)",
+          "url": "https://www.grab.com/vn/en/locations/"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-driving",
+      "country": "VN",
+      "topic": "transport",
+      "title": "Driving needs an IDP",
+      "body": "A Dutch licence is only valid with an IDP. Scooters: under 50 cc only.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Vietnam — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/vietnam"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "vn-plugs",
+      "country": "VN",
+      "topic": "connectivity",
+      "title": "Plugs: A, C, D; 220 V",
+      "body": "Mains is 220 V / 50 Hz; sockets usually take A and C plugs (often universal), sometimes D. A universal adapter covers it.",
+      "sources": [
+        {
+          "title": "Plug and voltage — Vietnam (WorldStandards)",
+          "url": "https://www.worldstandards.eu/electricity/plug-voltage-by-country/vietnam/"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    },
+    {
+      "id": "vn-tet",
+      "country": "VN",
+      "topic": "holidays",
+      "title": "Tết 2027: around 6 February",
+      "body": "Lunar New Year falls on 6 Feb 2027. The official public holiday was not final at the time of writing (proposed 4–10 Feb). Expect full trains, buses and flights and many closed shops and restaurants for about a week around it.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Vietnam ministry backs 7-day Lunar New Year break in 2027 — Tuoi Tre",
+          "url": "https://news.tuoitre.vn/vietnam-ministry-backs-7-day-lunar-new-year-break-in-2027-103260808105955453.htm"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    }
+  ]
 }

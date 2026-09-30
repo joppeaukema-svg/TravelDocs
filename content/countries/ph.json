@@ -31,5 +31,302 @@
       "verifiedAt": "2026-09-29"
     }
   ],
-  "facts": []
+  "facts": [
+    {
+      "id": "ph-visa-free",
+      "country": "PH",
+      "topic": "entry",
+      "title": "Visa-free for up to 30 days",
+      "body": "Show your exit ticket on arrival. Longer stays: extend at the Bureau of Immigration before the 30 days run out; after 6 months you need an ECC to leave.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        },
+        {
+          "title": "Bureau of Immigration Philippines",
+          "url": "https://immigration.gov.ph"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-passport",
+      "country": "PH",
+      "topic": "entry",
+      "title": "Passport ≥6 months on departure",
+      "body": "Valid for at least 6 months when you leave the Philippines.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-etravel",
+      "country": "PH",
+      "topic": "forms",
+      "title": "eTravel",
+      "body": "Free registration within 72 hours before travel to and from the Philippines. Show the QR code at check-in. Only at etravel.gov.ph.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        },
+        {
+          "title": "eTravel — Government of the Philippines",
+          "url": "https://etravel.gov.ph"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-red",
+      "country": "PH",
+      "topic": "safety",
+      "title": "Red: western Mindanao, Sulu archipelago, Sulu Sea",
+      "body": "Zamboanga Peninsula, parts of Northern Mindanao (Misamis Occidental, Lanao del Norte), Soccsksargen and BARMM; Basilan, Sulu, Tawi-Tawi; the Sulu Sea waters (Tubbataha reefs excepted). Terrorism, kidnapping, piracy.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-crime",
+      "country": "PH",
+      "topic": "safety",
+      "title": "Spiking and scams",
+      "body": "Foreigners are sometimes drugged in bars or taxis and robbed. Only use registered taxis with a meter. Beware of fake jewellery and goods sellers.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-ferries",
+      "country": "PH",
+      "topic": "transport",
+      "title": "Ferries",
+      "body": "Frequent ferry accidents: poor maintenance, overcrowding, often no life jackets. Avoid them in bad weather.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-roads",
+      "country": "PH",
+      "topic": "transport",
+      "title": "Chaotic roads",
+      "body": "Don't drive in the dark or bad weather. After an accident always wait for the police. An IDP is required and valid for at most 90 days.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-typhoons",
+      "country": "PH",
+      "topic": "weather",
+      "title": "Typhoons June–November",
+      "body": "Storm surges and heavy rain, especially on coasts. Follow PAGASA.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        },
+        {
+          "title": "PAGASA",
+          "url": "https://www.pagasa.dost.gov.ph"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-signals",
+      "country": "PH",
+      "topic": "weather",
+      "title": "PAGASA wind signals 1–5",
+      "body": "Signal 1: winds of 39–61 km/h expected within 36 hours; 2: 62–88 km/h within 24 h; 3: 89–117 km/h within 18 h; 4: 118–184 km/h within 12 h; 5: 185 km/h or more within 12 h. Follow the PAGASA bulletins.",
+      "sources": [
+        {
+          "title": "Tropical Cyclone Wind Signal — PAGASA",
+          "url": "https://pagasa.dost.gov.ph/learning-tools/tropical-cyclone-wind-signal"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-volcanoes",
+      "country": "PH",
+      "topic": "safety",
+      "title": "Volcano no-go zones",
+      "body": "2–6 km zones around Bulusan, Kanlaon, Mayon and Taal — never enter. Eruptions can halt flights; wear a mask in ash. Check PHIVOLCS.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-tsunami",
+      "country": "PH",
+      "topic": "safety",
+      "title": "Earthquakes and tsunamis",
+      "body": "If you feel a quake or see the sea retreat suddenly, go to higher ground immediately.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-emergency-info",
+      "country": "PH",
+      "topic": "emergency",
+      "title": "Emergency numbers",
+      "body": "911 (ambulance and fire), police 117.",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-hospitals",
+      "country": "PH",
+      "topic": "health",
+      "title": "Hospitals want prepayment",
+      "body": "Good private hospitals in big cities; most ask for prepayment or a payment guarantee before treating you. Limited care outside cities. Diving needs extra cover. GGD: dengue, chikungunya, zika, rabies.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        },
+        {
+          "title": "GGD reisvaccinaties",
+          "url": "https://www.ggdreisvaccinaties.nl/land/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-id",
+      "country": "PH",
+      "topic": "laws",
+      "title": "ID obligation from 16",
+      "body": "Always carry your passport with a valid visa or entry stamp — not having it is an offence.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-drugs",
+      "country": "PH",
+      "topic": "laws",
+      "title": "Drugs",
+      "body": "Small amounts and soft drugs included; one ecstasy pill can mean life imprisonment. Watch your luggage.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-minors",
+      "country": "PH",
+      "topic": "laws",
+      "title": "Children",
+      "body": "Being with unrelated children aged 12 or under, or much younger than you, can lead to accusations. Sex with anyone under 18 is heavily punished.",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-symbols",
+      "country": "PH",
+      "topic": "laws",
+      "title": "Respect national symbols",
+      "body": "Insulting the flag or other symbols is punished with prison. Foreigners at demonstrations can be deported.",
+      "sources": [
+        {
+          "title": "Reisadvies Filipijnen — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/filipijnen"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-grab",
+      "country": "PH",
+      "topic": "apps",
+      "title": "Grab",
+      "body": "Grab operates in Manila, Cebu, Davao, Iloilo, Bacolod, Dumaguete and other cities — not on most small islands.",
+      "sources": [
+        {
+          "title": "Grab — where we are (Philippines)",
+          "url": "https://www.grab.com/ph/locations/"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "ph-plugs",
+      "country": "PH",
+      "topic": "connectivity",
+      "title": "Plugs: A, B, C; 220 V",
+      "body": "Mains is 220 V / 60 Hz, mostly flat-pin (A/B) sockets. Bring an adapter.",
+      "sources": [
+        {
+          "title": "Plug and voltage — Philippines (WorldStandards)",
+          "url": "https://www.worldstandards.eu/electricity/plug-voltage-by-country/philippines/"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    }
+  ]
 }

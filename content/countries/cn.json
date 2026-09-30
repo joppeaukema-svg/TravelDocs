@@ -56,5 +56,372 @@
       "verifiedAt": "2026-09-29"
     }
   ],
-  "facts": []
+  "facts": [
+    {
+      "id": "cn-visa-free",
+      "country": "CN",
+      "topic": "entry",
+      "title": "Visa-free for up to 30 days",
+      "body": "Dutch passports: no visa for stays of up to 30 days for tourism, business, family visits, exchange visits or transit, for entries until 31 Dec 2026. You need a return or onward ticket. You may not change the purpose of your trip during the trip.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Chinese embassy in the Netherlands — visa exemption notice",
+          "url": "https://nl.china-embassy.gov.cn/eng/ls/zytz/202511/t20251104_11746916.htm"
+        },
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-passport",
+      "country": "CN",
+      "topic": "entry",
+      "title": "Passport validity",
+      "body": "Visa-free: valid for the whole stay. With a visa: at least 6 months on arrival. Everyone aged 16+ must be able to show ID — always carry your passport.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-medical-check",
+      "country": "CN",
+      "topic": "entry",
+      "title": "Medical checks on arrival",
+      "body": "Authorities may take your temperature or a blood sample on arrival. Refusing can mean you are not allowed in.",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-registration",
+      "country": "CN",
+      "topic": "entry",
+      "title": "Police registration within 24 hours",
+      "body": "You must be registered within 24 hours of arrival. Hotels do this for you; otherwise register at a police station or online with the city.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-arrival-card",
+      "country": "CN",
+      "topic": "forms",
+      "title": "Online arrival card",
+      "body": "Needed with a Dutch passport. Filling it in online beforehand is not mandatory; you can also do it on arrival. Use only the official site, the NIA 12367 app or the WeChat/Alipay mini-programs.",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        },
+        {
+          "title": "China online arrival card — National Immigration Administration",
+          "url": "https://s.nia.gov.cn/ArrivalCardFillingPC/"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-scams",
+      "country": "CN",
+      "topic": "safety",
+      "title": "Tea-house and \"guide\" scams",
+      "body": "Be wary of young English-speaking \"guides\" and invitations to a tea shop, massage parlour or bar: you may get a huge bill and be forced to pay it under threat.",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-arrest",
+      "country": "CN",
+      "topic": "safety",
+      "title": "Arbitrary detention",
+      "body": "Foreigners can be arrested for unclear or political reasons (e.g. suspected espionage). The Dutch embassy can help only in a limited way, especially if you have (had) Chinese nationality.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-weather-storms",
+      "country": "CN",
+      "topic": "weather",
+      "title": "Typhoons May–November, southern rains Feb–October",
+      "body": "Coastal provinces get typhoons and tropical storms mainly from May to November. Southern China gets heavy rain mainly from February to October, with floods and landslides.",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-earthquakes",
+      "country": "CN",
+      "topic": "safety",
+      "title": "Earthquakes",
+      "body": "Earthquake risk, especially in the west of the country.",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-no-english",
+      "country": "CN",
+      "topic": "emergency",
+      "title": "Emergency services speak little English",
+      "body": "Police 110, ambulance 120, fire 119, traffic accidents 122. Responders speak little or no English — have your address in Chinese ready (see \"show this\" cards in Phrases).",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-hospital-pay",
+      "country": "CN",
+      "topic": "health",
+      "title": "Hospitals want payment up front",
+      "body": "Even when insured, hospitals often demand immediate payment. Private clinics are expensive; outside big cities only basic care is available. Call your insurer straight away.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-altitude",
+      "country": "CN",
+      "topic": "health",
+      "title": "Altitude sickness in the mountains",
+      "body": "Possible in mountain areas; see the GGD page on altitude sickness.",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        },
+        {
+          "title": "GGD reisvaccinaties",
+          "url": "https://www.ggdreisvaccinaties.nl/land/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-drugs",
+      "country": "CN",
+      "topic": "laws",
+      "title": "Drugs: zero tolerance, tests count use abroad",
+      "body": "No drugs at all, soft drugs included; penalties up to the death penalty. Police test blood, urine or hair in bars, on the street, at home or at the border — a positive test counts even if you used before arriving.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-online",
+      "country": "CN",
+      "topic": "laws",
+      "title": "Online posts and phone checks",
+      "body": "Posting or sharing criticism of China or its government can be punishable, including posts from before the trip. Authorities may check your phone or laptop on arrival.",
+      "severity": "critical",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-photos",
+      "country": "CN",
+      "topic": "laws",
+      "title": "No photos of protests, military or police",
+      "body": "Photographing or filming demonstrations, government buildings, military sites, the army or police is forbidden and can lead to espionage suspicions. Drones: strict import and use rules.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-dual",
+      "country": "CN",
+      "topic": "laws",
+      "title": "Dual nationality not recognised",
+      "body": "If you also have (or had) Chinese nationality, China does not recognise your Dutch nationality and the embassy may not be allowed to help.",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-payments",
+      "country": "CN",
+      "topic": "money",
+      "title": "Pay by phone: Alipay or WeChat Pay",
+      "body": "Often you can only pay by phone. Not every Dutch card works at every Chinese bank ATM; credit cards mostly only at big hotels and airports; cash is not accepted everywhere. Bring several payment methods and test a payment app before the trip.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-blocked",
+      "country": "CN",
+      "topic": "connectivity",
+      "title": "Google, WhatsApp and more are blocked",
+      "body": "Always blocked: Google (incl. Maps and Gmail), Facebook, Instagram, WhatsApp, YouTube, X and many Dutch and international news sites. Authorities can also temporarily cut phone and internet. Tell people at home how to reach you.",
+      "severity": "important",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-plugs",
+      "country": "CN",
+      "topic": "connectivity",
+      "title": "Plugs: types A, C and I, 220 V",
+      "body": "Mains is 220 V / 50 Hz. Sockets take types A, C and I (the Australian-style angled pins) — bring a universal adapter.",
+      "sources": [
+        {
+          "title": "Plug and voltage — China (WorldStandards)",
+          "url": "https://www.worldstandards.eu/electricity/plug-voltage-by-country/china/"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    },
+    {
+      "id": "cn-fuzhou-airport",
+      "country": "CN",
+      "topic": "transport",
+      "title": "Fuzhou Changle airport ↔ city",
+      "body": "Per travel guides: Metro Line 6 runs from the airport into Fuzhou in about 40–45 minutes for about ¥8, roughly 06:30–23:00 (last train from the airport around 22:40). Taxis are the fallback at night.",
+      "sources": [
+        {
+          "title": "Fuzhou Airport (FOC) guide — Trip.com",
+          "url": "https://www.trip.com/guide/transport/fuzhou-airport.html"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    },
+    {
+      "id": "cn-xiamen-airport",
+      "country": "CN",
+      "topic": "transport",
+      "title": "Xiamen Gaoqi airport ↔ city",
+      "body": "Per travel guides: the airport is close to the city (about 30 minutes by metro or taxi). Metro stations named after the terminals exist, but check which terminal your flight uses and whether the station is walkable.",
+      "sources": [
+        {
+          "title": "Xiamen Airport: transport — Trip.com",
+          "url": "https://uk.trip.com/guide/china/xiamen-airport.html"
+        }
+      ],
+      "verifiedAt": "2026-09-30",
+      "unverified": true
+    },
+    {
+      "id": "cn-consulate-fujian",
+      "country": "CN",
+      "topic": "emergency",
+      "title": "Fujian is covered by the consulate-general in Guangzhou",
+      "body": "The Dutch consulate-general in Guangzhou covers Guangdong, Guangxi, Fujian and Hainan — so Fuzhou and Xiamen. Emergencies 24/7: +31 247 247 247.",
+      "sources": [
+        {
+          "title": "Consulate-general Guangzhou — Netherlands and you",
+          "url": "https://netherlandsandyou.nl/web/china-en/about-us/consulate-general-guangzhou-"
+        },
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-apps-pay",
+      "country": "CN",
+      "topic": "apps",
+      "title": "Alipay / WeChat Pay",
+      "body": "Set up and link your card before the trip; the arrival card also has mini-programs in both apps.",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    },
+    {
+      "id": "cn-lgbt",
+      "country": "CN",
+      "topic": "culture",
+      "title": "LGBTQ+ travellers",
+      "body": "No specific risks, but same-sex marriage and partnerships are not recognised.",
+      "sources": [
+        {
+          "title": "Reisadvies China — NederlandWereldwijd",
+          "url": "https://www.nederlandwereldwijd.nl/reisadvies/china"
+        }
+      ],
+      "verifiedAt": "2026-09-30"
+    }
+  ]
 }
