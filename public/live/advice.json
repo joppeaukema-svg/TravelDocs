@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-10-06T11:19:38.210Z",
+ "fetchedAt": "2026-10-07T11:07:30.620Z",
  "countries": [
   {
    "country": "CN",
@@ -3442,7 +3442,7 @@
       },
       {
        "type": "li",
-       "text": "16 en 17 november - Gesloten"
+       "text": "16 - 19 november - Gesloten"
       },
       {
        "type": "li",
@@ -3477,7 +3477,7 @@
      ],
      "lat": 14.557964,
      "lon": 121.023759,
-     "lastModified": "2026-10-05T13:20:10.084Z"
+     "lastModified": "2026-10-06T13:05:06.404Z"
     }
    ],
    "hash": "2be336a845de24b8"
@@ -3485,7 +3485,7 @@
   {
    "country": "TH",
    "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand",
-   "lastModified": "2026-09-24T09:55:24.261Z",
+   "lastModified": "2026-10-06T13:58:22.751Z",
    "modification": "Reist u naar Thailand? Lees welke veiligheidsrisico’s er zijn, wat u kunt doen in geval van nood, en hoe u zich voorbereidt op uw reis.",
    "colours": [
     "red",
@@ -3531,7 +3531,7 @@
         },
         {
          "type": "p",
-         "text": "Reis niet naar de grensstrook. Sinds eind 2025 is er een staakt-het-vuren tussen Thailand en Cambodja. De veiligheidssituatie is verbeterd, maar blijft onvoorspelbaar. ZDe grens is gesloten. Ondanks het staakt-het-vuren zijn er checkpoints van het leger. Er kunnen ook landmijnen in het gebied liggen."
+         "text": "Reis niet naar de grensstrook. Sinds eind 2025 is er een staakt-het-vuren tussen Thailand en Cambodja. De veiligheidssituatie is verbeterd, maar blijft onvoorspelbaar. De grens is gesloten. Ondanks het staakt-het-vuren zijn er checkpoints van het leger. Er kunnen ook landmijnen in het gebied liggen."
         },
         {
          "type": "h",
@@ -4445,7 +4445,7 @@
      "lastModified": "2026-09-28T08:54:00.351Z"
     }
    ],
-   "hash": "0a7358405e991d62"
+   "hash": "9b19b379f0d8cef4"
   },
   {
    "country": "VN",
