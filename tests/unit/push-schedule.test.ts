@@ -36,7 +36,7 @@ describe('push schedule', () => {
         item('b'),
         item('c'),
         item('d'),
-        item('e', { moment: 'exit', alarm: { date: '2026-10-25', time: '21:00', tz: 'Asia/Vientiane' } }),
+        item('e', { moment: 'exit', alarm: { date: '2026-10-27', time: '21:00', tz: 'Asia/Vientiane' } }),
         item('f', { group: 'predeparture', country: 'NL', alarm: { date: '2026-10-10', time: '09:00', tz: 'Europe/Amsterdam' } }),
         item('past', { alarm: { date: '2026-09-01', time: '09:00', tz: 'Asia/Bangkok' } }),
       ],
@@ -49,7 +49,7 @@ describe('push schedule', () => {
       { at: '2026-10-10T07:00:00Z', title: 'Before you leave: 1 task due', url: '#/checklists/predeparture' },
       { at: '2026-10-20T02:00:00Z', title: 'Laos prep: 2 tasks due', url: '#/checklists/n/1' },
       { at: '2026-10-22T02:00:00Z', title: 'Laos prep: 1 task due', url: '#/checklists/n/1' },
-      { at: '2026-10-25T14:00:00Z', title: 'Leaving Laos: 1 task', url: '#/checklists/n/1' },
+      { at: '2026-10-27T14:00:00Z', title: 'Leaving Laos: 1 task', url: '#/checklists/n/1' },
     ]);
   });
 

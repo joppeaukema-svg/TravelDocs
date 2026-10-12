@@ -167,7 +167,7 @@ describe('scheduled sender', () => {
       schedule: [
         { at: '2026-10-19T01:00:00Z', title: 'Too late', url: '#/checklists' },
         { at: '2026-10-21T01:00:00Z', title: 'Laos prep: 3 tasks due', url: '#/checklists/la' },
-        { at: '2026-10-25T01:00:00Z', title: 'Leaving Laos: 2 tasks', url: '#/checklists/la' },
+        { at: '2026-10-27T01:00:00Z', title: 'Leaving Laos: 2 tasks', url: '#/checklists/la' },
       ],
     });
 
@@ -183,7 +183,7 @@ describe('scheduled sender', () => {
     expect(JSON.parse(e.SUBS.data.get(`sub:${ID}`)!).schedule.map((x: { title: string }) => x.title)).toEqual(['Leaving Laos: 2 tasks']);
 
     const gone = vi.fn(async () => new Response(null, { status: 410 })) as unknown as typeof fetch;
-    expect(await sendDue(e, Date.parse('2026-10-25T01:01:00Z'), gone)).toEqual({ sent: 0, removed: 1 });
+    expect(await sendDue(e, Date.parse('2026-10-27T01:01:00Z'), gone)).toEqual({ sent: 0, removed: 1 });
     expect(e.SUBS.data.size).toBe(0);
   });
 });

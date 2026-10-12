@@ -112,7 +112,7 @@ describe('converter', () => {
 
 describe('weather stops', () => {
   const trip = {
-    meta: { depart: '2026-10-24', return: '2027-01-22' },
+    meta: { depart: '2026-10-20', return: '2027-01-22' },
     stays: [],
     bookings: [],
     days: [

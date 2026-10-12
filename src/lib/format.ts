@@ -2,7 +2,7 @@ import { Temporal } from 'temporal-polyfill';
 
 const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 
-/** "2026-10-24" → "24 Oct 2026" (a calendar date, no time-zone shifting). */
+/** "2027-03-14" → "14 Mar 2027" (a calendar date, no time-zone shifting). */
 export function formatDate(isoDate: string): string {
   const d = Temporal.PlainDate.from(isoDate);
   return dateFmt.format(new Date(Date.UTC(d.year, d.month - 1, d.day)));
