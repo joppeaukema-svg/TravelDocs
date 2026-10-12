@@ -43,6 +43,10 @@ The app is served from GitHub Pages once deployed (see *Deploying*).
 **iPhone (Safari, iOS 16.4+):** open the site in Safari → Share → *Add to Home Screen* → open it from the home screen.
 Installing matters on iOS: Safari may clear data of websites you haven't used for a while, but not of home-screen apps.
 
+**Updates install themselves.** A new version downloads in the background and is applied when you leave the app, so
+there's no prompt and nothing reloads while you're using it. Settings shows the version and an *Update now* link when
+one is waiting. The daily travel-advice refresh is data, not a new version: it never triggers an update.
+
 **Android (Chrome):** open the site → menu (⋮) → *Install app* (or *Add to Home screen*).
 
 Then, in the app:
@@ -80,6 +84,13 @@ downloaded rates, and you can set your own rate per currency.
 - **Trip → Import trip file** reads `my-trip.json` (`travel-companion-trip/1`). Anything that doesn't validate is
   listed and left out; the rest is imported. After that the app is the source of truth — **Export** writes the same
   format back.
+- **Update files** change part of a trip that's already on the phone — new flight times, a booking that's now
+  confirmed — and keep everything else, including your edits, notes and checklists. Trip → *Import an update or a new
+  trip file* shows every change before you apply it. Format `travel-companion-update/1`: `bookings`, `stays` and
+  `days`, each item naming an existing `id` (days: `date`) with only the fields that change (`null` clears one); a
+  booking with a new `id` is added and must be complete. Legs bought as one ticket can say `"sameTicketAs":
+  "<previous leg's id>"`: a connection on one ticket isn't treated as entering the country. Applied changes count as
+  edits, so *Send trip* carries them to a travel companion.
 - The rules engine (`src/rules/`) is a set of pure functions over the itinerary. All rule parameters — stay limits,
   passport validity, forms and their windows, e-visa ports, booking windows, crossings, holidays — live in
   `content/rules.json`, each with sources and a `verifiedAt` date. Change a rule by editing that file; the tests check

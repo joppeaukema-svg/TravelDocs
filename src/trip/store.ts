@@ -3,6 +3,7 @@ import { db, getMeta, META, setMeta, type PrepStateRow } from '../db/db';
 import type { TripData } from './io';
 import { Booking, Stay, TripMeta } from './schema';
 import { mergeTrip, type MergeStats, type SharePayload, type Tombstones } from './share';
+import type { UpdatePlan } from './update';
 
 const now = () => new Date().toISOString();
 
@@ -96,6 +97,29 @@ export async function replaceTrip(data: TripData): Promise<void> {
     ]);
   }
   await markUnsent();
+}
+
+/**
+ * Applies an update file's changes (see planTripUpdate). Only the changed
+ * items are written; they count as edits, so the next share carries them to a
+ * travel companion.
+ */
+export async function applyTripUpdate(plan: UpdatePlan): Promise<number> {
+  const at = now();
+  const { stays, bookings, days } = plan.write;
+  const count = stays.length + bookings.length + days.length;
+  if (!count) return 0;
+  await db.transaction('rw', db.stays, db.bookings, db.days, db.meta, async () => {
+    await db.stays.bulkPut(stays.map((s) => ({ ...s, updatedAt: at })));
+    await db.bookings.bulkPut(bookings.map((b) => ({ ...b, updatedAt: at })));
+    await db.days.bulkPut(days.map((d) => ({ ...d, updatedAt: at })));
+    // Something deleted earlier and now back in the update is no longer deleted.
+    const t = await getTombstones();
+    for (const k of [...stays.map((s) => `stay:${s.id}`), ...bookings.map((b) => `booking:${b.id}`), ...days.map((d) => `day:${d.date}`)]) delete t[k];
+    await db.meta.put({ key: META.tripDeleted, value: t });
+  });
+  await markUnsent();
+  return count;
 }
 
 /** Merges a travel companion's shared trip into this phone's. */

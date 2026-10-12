@@ -26,9 +26,17 @@ export interface SyntheticStay extends Stay {
  * Derived view of the itinerary used by all rules: countries of bookings,
  * the bookings that enter and leave each stay, and where you are on a date.
  */
+/** Two legs on one ticket that change planes in a country without staying there. */
+export interface ThroughConnection {
+  country: string;
+  date: string;
+  viaBookings: [string, string];
+}
+
 export class Itinerary {
   readonly stays: Stay[];
   readonly synthetic: SyntheticStay[];
+  readonly through: ThroughConnection[] = [];
   private readonly tzCountry = new Map<string, string>();
 
   constructor(private readonly ctx: RuleContext) {
@@ -119,7 +127,8 @@ export class Itinerary {
   /**
    * Rule 11: two flights where the first lands in a country and the second
    * leaves it within a day, with no stay there, are a connection on separate
-   * tickets — which counts as entering that country.
+   * tickets — which counts as entering that country. Legs marked as one ticket
+   * (`sameTicketAs`) are a through connection instead.
    */
   private findSelfTransfers(real: Stay[]): SyntheticStay[] {
     const flights = this.ctx.bookings
@@ -135,6 +144,11 @@ export class Itinerary {
         (f) => f !== a && this.fromCountry(f) === c && f.depart!.date >= landed && f.depart!.date <= addDays(landed, 1),
       );
       if (!b) continue;
+      if (b.sameTicketAs === a.id || a.sameTicketAs === b.id) {
+        // One ticket: normally an airside transfer, not an entry.
+        this.through.push({ country: c, date: landed, viaBookings: [a.id, b.id] });
+        continue;
+      }
       out.push({
         id: `connection-${a.id}`,
         country: c,

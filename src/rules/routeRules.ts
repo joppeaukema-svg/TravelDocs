@@ -21,6 +21,20 @@ export function connectionRules(b: Builder): void {
       sourceIds: b.adviceSource(s.country),
     });
   }
+  for (const t of it.through) {
+    const name = it.countryName(t.country);
+    const [a, c] = t.viaBookings.map((id) => ctx.bookings.find((x) => x.id === id)!);
+    b.check({
+      id: `through-${t.viaBookings[0]}`,
+      rule: 11,
+      severity: 'info',
+      title: `Connection in ${name} on one ticket`,
+      detail: `${bookingLabel(a!)} then ${bookingLabel(c!)} are booked together, so you normally stay airside. Ask the airline whether you have to pass ${name}'s immigration or collect your bags there — if so, ${name}'s entry rules and forms apply.`,
+      country: t.country,
+      dueDate: t.date,
+      sourceIds: b.adviceSource(t.country),
+    });
+  }
 }
 
 /** Rule 12: land crossings have their own records. */

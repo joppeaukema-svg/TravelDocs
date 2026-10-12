@@ -106,6 +106,11 @@ export const Booking = z.object({
   freeCancellationUntil: isoDate.optional(),
   documentIds: z.array(z.string()).default([]),
   note: z.string().optional(),
+  /**
+   * The id of the previous leg when both were bought as one ticket (a connection).
+   * A connection on one ticket is usually airside, so it doesn't count as entering the country.
+   */
+  sameTicketAs: z.string().optional(),
   /** "me": only this traveller's (not shared). */
   who: z.enum(['both', 'me']).default('both'),
   /** Personal note, never shared. */

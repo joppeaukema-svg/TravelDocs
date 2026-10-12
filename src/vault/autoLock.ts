@@ -22,6 +22,11 @@ function pickerActive(now: number): boolean {
   return now < pickerUntil;
 }
 
+/** True while a file picker, camera or share sheet has the app in the background. */
+export function externalPickActive(): boolean {
+  return pickerActive(Date.now());
+}
+
 export interface AutoLockOptions {
   idleMs: number;
   backgroundGraceMs: number;

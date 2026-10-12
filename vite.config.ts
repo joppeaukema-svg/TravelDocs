@@ -1,4 +1,5 @@
 import { execSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -8,10 +9,21 @@ import { VitePWA } from 'vite-plugin-pwa';
 // GitHub Pages serves the app from /<repo>/; the deploy workflow sets BASE_PATH.
 const base = process.env.BASE_PATH ?? '/';
 
+/**
+ * "0.1.0 (abc1234)": the package version plus a fingerprint of the files that go into
+ * the app. The daily live-data commits (public/live), docs, tests, workflows and the push
+ * worker are left out, so refreshing the travel advice never looks like a new app version.
+ */
 function appVersion(): string {
   const { version } = JSON.parse(readFileSync('package.json', 'utf8')) as { version: string };
   try {
-    return `${version} (${execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim()})`;
+    const excluded = ['public/live/', '.github/', 'tests/', 'push/', 'README.md'];
+    const files = execSync('git ls-tree -r HEAD', { stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString()
+      .split('\n')
+      .filter((line) => line && !excluded.some((p) => line.split('\t')[1]!.startsWith(p)))
+      .join('\n');
+    return `${version} (${createHash('sha256').update(files).digest('hex').slice(0, 7)})`;
   } catch {
     return version;
   }

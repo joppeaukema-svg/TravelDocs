@@ -59,3 +59,35 @@ test('a flight across time zones shows local times at both ends', async ({ page 
   await expect(page.getByText(/12:25 Ho Chi Minh \(UTC\+7\)/)).toBeVisible();
   await expect(page.getByText('Takes 5 h 30 min')).toBeVisible();
 });
+
+test('an update file changes only what it lists, after a preview', async ({ page }) => {
+  await page.goto('/#/trip');
+  await page.getByRole('button', { name: 'Try the demo trip' }).click();
+  await expect(page.getByText('Timeline')).toBeVisible();
+
+  const update = {
+    format: 'travel-companion-update/1',
+    title: 'Flights',
+    bookings: [
+      { id: 'f-fuk-oka', status: 'booked', title: 'XX123 Fukuoka → Okinawa', provider: 'Test Air' },
+      { id: 'test-ferry', type: 'ferry', status: 'planned', from: 'Harbour A', to: 'Harbour B', title: 'Test ferry' },
+    ],
+  };
+  await page.getByRole('button', { name: 'Import an update or a new trip file' }).click();
+  await page.getByTestId('trip-input').setInputFiles({
+    name: 'flights-update.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(update)),
+  });
+
+  const changes = page.getByRole('list', { name: 'Changes' });
+  await expect(changes).toContainText('XX123 Fukuoka → Okinawa');
+  await expect(changes).toContainText('status');
+  await expect(changes).toContainText('Test ferry');
+  await page.getByRole('button', { name: 'Apply 2 changes' }).click();
+  await expect(page.getByText('Trip updated: 2 changes')).toBeVisible();
+
+  await page.goto('/#/trip/booking/f-fuk-oka');
+  await expect(page.getByLabel('Title')).toHaveValue('XX123 Fukuoka → Okinawa');
+  await expect(page.getByLabel('From')).toHaveValue('Fukuoka (FUK)');
+});

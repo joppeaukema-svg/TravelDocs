@@ -71,4 +71,16 @@ describe('rule 11 — self-transfer connections', () => {
     // …so Thailand's entry form applies to it.
     expect(item(r, 'form-th-tdac-connection-leg1')).toBeDefined();
   });
+
+  it('a connection on one ticket stays airside: no entry, just a note to check with the airline', () => {
+    const la = stay({ country: 'LA', from: '2027-03-15', to: '2027-04-03' });
+    const ph = stay({ country: 'PH', from: '2027-04-04', to: '2027-04-24' });
+    const leg1 = hop('LA', 'VN', '2027-04-03', { id: 'leg-a', to: 'Connecting airport' });
+    const leg2 = hop('VN', 'PH', '2027-04-03', { id: 'leg-b', from: 'Connecting airport', arriveDate: '2027-04-04', sameTicketAs: 'leg-a' });
+    const r = run(trip('2027-03-15', '2027-04-24', [la, ph], [leg1, leg2]));
+    expect(r.stays.map((s) => s.stay.country)).toEqual(['LA', 'PH']);
+    expect(check(r, 'connection-connection-leg-a')).toBeUndefined();
+    expect(check(r, 'through-leg-a')).toMatchObject({ severity: 'info', title: 'Connection in Vietnam on one ticket' });
+    expect(r.prep.some((p) => p.id.includes('connection-leg-a'))).toBe(false);
+  });
 });

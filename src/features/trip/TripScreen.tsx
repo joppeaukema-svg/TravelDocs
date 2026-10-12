@@ -7,14 +7,15 @@ import { diffDays, isSynthetic, stayEnd, stayStart } from '../../rules/itinerary
 import { useRules, type Rules } from '../../rules/useRules';
 import { exportTripFile, parseTripFile, TripFileError, type ImportResult } from '../../trip/io';
 import { BOOKING_TYPE_LABELS, bookingLabel } from '../../trip/schema';
-import { deleteTrip, replaceTrip } from '../../trip/store';
+import { applyTripUpdate, deleteTrip, loadTrip, replaceTrip } from '../../trip/store';
+import { isTripUpdate, parseTripUpdate, planTripUpdate, type UpdatePlan } from '../../trip/update';
 import { bookingsOn, dateRanges, nightsWithoutBed } from '../../trip/timeline';
 import { formatLocal } from '../../trip/time';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
 import { DownloadIcon, PlusIcon, UploadIcon } from '../../ui/icons';
 import { Button, Card, cx, ErrorText, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
 import { CheckCard, StayCard } from './parts';
-import { SharePanel } from './SharePanel';
+import { SharePanel, useTripCode } from './SharePanel';
 
 export function TripScreen() {
   const rules = useRules();
@@ -70,20 +71,83 @@ function ImportReport({ result, onClose }: { result: ImportResult; onClose: () =
   );
 }
 
-async function readTripFile(file: File): Promise<ImportResult> {
-  let json: unknown;
+async function readJson(file: File): Promise<unknown> {
   try {
-    json = JSON.parse(await file.text());
+    return JSON.parse(await file.text());
   } catch {
     throw new TripFileError('That file is not valid JSON.');
   }
-  return parseTripFile(json);
+}
+
+const FIELD_LABELS: Record<string, string> = {
+  depart: 'departure',
+  arrive: 'arrival',
+  from: 'from',
+  to: 'to',
+  status: 'status',
+  title: 'title',
+  provider: 'airline/provider',
+  confirmation: 'reference',
+  note: 'note',
+  type: 'type',
+  entry: 'entry point',
+  exit: 'exit point',
+  place: 'place',
+  country: 'country',
+  sameTicketAs: 'same ticket',
+};
+
+function UpdatePreview({ plan, onApply, onCancel }: { plan: UpdatePlan; onApply: () => void; onCancel: () => void }) {
+  const kinds = { booking: 'Booking', stay: 'Stay', day: 'Day' } as const;
+  return (
+    <div className="space-y-3">
+      <p className="font-bold">
+        {plan.title ?? 'Update'}: {plural(plan.changes.length, 'change')}
+        {plan.unchanged > 0 && <span className="font-normal text-muted"> · {plan.unchanged} already up to date</span>}
+      </p>
+      <ul className="space-y-1.5" aria-label="Changes">
+        {plan.changes.map((c) => (
+          <li key={`${c.kind}:${c.key}`} className="flex items-start gap-2">
+            <Pill tone={c.action === 'add' ? 'ok' : 'info'}>{c.action === 'add' ? 'New' : 'Changed'}</Pill>
+            <span className="min-w-0">
+              <span className="block font-bold">{c.label}</span>
+              <span className="block text-sm text-muted">
+                {kinds[c.kind]}
+                {c.action === 'update' && ` · ${c.fields.map((f) => FIELD_LABELS[f] ?? f).join(', ')}`}
+              </span>
+            </span>
+          </li>
+        ))}
+      </ul>
+      {plan.problems.length > 0 && (
+        <Notice tone="warn" title="Left out">
+          <ul className="ml-4 list-disc">
+            {plan.problems.map((p, i) => (
+              <li key={i}>
+                <strong>{p.where}</strong>: {p.reason}
+              </li>
+            ))}
+          </ul>
+        </Notice>
+      )}
+      <p className="text-sm text-muted">Only these items change; the rest of your trip, your notes and checklists stay as they are.</p>
+      <div className="grid grid-cols-2 gap-2">
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button variant="primary" disabled={!plan.changes.length} onClick={onApply}>
+          Apply {plural(plan.changes.length, 'change')}
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 export function ImportPanel({ replacing, onImported }: { replacing?: boolean; onImported: (r: ImportResult) => void }) {
   const input = useRef<HTMLInputElement>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [plan, setPlan] = useState<UpdatePlan | null>(null);
+  const [updated, setUpdated] = useState<number | null>(null);
+  const linked = !!useTripCode();
 
   async function apply(r: ImportResult) {
     if (replacing && !window.confirm('Replace the current trip with this one? Your edits to the current trip are lost.')) return;
@@ -95,8 +159,16 @@ export function ImportPanel({ replacing, onImported }: { replacing?: boolean; on
   async function onFile(f: File) {
     setError('');
     setBusy(true);
+    setUpdated(null);
     try {
-      await apply(await readTripFile(f));
+      const json = await readJson(f);
+      if (isTripUpdate(json)) {
+        const trip = await loadTrip();
+        if (!trip) throw new TripFileError('This is an update for a trip that is already in the app. Import the trip itself first.');
+        setPlan(planTripUpdate(trip, parseTripUpdate(json)));
+        return;
+      }
+      await apply(parseTripFile(json));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -109,10 +181,46 @@ export function ImportPanel({ replacing, onImported }: { replacing?: boolean; on
     await apply(parseTripFile(demo));
   }
 
+  if (plan) {
+    return (
+      <Card>
+        <UpdatePreview
+          plan={plan}
+          onCancel={() => setPlan(null)}
+          onApply={() =>
+            void applyTripUpdate(plan).then((n) => {
+              setPlan(null);
+              setUpdated(n);
+            })
+          }
+        />
+      </Card>
+    );
+  }
+
   return (
     <Card>
+      {updated !== null && (
+        <div className="mb-3">
+          <Notice tone="ok" title={`Trip updated: ${plural(updated, 'change')}`}>
+            {linked
+              ? 'Now send it to your travel companion: Travelling together (below) → Send trip.'
+              : 'Checks, checklists and reminders now follow the new details.'}
+          </Notice>
+        </div>
+      )}
       <p>
-        Choose your <code className="font-mono text-sm">my-trip.json</code> (format <code className="font-mono text-sm">travel-companion-trip/1</code>). It stays on this phone.
+        {replacing ? (
+          <>
+            An <strong>update file</strong> changes only what it lists (new flight times, a confirmed booking) and keeps the rest. A{' '}
+            <strong>trip file</strong> (<code className="font-mono text-sm">my-trip.json</code>) replaces the whole trip.
+          </>
+        ) : (
+          <>
+            Choose your <code className="font-mono text-sm">my-trip.json</code> (format{' '}
+            <code className="font-mono text-sm">travel-companion-trip/1</code>). It stays on this phone.
+          </>
+        )}
       </p>
       <input
         ref={input}
@@ -136,7 +244,7 @@ export function ImportPanel({ replacing, onImported }: { replacing?: boolean; on
           input.current?.click();
         }}
       >
-        <UploadIcon /> {replacing ? 'Import a new version' : 'Import trip file'}
+        <UploadIcon /> {replacing ? 'Choose file' : 'Import trip file'}
       </Button>
       {!replacing && (
         <Button className="mt-2 w-full" onClick={() => void loadDemo()}>
@@ -290,10 +398,13 @@ function ExportPanel({ rules, onImported }: { rules: Rules; onImported: (r: Impo
       {showImport ? (
         <div className="mt-3">
           <ImportPanel replacing onImported={(r) => { setShowImport(false); onImported(r); }} />
+          <Button variant="ghost" className="mt-1 w-full" onClick={() => setShowImport(false)}>
+            Close
+          </Button>
         </div>
       ) : (
         <Button variant="ghost" className="mt-2 w-full" onClick={() => setShowImport(true)}>
-          Replace with a new trip file
+          <UploadIcon /> Import an update or a new trip file
         </Button>
       )}
       <Button

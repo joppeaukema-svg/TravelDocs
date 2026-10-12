@@ -20,6 +20,7 @@ import {
 import { vaultSession } from '../../vault/session';
 import { DemoCard } from '../../demo/DemoBanner';
 import { PushSettings } from './PushSettings';
+import { updateNow, useUpdateReady } from '../../app/updates';
 import { changePassphrase } from '../../vault/vault';
 
 const LOCK_OPTIONS = [1, 2, 5, 10, 15, 30].map((m) => ({ value: String(m), label: `After ${m} min without use` }));
@@ -104,11 +105,13 @@ export function SettingsScreen() {
         </p>
         <p className="mt-2">
           <strong>Readable on this phone without it:</strong> document types and expiry dates, the fields you put on the
-          emergency card, your insurance coverage limits (for the checks), settings — and from phase 2 your itinerary.
+          emergency card, your insurance coverage limits (for the checks), your itinerary, checklists and expenses, settings.
         </p>
-        <p className="mt-2 text-muted">Nothing is sent anywhere. Backups encrypt everything.</p>
+        <p className="mt-2 text-muted">
+          Nothing is sent anywhere unless you turn on weather or push notifications. Backups encrypt everything.
+        </p>
       </Card>
-      <p className="mt-6 text-center text-sm text-muted">Travel Companion {__APP_VERSION__}</p>
+      <AppVersion />
     </>
   );
 }
@@ -228,6 +231,25 @@ function EraseAll() {
           Erase
         </Button>
       </div>
+    </div>
+  );
+}
+
+function AppVersion() {
+  const ready = useUpdateReady();
+  return (
+    <div className="mt-6 text-center text-sm text-muted">
+      <p>Travel Companion {__APP_VERSION__}</p>
+      {ready ? (
+        <p className="mt-1">
+          A new version is downloaded and installs when you leave the app.{' '}
+          <button type="button" className="font-bold text-accent underline" onClick={updateNow}>
+            Update now
+          </button>
+        </p>
+      ) : (
+        <p className="mt-1">Updates install by themselves.</p>
+      )}
     </div>
   );
 }

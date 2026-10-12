@@ -24,7 +24,8 @@ import { Button, Card, ErrorText, inputClass, Notice, Pill } from '../../ui/kit'
 
 const pretty = (code: string) => normaliseCode(code).replace(/(.{4})(?=.)/g, '$1-');
 
-function useTripCode(): string | null | undefined {
+/** The trip code shared with a travel companion, if this phone is linked. */
+export function useTripCode(): string | null | undefined {
   return useLiveQuery(async () => ((await db.meta.get(META.shareCode))?.value as string | undefined) ?? null, []);
 }
 

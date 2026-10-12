@@ -28,7 +28,7 @@ import { vaultSession } from '../vault/session';
 import { Header } from './Header';
 import { matchPath, usePath, useVaultState } from './hooks';
 import { TabBar, type Tab } from './TabBar';
-import { UpdatePrompt } from './UpdatePrompt';
+import { useAutoUpdate } from './updates';
 
 interface Route {
   pattern: string;
@@ -110,6 +110,7 @@ export function App() {
   useAutoLock();
   useTheme();
   useLiveData();
+  useAutoUpdate();
   usePushSync();
 
   useEffect(() => {
@@ -121,7 +122,6 @@ export function App() {
       <DemoBanner />
       <Header emergencyActive={route.pattern.startsWith('/emergency')} />
       <main className="mx-auto w-full max-w-xl flex-1 px-4 pb-32 pt-2">{route.render(params)}</main>
-      <UpdatePrompt />
       <TabBar active={route.tab} />
     </div>
   );
