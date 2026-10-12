@@ -267,7 +267,7 @@ function fromBase64url(text: string): Bytes {
 export function shareText(encrypted: Uint8Array): string {
   return [
     'Travel Companion — our trip (encrypted).',
-    'Open the app → Trip → Receive a shared trip → paste this whole message.',
+    'Open the app → More → Travelling together → paste this whole message.',
     '',
     TOKEN + base64url(encrypted) + '.',
   ].join('\n');

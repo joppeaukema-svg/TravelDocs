@@ -9,18 +9,32 @@ import {
   PersonIcon,
   PhoneIcon,
   ShieldIcon,
+  ShareIcon,
   SpeechIcon,
   WalletIcon,
 } from '../../ui/icons';
 import { Card, PageTitle, Pill, RowLink } from '../../ui/kit';
+import { useShareStatus } from '../../trip/store';
+import { useTripCode } from '../trip/SharePanel';
+
+/** Linked, and how many changes haven't been sent. */
+function useTogetherStatus(): string {
+  const code = useTripCode();
+  const status = useShareStatus();
+  if (!code) return 'Share the trip, import trip files';
+  if (status?.unsent) return `Linked · ${status.unsent} ${status.unsent === 1 ? 'change' : 'changes'} to send`;
+  return 'Linked with your travel companion';
+}
 
 export function MoreScreen() {
+  const together = useTogetherStatus();
   return (
     <>
       <PageTitle>More</PageTitle>
       <Card className="py-1">
+        <RowLink href="#/together" icon={<ShareIcon />} title="Travelling together" sub={together} />
         <RowLink href="#/insurance" icon={<ShieldIcon />} title="Insurance" sub="Policy, assistance line, coverage" />
-        <RowLink href="#/checklists" icon={<ListIcon />} title="Checklists" sub="Prep per country, do-now list" />
+        <RowLink href="#/checklists" icon={<ListIcon />} title="Checklists" sub="Prep, checks and packing" />
         <RowLink href="#/profile" icon={<ShieldIcon />} title="Profile and bag" sub="Passport, vape, medicines, diving…" />
         <RowLink href="#/personal" icon={<PersonIcon />} title="Personal details" sub="ICE contacts, medical info" />
         <RowLink href="#/emergency" icon={<PhoneIcon />} title="Emergency card" sub="Readable while locked" />

@@ -96,6 +96,6 @@ describe('applying an update', () => {
     expect(after!.bookings.find((b) => b.id === untouched.id)).toEqual(untouched);
     expect(after!.bookings.find((b) => b.id === 'came-back')).toBeDefined();
     expect(await getTombstones()).toEqual({});
-    expect((await getShareStatus()).unsent).toBe(unsentBefore + 1);
+    expect((await getShareStatus()).unsent).toBe(unsentBefore + 2);
   });
 });

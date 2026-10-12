@@ -4,7 +4,7 @@ import type { PrepItem } from '../../rules/types';
 import { useRules, type Rules } from '../../rules/useRules';
 import { usePrepStates } from '../../trip/store';
 import { Card, LinkButton, Notice, PageTitle, Pill, RowLink, SectionTitle } from '../../ui/kit';
-import { PrepItemRow } from '../trip/parts';
+import { CheckCard, PrepItemRow } from '../trip/parts';
 import { packingId, PackingScreen, usePackingList } from './Packing';
 
 function groupTitle(rules: Rules, group: string): { title: string; sub: string } {
@@ -54,6 +54,10 @@ export function ChecklistsScreen() {
   const urgent = result.prep.filter((p) => ['overdue', 'do-now'].includes(status(p)));
   const groups = ['predeparture', ...result.stays.map((s) => s.stay.id)].filter((g) => result.prep.some((p) => p.group === g));
 
+  const checks = result.checks
+    .filter((c) => c.severity !== 'info')
+    .sort((a, b) => Number(b.severity === 'critical') - Number(a.severity === 'critical'));
+
   return (
     <>
       <PageTitle sub="Built from your itinerary and the entry rules.">Checklists</PageTitle>
@@ -86,6 +90,16 @@ export function ChecklistsScreen() {
           );
         })}
       </Card>
+      {checks.length > 0 && (
+        <>
+          <SectionTitle>Checks</SectionTitle>
+          <div className="space-y-2">
+            {checks.map((c) => (
+              <CheckCard key={c.id} check={c} />
+            ))}
+          </div>
+        </>
+      )}
       <SectionTitle>Packing</SectionTitle>
       <Card className="py-1">
         <PackingRow />

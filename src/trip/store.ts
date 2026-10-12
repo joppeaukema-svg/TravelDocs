@@ -35,10 +35,10 @@ async function updateShareStatus(patch: Partial<ShareStatus>): Promise<void> {
   await setMeta(META.shareStatus, { ...(await getShareStatus()), ...patch });
 }
 
-/** A shared edit happened on this phone: counts until the next send. */
-async function markUnsent(): Promise<void> {
+/** Shared edits happened on this phone: they count until the next send. */
+async function markUnsent(count = 1): Promise<void> {
   const s = await getShareStatus();
-  await updateShareStatus({ unsent: s.unsent + 1 });
+  await updateShareStatus({ unsent: s.unsent + count });
 }
 
 export async function markSent(at = now()): Promise<void> {
@@ -118,7 +118,7 @@ export async function applyTripUpdate(plan: UpdatePlan): Promise<number> {
     for (const k of [...stays.map((s) => `stay:${s.id}`), ...bookings.map((b) => `booking:${b.id}`), ...days.map((d) => `day:${d.date}`)]) delete t[k];
     await db.meta.put({ key: META.tripDeleted, value: t });
   });
-  await markUnsent();
+  await markUnsent(count);
   return count;
 }
 

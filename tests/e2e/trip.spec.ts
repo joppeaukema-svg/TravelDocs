@@ -11,8 +11,14 @@ test('import the demo trip, see stays, checklists and export the calendar', asyn
   await expect(page.getByRole('link', { name: /Vietnam.*20 of 45 days/ })).toBeVisible();
   await expect(page.getByRole('link', { name: /Laos.*24 of 30 days/ })).toBeVisible();
 
-  // Checklists, with the Laos entry decision.
+  // Checks live in Checklists, not on Trip or Today.
+  await expect(page.getByRole('heading', { name: 'Checks' })).toHaveCount(0);
+  await page.goto('/#/today');
+  await expect(page.getByRole('heading', { name: 'Checks' })).toHaveCount(0);
+
+  // Checklists, with the checks and the Laos entry decision.
   await page.goto('/#/checklists');
+  await expect(page.getByRole('heading', { name: 'Checks' })).toBeVisible();
   await expect(page.getByRole('link', { name: /Before you leave/ })).toBeVisible();
   await page.getByRole('link', { name: /^Laos/ }).click();
   const decide = page.getByRole('button', { name: /Laos: e-visa or visa on arrival/ });
@@ -73,7 +79,7 @@ test('an update file changes only what it lists, after a preview', async ({ page
       { id: 'test-ferry', type: 'ferry', status: 'planned', from: 'Harbour A', to: 'Harbour B', title: 'Test ferry' },
     ],
   };
-  await page.getByRole('button', { name: 'Import an update or a new trip file' }).click();
+  await page.goto('/#/together');
   await page.getByTestId('trip-input').setInputFiles({
     name: 'flights-update.json',
     mimeType: 'application/json',

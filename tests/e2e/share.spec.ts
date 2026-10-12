@@ -12,7 +12,7 @@ test('share the trip with a travel companion and merge their changes back', asyn
   await page.getByRole('button', { name: 'Save booking' }).click();
   await expect(page.getByRole('button', { name: 'Saved' })).toBeVisible();
 
-  await page.goto('/#/trip');
+  await page.goto('/#/together');
   await page.getByRole('button', { name: 'Create a trip code' }).click();
   const code = (await page.getByTestId('trip-code').textContent())!.trim();
   expect(code).toMatch(/^\w{4}-\w{4}-\w{4}$/);
@@ -25,13 +25,15 @@ test('share the trip with a travel companion and merge their changes back', asyn
   const phoneB = await browser.newContext(testInfo.project.use);
   const b = await phoneB.newPage();
   b.on('dialog', (d) => void d.accept());
-  await b.goto('/#/trip');
+  await b.goto('/#/together');
   await b.getByTestId('share-paste').fill(message);
   await b.getByLabel('Trip code').fill('wrong-code-abcd');
   await b.getByRole('button', { name: 'Merge into my trip' }).click();
   await expect(b.getByText(/12 letters and digits|does not open/)).toBeVisible();
   await b.getByLabel('Trip code').fill(code.toLowerCase());
   await b.getByRole('button', { name: 'Merge into my trip' }).click();
+  await expect(b.getByText('Trip merged')).toBeVisible();
+  await b.goto('/#/trip');
   await expect(b.getByRole('link', { name: /Laos.*24 of 30 days/ })).toBeVisible();
   // A's personal booking didn't travel.
   await b.goto('/#/trip/booking/a-parkrun-osaka');
@@ -43,7 +45,7 @@ test('share the trip with a travel companion and merge their changes back', asyn
   await b.getByLabel('Confirmation code').fill('HALONG-42');
   await b.getByRole('button', { name: 'Save booking' }).click();
   await expect(b.getByRole('button', { name: 'Saved' })).toBeVisible();
-  await b.goto('/#/trip');
+  await b.goto('/#/together');
   await expect(b.getByTestId('trip-code')).toHaveText(code);
   // The status shows the link, what was received and what hasn't been sent yet.
   const status = b.getByTestId('share-status');
@@ -51,9 +53,13 @@ test('share the trip with a travel companion and merge their changes back', asyn
   await expect(status.getByText('Last received')).toBeVisible();
   await expect(status.getByText('not yet')).toHaveCount(1); // last sent
   await expect(b.getByTestId('unsent')).toHaveText('1 change on this phone not sent yet.');
+  // Opening the app with unsent changes asks to send them.
   await b.goto('/#/today');
-  await expect(b.getByText('1 trip change not shared with your travel companion')).toBeVisible();
-  await b.goto('/#/trip');
+  await b.reload();
+  const prompt = b.getByRole('dialog', { name: 'Your travel companion doesn’t have your latest changes' });
+  await expect(prompt).toContainText('1 change to the trip on this phone');
+  await prompt.getByRole('button', { name: 'Send now' }).click();
+  await expect(b.getByRole('heading', { level: 1, name: 'Travelling together' })).toBeVisible();
   await b.getByRole('button', { name: 'Prepare trip to send' }).click();
   const back = b.waitForEvent('download');
   await b.getByRole('button', { name: 'Save as a text file instead' }).click();
@@ -65,7 +71,7 @@ test('share the trip with a travel companion and merge their changes back', asyn
 
   // Phone A merges: B's booking arrives, A's personal booking is still there.
   expect(readFileSync(fileB, 'utf8')).toContain('TC1.');
-  await page.goto('/#/trip');
+  await page.goto('/#/together');
   await page.getByTestId('share-input').setInputFiles(fileB);
   await page.getByRole('button', { name: 'Merge into my trip' }).click();
   await expect(page.getByText('Trip merged')).toBeVisible();

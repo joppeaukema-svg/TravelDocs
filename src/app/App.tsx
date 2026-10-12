@@ -14,6 +14,8 @@ import { WeatherScreen } from '../features/weather/WeatherScreen';
 import { useLiveRefresh } from '../live/useLive';
 import { useTrip } from '../trip/store';
 import { DemoBanner } from '../demo/DemoBanner';
+import { TogetherScreen } from '../features/together/TogetherScreen';
+import { UnsentPrompt } from '../features/together/UnsentPrompt';
 import { usePushSync } from '../push/usePush';
 import { PersonalScreen } from '../features/personal/PersonalScreen';
 import { SettingsScreen } from '../features/settings/SettingsScreen';
@@ -51,6 +53,7 @@ const routes: Route[] = [
   { pattern: '/sources', tab: 'countries', render: () => <SourcesScreen /> },
   { pattern: '/weather', tab: 'today', render: () => <WeatherScreen /> },
   { pattern: '/more', tab: 'more', render: () => <MoreScreen /> },
+  { pattern: '/together', tab: 'more', render: () => <TogetherScreen /> },
   { pattern: '/insurance', tab: 'more', render: () => <InsuranceScreen /> },
   { pattern: '/personal', tab: 'more', render: () => <PersonalScreen /> },
   { pattern: '/backup', tab: 'more', render: () => <BackupScreen /> },
@@ -122,6 +125,7 @@ export function App() {
       <DemoBanner />
       <Header emergencyActive={route.pattern.startsWith('/emergency')} />
       <main className="mx-auto w-full max-w-xl flex-1 px-4 pb-32 pt-2">{route.render(params)}</main>
+      <UnsentPrompt />
       <TabBar active={route.tab} />
     </div>
   );

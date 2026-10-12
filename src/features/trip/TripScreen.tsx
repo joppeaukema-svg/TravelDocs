@@ -5,7 +5,7 @@ import { shareFile } from '../../lib/share';
 import { buildIcs } from '../../rules/ics';
 import { diffDays, isSynthetic, stayEnd, stayStart } from '../../rules/itinerary';
 import { useRules, type Rules } from '../../rules/useRules';
-import { exportTripFile, parseTripFile, TripFileError, type ImportResult } from '../../trip/io';
+import { exportTripFile, parseTripFile, TripFileError, type ImportResult, type TripData } from '../../trip/io';
 import { BOOKING_TYPE_LABELS, bookingLabel } from '../../trip/schema';
 import { applyTripUpdate, deleteTrip, loadTrip, replaceTrip } from '../../trip/store';
 import { isTripUpdate, parseTripUpdate, planTripUpdate, type UpdatePlan } from '../../trip/update';
@@ -14,8 +14,8 @@ import { formatLocal } from '../../trip/time';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
 import { DownloadIcon, PlusIcon, UploadIcon } from '../../ui/icons';
 import { Button, Card, cx, ErrorText, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
-import { CheckCard, StayCard } from './parts';
-import { SharePanel, useTripCode } from './SharePanel';
+import { StayCard } from './parts';
+import { useTripCode } from './SharePanel';
 
 export function TripScreen() {
   const rules = useRules();
@@ -27,8 +27,11 @@ export function TripScreen() {
       <>
         <PageTitle sub="Import your itinerary to get stay counters, entry checks and prep reminders.">Trip</PageTitle>
         <ImportPanel onImported={setReport} />
-        <SectionTitle>Travelling together?</SectionTitle>
-        <SharePanel hasTrip={false} />
+        <div className="mt-4">
+          <Notice title="Travelling together?" action={<LinkButton href="#/together">Travelling together</LinkButton>}>
+            If your travel companion already has the trip, receive it from them instead: More → Travelling together.
+          </Notice>
+        </div>
       </>
     );
   }
@@ -39,12 +42,12 @@ export function TripScreen() {
           <ImportReport result={report} onClose={() => setReport(null)} />
         </div>
       )}
-      <TripView rules={rules} onImported={setReport} />
+      <TripView rules={rules} />
     </>
   );
 }
 
-function ImportReport({ result, onClose }: { result: ImportResult; onClose: () => void }) {
+export function ImportReport({ result, onClose }: { result: ImportResult; onClose: () => void }) {
   return (
     <Notice
       tone={result.rejected.length ? 'warn' : 'ok'}
@@ -204,7 +207,7 @@ export function ImportPanel({ replacing, onImported }: { replacing?: boolean; on
         <div className="mb-3">
           <Notice tone="ok" title={`Trip updated: ${plural(updated, 'change')}`}>
             {linked
-              ? 'Now send it to your travel companion: Travelling together (below) → Send trip.'
+              ? 'Now send it to your travel companion with Send trip, at the top of this screen.'
               : 'Checks, checklists and reminders now follow the new details.'}
           </Notice>
         </div>
@@ -256,12 +259,10 @@ export function ImportPanel({ replacing, onImported }: { replacing?: boolean; on
   );
 }
 
-function TripView({ rules, onImported }: { rules: Rules; onImported: (r: ImportResult) => void }) {
+function TripView({ rules }: { rules: Rules }) {
   const { data, result, itinerary } = rules;
   const tripDays = diffDays(data.meta.depart, data.meta.return) + 1;
   const noBed = nightsWithoutBed(data);
-  const stuck = result.checks.filter((c) => c.id.startsWith('onward-none-'));
-  const stayChecks = result.checks.filter((c) => c.severity !== 'info');
 
   return (
     <>
@@ -276,17 +277,6 @@ function TripView({ rules, onImported }: { rules: Rules; onImported: (r: ImportR
         ))}
       </div>
 
-      {stayChecks.length > 0 && (
-        <>
-          <SectionTitle action={<a href="#/checklists" className="text-sm font-bold">Checklists</a>}>Checks</SectionTitle>
-          <div className="space-y-2">
-            {stayChecks.map((c) => (
-              <CheckCard key={c.id} check={c} />
-            ))}
-          </div>
-        </>
-      )}
-
       <SectionTitle>Gaps</SectionTitle>
       <Card>
         <p className="font-bold">{noBed.length ? `${plural(noBed.length, 'night')} without accommodation booked` : 'Every night has a bed'}</p>
@@ -297,11 +287,6 @@ function TripView({ rules, onImported }: { rules: Rules; onImported: (r: ImportR
               .join(' · ')}
           </p>
         )}
-        {stuck.map((c) => (
-          <p key={c.id} className="mt-2 font-bold text-crit">
-            {c.title}
-          </p>
-        ))}
       </Card>
 
       <SectionTitle action={<a href="#/trip/booking/new" className="inline-flex items-center gap-1 text-sm font-bold"><PlusIcon size={16} /> Booking</a>}>
@@ -309,11 +294,8 @@ function TripView({ rules, onImported }: { rules: Rules; onImported: (r: ImportR
       </SectionTitle>
       <Timeline rules={rules} />
 
-      <SectionTitle>Travelling together</SectionTitle>
-      <SharePanel hasTrip />
-
-      <SectionTitle>Export and import</SectionTitle>
-      <ExportPanel rules={rules} onImported={onImported} />
+      <SectionTitle>Reminders</SectionTitle>
+      <CalendarPanel rules={rules} />
     </>
   );
 }
@@ -367,20 +349,20 @@ function Timeline({ rules }: { rules: Rules }) {
   );
 }
 
-function ExportPanel({ rules, onImported }: { rules: Rules; onImported: (r: ImportResult) => void }) {
+/** Writes the trip as a my-trip.json file (to keep, or to give to a travel companion). */
+export async function exportTrip(data: TripData) {
+  const json = JSON.stringify(exportTripFile(data), null, 2);
+  await shareFile(new Blob([json], { type: 'application/json' }), 'my-trip.json');
+}
+
+function CalendarPanel({ rules }: { rules: Rules }) {
   const { data, result, itinerary } = rules;
-  const [showImport, setShowImport] = useState(false);
 
   async function exportCalendar() {
     const appUrl = `${window.location.origin}${window.location.pathname}`;
     const countryNames = new Map(data.stays.map((s) => [s.country, getCountry(s.country)?.name ?? itinerary.countryName(s.country)]));
     const ics = buildIcs(result.prep, data.bookings, { appUrl, countryNames });
     await shareFile(new Blob([ics], { type: 'text/calendar' }), 'trip-prep.ics');
-  }
-
-  async function exportTrip() {
-    const json = JSON.stringify(exportTripFile(data), null, 2);
-    await shareFile(new Blob([json], { type: 'application/json' }), 'my-trip.json');
   }
 
   return (
@@ -392,33 +374,18 @@ function ExportPanel({ rules, onImported }: { rules: Rules; onImported: (r: Impo
         One event per prep moment with an alarm, at the local time where you'll be, never between 22:00 and 08:00. Import it into a
         separate calendar (e.g. “Trip prep”). When the plan changes: delete that calendar and import the new file.
       </p>
-      <Button className="mt-3 w-full" onClick={() => void exportTrip()}>
-        <DownloadIcon /> Trip file (my-trip.json)
-      </Button>
-      {showImport ? (
-        <div className="mt-3">
-          <ImportPanel replacing onImported={(r) => { setShowImport(false); onImported(r); }} />
-          <Button variant="ghost" className="mt-1 w-full" onClick={() => setShowImport(false)}>
-            Close
-          </Button>
-        </div>
-      ) : (
-        <Button variant="ghost" className="mt-2 w-full" onClick={() => setShowImport(true)}>
-          <UploadIcon /> Import an update or a new trip file
-        </Button>
-      )}
+      <LinkButton href="#/checklists" className="mt-3 w-full">
+        Prep checklists and checks
+      </LinkButton>
       <Button
         variant="ghost"
-        className="w-full text-crit"
+        className="mt-1 w-full text-crit"
         onClick={async () => {
           if (window.confirm('Delete the trip from this phone? Documents stay.')) await deleteTrip();
         }}
       >
         Delete trip
       </Button>
-      <LinkButton href="#/checklists" className="mt-2 w-full">
-        Prep checklists
-      </LinkButton>
     </Card>
   );
 }

@@ -83,10 +83,10 @@ downloaded rates, and you can set your own rate per currency.
 
 - **Trip → Import trip file** reads `my-trip.json` (`travel-companion-trip/1`). Anything that doesn't validate is
   listed and left out; the rest is imported. After that the app is the source of truth — **Export** writes the same
-  format back.
+  format back (**More → Travelling together → Save the trip as a file**).
 - **Update files** change part of a trip that's already on the phone — new flight times, a booking that's now
-  confirmed — and keep everything else, including your edits, notes and checklists. Trip → *Import an update or a new
-  trip file* shows every change before you apply it. Format `travel-companion-update/1`: `bookings`, `stays` and
+  confirmed — and keep everything else, including your edits, notes and checklists. **More → Travelling together →
+  Trip files** shows every change before you apply it. Format `travel-companion-update/1`: `bookings`, `stays` and
   `days`, each item naming an existing `id` (days: `date`) with only the fields that change (`null` clears one); a
   booking with a new `id` is added and must be complete. Legs bought as one ticket can say `"sameTicketAs":
   "<previous leg's id>"`: a connection on one ticket isn't treated as entering the country. Applied changes count as
@@ -95,8 +95,9 @@ downloaded rates, and you can set your own rate per currency.
   passport validity, forms and their windows, e-visa ports, booking windows, crossings, holidays — live in
   `content/rules.json`, each with sources and a `verifiedAt` date. Change a rule by editing that file; the tests check
   that every rule still has a source.
-- **Checklists** holds a “before you leave” list and one prep list per country. Items whose moment has passed show as
-  **Do now**; tick them off, snooze them or mark them not needed.
+- **More → Checklists** holds the checks (warnings from the entry rules, most serious first), a “before you leave” list
+  and one prep list per country. Items whose moment has passed show as **Do now**; tick them off, snooze them or mark
+  them not needed. Today shows what's due; the Trip tab shows the countries, gaps and timeline.
 
 ### Calendar reminders (.ics)
 
@@ -148,13 +149,14 @@ The private key never leaves the Worker's storage on your Cloudflare account.
 
 Two people each use the app on their own phone and share the trip, without accounts or a server:
 
-1. One of you: **Trip → Travelling together → Create a trip code**, then **Prepare trip to send** → **Send as
+1. One of you: **More → Travelling together → Create a trip code**, then **Prepare trip to send** → **Send as
    message** (WhatsApp, Signal, iMessage, email). The trip travels as an encrypted block of text, so chat apps don't
    mangle it. Tell the other person the trip code in person — it is never sent with the trip.
-2. The other: install the app, copy the whole message, **Trip → Receive a shared trip**, paste it, type the code.
+2. The other: install the app, copy the whole message, **More → Travelling together → Receive**, paste it, type the code.
 3. You link once: both phones keep the trip code. It is not a live connection — after changes, either of you sends
    again (Prepare → Send) and the other receives it the same way. **Travelling together** shows the link, when you last
-   sent and received, and how many changes on this phone haven't been sent; Today reminds you too. The newest edit of each stay or
+   sent and received, and how many changes on this phone haven't been sent. When you open the app with unsent changes,
+   a pop-up offers to send them. The newest edit of each stay or
    booking wins, and deletions carry over.
 
 What is shared: stays, bookings marked **Both of us**, the day plan and trip dates. What never leaves the phone: the
