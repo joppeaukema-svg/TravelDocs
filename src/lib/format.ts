@@ -30,8 +30,12 @@ export function clock(timeZone: string, at: Date): { time: string; day: string }
   return { time, day };
 }
 
-export function todayIn(timeZone: string): string {
-  return Temporal.Now.plainDateISO(timeZone).toString();
+/**
+ * The calendar date in a time zone. Read from `Date`, the clock the rest of the
+ * app ticks on (Temporal.Now can be a separate, native clock).
+ */
+export function todayIn(timeZone: string, at: Date = new Date()): string {
+  return Temporal.Instant.fromEpochMilliseconds(at.getTime()).toZonedDateTimeISO(timeZone).toPlainDate().toString();
 }
 
 /** Whole days from `from` to `to` (both "YYYY-MM-DD"); negative when `to` is earlier. */

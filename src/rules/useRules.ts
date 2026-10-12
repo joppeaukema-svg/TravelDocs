@@ -16,7 +16,7 @@ export const phoneTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZ
 
 export function useToday(): string {
   const now = useNow(60_000);
-  return useMemo(() => todayIn(phoneTimeZone()), [now]); // eslint-disable-line react-hooks/exhaustive-deps
+  return useMemo(() => todayIn(phoneTimeZone(), now), [now]);
 }
 
 export interface Rules {

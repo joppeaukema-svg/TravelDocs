@@ -6,6 +6,7 @@ import { saveExpense, setBudget, type ExpenseCategory } from '../money/expenses'
 import { saveInsurance, Insurance } from '../profile/insurance';
 import { Personal, savePersonal } from '../profile/personal';
 import { updateProfile } from '../profile/profile';
+import { todayIn } from '../lib/format';
 import { parseTripFile } from '../trip/io';
 import { shiftDates } from '../trip/shift';
 import { replaceTrip } from '../trip/store';
@@ -37,7 +38,7 @@ export async function exitDemo(): Promise<void> {
   window.location.reload();
 }
 
-const today = () => Temporal.Now.plainDateISO().toString();
+const today = () => todayIn(Intl.DateTimeFormat().resolvedOptions().timeZone);
 const add = (d: string, n: number) => Temporal.PlainDate.from(d).add({ days: n }).toString();
 
 /** The demo trip, moved (by whole weeks) so that today is about three weeks into it. */
