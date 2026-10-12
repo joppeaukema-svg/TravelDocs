@@ -1,9 +1,13 @@
+import { getCountry } from '../../content';
 import { formatDate } from '../../lib/format';
+import { shareFile } from '../../lib/share';
+import { buildIcs } from '../../rules/ics';
 import { itemStatus, OPEN } from '../../rules/status';
 import type { PrepItem } from '../../rules/types';
 import { useRules, type Rules } from '../../rules/useRules';
 import { usePrepStates } from '../../trip/store';
-import { Card, LinkButton, Notice, PageTitle, Pill, RowLink, SectionTitle } from '../../ui/kit';
+import { DownloadIcon } from '../../ui/icons';
+import { Button, Card, LinkButton, Notice, PageTitle, Pill, RowLink, SectionTitle } from '../../ui/kit';
 import { CheckCard, PrepItemRow } from '../trip/parts';
 import { packingId, PackingScreen, usePackingList } from './Packing';
 
@@ -104,7 +108,33 @@ export function ChecklistsScreen() {
       <Card className="py-1">
         <PackingRow />
       </Card>
+      <SectionTitle>Calendar</SectionTitle>
+      <CalendarExport rules={rules} />
     </>
+  );
+}
+
+/** The prep moments as calendar events, each with an alarm. */
+function CalendarExport({ rules }: { rules: Rules }) {
+  const { data, result, itinerary } = rules;
+
+  async function exportCalendar() {
+    const appUrl = `${window.location.origin}${window.location.pathname}`;
+    const countryNames = new Map(data.stays.map((s) => [s.country, getCountry(s.country)?.name ?? itinerary.countryName(s.country)]));
+    const ics = buildIcs(result.prep, data.bookings, { appUrl, countryNames });
+    await shareFile(new Blob([ics], { type: 'text/calendar' }), 'trip-prep.ics');
+  }
+
+  return (
+    <Card>
+      <Button variant="primary" className="w-full" onClick={() => void exportCalendar()}>
+        <DownloadIcon /> Calendar with prep reminders (.ics)
+      </Button>
+      <p className="mt-2 text-sm text-muted">
+        One event per prep moment with an alarm, at the local time where you'll be, never between 22:00 and 08:00. Import it into a
+        separate calendar (e.g. “Trip prep”). When the plan changes: delete that calendar and import the new file.
+      </p>
+    </Card>
   );
 }
 

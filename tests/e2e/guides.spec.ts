@@ -123,3 +123,37 @@ test('weather is off until you turn it on', async ({ page }) => {
   await page.waitForTimeout(500);
   expect(calls).toEqual([]);
 });
+
+test('weather on Today sits between the day card and Next', async ({ page }) => {
+  // Fake Open-Meteo: one place, a sunny week.
+  await page.route('https://geocoding-api.open-meteo.com/**', (r) =>
+    r.fulfill({ json: { results: [{ latitude: 52.37, longitude: 4.89, name: 'Amsterdam', country: 'Netherlands' }] } }),
+  );
+  await page.route('https://api.open-meteo.com/**', (r) =>
+    r.fulfill({
+      json: {
+        daily: {
+          time: ['2028-02-01', '2028-02-02'],
+          weather_code: [0, 3],
+          temperature_2m_max: [21, 19],
+          temperature_2m_min: [12, 11],
+          precipitation_probability_max: [0, 20],
+        },
+      },
+    }),
+  );
+  await page.clock.setFixedTime(new Date('2028-02-01T10:00:00'));
+  await page.goto('/#/trip');
+  await page.getByRole('button', { name: 'Try the demo trip' }).click();
+  await expect(page.getByText('Imported 7 stays')).toBeVisible();
+  await page.goto('/#/weather');
+  await page.getByText('Weather forecasts', { exact: true }).click();
+  await expect(page.getByRole('switch', { name: /Weather forecasts/ })).toBeChecked();
+  await page.goto('/#/today');
+  await expect(page.getByRole('heading', { name: 'Weather' })).toBeVisible();
+  const headings = await page.getByRole('heading', { level: 2 }).allTextContents();
+  const at = (name: string) => headings.findIndex((h) => h.toLowerCase() === name.toLowerCase());
+  expect(at('First day of the trip')).toBeGreaterThanOrEqual(0);
+  expect(at('Weather')).toBe(at('First day of the trip') + 1);
+  expect(at('Next')).toBe(at('Weather') + 1);
+});

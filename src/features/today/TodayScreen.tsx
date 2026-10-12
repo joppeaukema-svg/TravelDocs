@@ -195,6 +195,7 @@ function TripToday() {
         </>
       )}
       <TodayPlan rules={rules} />
+      <WeatherCard />
       {next && (
         <>
           <SectionTitle>Next</SectionTitle>
@@ -359,9 +360,6 @@ export function TodayScreen() {
       <CountryClock />
       <AdviceChanges />
       <TripToday />
-      <div className="mt-3">
-        <WeatherCard />
-      </div>
       <Warnings />
       <SetupSteps />
     </>

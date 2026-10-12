@@ -33,8 +33,12 @@ test('import the demo trip, see stays, checklists and export the calendar', asyn
   await page.getByRole('checkbox', { name: /Done: Laos: e-visa or visa on arrival/ }).click();
   await expect(page.getByRole('checkbox', { name: /Done: Laos: e-visa or visa on arrival/ })).toHaveAttribute('aria-checked', 'true');
 
-  // Calendar export.
+  // Calendar export, from Checklists; Trip itself is just the day by day.
   await page.goto('/#/trip');
+  await expect(page.getByText('Day by day')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Calendar with prep reminders (.ics)' })).toHaveCount(0);
+  await expect(page.getByText('Gaps')).toHaveCount(0);
+  await page.goto('/#/checklists');
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Calendar with prep reminders (.ics)' }).click();
   const download = await downloadPromise;
@@ -144,4 +148,14 @@ test('before the trip, Today shows its first day with the bookings', async ({ pa
   const first = page.getByRole('list', { name: 'First day of the trip' });
   await expect(first.getByText('Amsterdam', { exact: true })).toBeVisible();
   await expect(first.getByRole('link', { name: /21:30 Flight: Amsterdam \(AMS\) → Fuzhou \(FOC\)/ })).toBeVisible();
+});
+
+test('the trip is deleted from More → Travelling together', async ({ page }) => {
+  await page.goto('/#/trip');
+  await page.getByRole('button', { name: 'Try the demo trip' }).click();
+  await expect(page.getByText('Imported 7 stays')).toBeVisible();
+  await page.goto('/#/together');
+  await page.getByRole('button', { name: 'Delete trip' }).click();
+  await page.goto('/#/trip');
+  await expect(page.getByRole('button', { name: 'Import trip file' })).toBeVisible();
 });

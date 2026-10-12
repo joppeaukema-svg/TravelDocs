@@ -11,7 +11,6 @@ import {
   ShieldIcon,
   ShareIcon,
   SpeechIcon,
-  WalletIcon,
 } from '../../ui/icons';
 import { Card, PageTitle, Pill, RowLink } from '../../ui/kit';
 import { useShareStatus } from '../../trip/store';
@@ -43,7 +42,6 @@ export function MoreScreen() {
         <RowLink href="#/settings" icon={<GearIcon />} title="Settings" sub="Lock, appearance, storage" />
       </Card>
       <Card className="mt-4 py-1">
-        <RowLink href="#/money" icon={<WalletIcon />} title="Money" sub="Expenses, daily budgets, converter" />
         <RowLink href="#/phrases" icon={<SpeechIcon />} title="Phrases" sub="Key phrases and “show this” cards" />
         <RowLink href="#/weather" icon={<GlobeIcon />} title="Weather" sub="7-day forecast, seasons" />
         <RowLink href="#/sources" icon={<ListIcon />} title="Sources" sub="Where every fact comes from" />

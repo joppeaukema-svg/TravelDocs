@@ -2,17 +2,16 @@ import { useRef, useState } from 'react';
 import { getCountry } from '../../content';
 import { formatDate, formatDayRange, plural } from '../../lib/format';
 import { shareFile } from '../../lib/share';
-import { buildIcs } from '../../rules/ics';
 import { rulesContent } from '../../rules/content';
 import { diffDays } from '../../rules/itinerary';
 import { useRules, type Rules } from '../../rules/useRules';
 import { exportTripFile, parseTripFile, TripFileError, type ImportResult, type TripData } from '../../trip/io';
 import { checksByLeg, holidaysOn, tripLegs } from '../../trip/days';
-import { applyTripUpdate, deleteTrip, loadTrip, replaceTrip } from '../../trip/store';
+import { applyTripUpdate, loadTrip, replaceTrip } from '../../trip/store';
 import { isTripUpdate, parseTripUpdate, planTripUpdate, type UpdatePlan } from '../../trip/update';
-import { bookingsOn, dateRanges, nightsWithoutBed } from '../../trip/timeline';
+import { bookingsOn } from '../../trip/timeline';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
-import { ChevronRightIcon, DownloadIcon, PlusIcon, UploadIcon } from '../../ui/icons';
+import { ChevronRightIcon, PlusIcon, UploadIcon } from '../../ui/icons';
 import { Button, Card, ErrorText, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
 import { DayRow } from './DayRow';
 import { CheckCard } from './parts';
@@ -263,8 +262,6 @@ export function ImportPanel({ replacing, onImported }: { replacing?: boolean; on
 function TripView({ rules }: { rules: Rules }) {
   const { data } = rules;
   const tripDays = diffDays(data.meta.depart, data.meta.return) + 1;
-  const noBed = nightsWithoutBed(data);
-
   return (
     <>
       <PageTitle sub={`${formatDate(data.meta.depart)} – ${formatDate(data.meta.return)} · ${tripDays} days door to door`}>
@@ -275,21 +272,6 @@ function TripView({ rules }: { rules: Rules }) {
         Day by day
       </SectionTitle>
       <DayByDay rules={rules} />
-
-      <SectionTitle>Gaps</SectionTitle>
-      <Card>
-        <p className="font-bold">{noBed.length ? `${plural(noBed.length, 'night')} without accommodation booked` : 'Every night has a bed'}</p>
-        {noBed.length > 0 && (
-          <p className="mt-1 text-sm text-muted">
-            {dateRanges(noBed)
-              .map(([a, b]) => (a === b ? formatDate(a) : `${formatDate(a)} – ${formatDate(b)}`))
-              .join(' · ')}
-          </p>
-        )}
-      </Card>
-
-      <SectionTitle>Reminders</SectionTitle>
-      <CalendarPanel rules={rules} />
     </>
   );
 }
@@ -370,39 +352,4 @@ function DayByDay({ rules }: { rules: Rules }) {
 export async function exportTrip(data: TripData) {
   const json = JSON.stringify(exportTripFile(data), null, 2);
   await shareFile(new Blob([json], { type: 'application/json' }), 'my-trip.json');
-}
-
-function CalendarPanel({ rules }: { rules: Rules }) {
-  const { data, result, itinerary } = rules;
-
-  async function exportCalendar() {
-    const appUrl = `${window.location.origin}${window.location.pathname}`;
-    const countryNames = new Map(data.stays.map((s) => [s.country, getCountry(s.country)?.name ?? itinerary.countryName(s.country)]));
-    const ics = buildIcs(result.prep, data.bookings, { appUrl, countryNames });
-    await shareFile(new Blob([ics], { type: 'text/calendar' }), 'trip-prep.ics');
-  }
-
-  return (
-    <Card>
-      <Button variant="primary" className="w-full" onClick={() => void exportCalendar()}>
-        <DownloadIcon /> Calendar with prep reminders (.ics)
-      </Button>
-      <p className="mt-2 text-sm text-muted">
-        One event per prep moment with an alarm, at the local time where you'll be, never between 22:00 and 08:00. Import it into a
-        separate calendar (e.g. “Trip prep”). When the plan changes: delete that calendar and import the new file.
-      </p>
-      <LinkButton href="#/checklists" className="mt-3 w-full">
-        Prep checklists and checks
-      </LinkButton>
-      <Button
-        variant="ghost"
-        className="mt-1 w-full text-crit"
-        onClick={async () => {
-          if (window.confirm('Delete the trip from this phone? Documents stay.')) await deleteTrip();
-        }}
-      >
-        Delete trip
-      </Button>
-    </Card>
-  );
 }

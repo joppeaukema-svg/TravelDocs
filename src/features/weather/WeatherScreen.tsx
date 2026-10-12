@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNow, useOnline } from '../../app/hooks';
 import { getCountry } from '../../content';
-import { formatDate, formatDateTime } from '../../lib/format';
+import { formatDate, formatDateTime, formatDayRange } from '../../lib/format';
 import { useToday } from '../../rules/useRules';
 import { updateSettings, useSettings } from '../../settings/settings';
 import { useTrip } from '../../trip/store';
@@ -34,7 +34,7 @@ function ForecastTable({ f, days = 7 }: { f: Forecast; days?: number }) {
         const w = describe(d.code);
         return (
           <li key={d.date} className="flex items-center gap-3 border-b border-line py-2 last:border-b-0">
-            <span className="w-24 shrink-0 text-sm text-muted">{formatDate(d.date)}</span>
+            <span className="w-16 shrink-0 text-sm text-muted">{formatDayRange(d.date, d.date)}</span>
             <span className="text-xl" aria-hidden="true">
               {w.icon}
             </span>
@@ -57,13 +57,16 @@ export function WeatherCard() {
   if (!weather || !list.length || !forecasts?.[0]) return null;
   const f = forecasts[0];
   return (
-    <a href="#/weather" className="block text-ink no-underline">
-      <Card>
-        <p className="font-bold">Weather · {f.place}</p>
-        <ForecastTable f={f} days={2} />
-        <p className="mt-1 text-sm text-muted">Updated {formatDateTime(f.fetchedAt)}</p>
-      </Card>
-    </a>
+    <>
+      <SectionTitle action={<a href="#/weather" className="text-sm font-bold">7 days</a>}>Weather</SectionTitle>
+      <a href="#/weather" className="block text-ink no-underline">
+        <Card>
+          <p className="font-bold">{f.place}</p>
+          <ForecastTable f={f} days={2} />
+          <p className="mt-1 text-sm text-muted">Updated {formatDateTime(f.fetchedAt)}</p>
+        </Card>
+      </a>
+    </>
   );
 }
 

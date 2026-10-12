@@ -74,7 +74,7 @@ passphrase.
 
 ## Money
 
-More → Money: log expenses in any of the route's currencies with a category and country; the EUR value is fixed with
+The **Money** tab: log expenses in any of the route's currencies with a category and country; the EUR value is fixed with
 the rate of the day you enter it. Set a daily budget per country to see today's spending and each country's average
 per day against it. **CSV** exports everything for a spreadsheet. The **converter** works offline with the last
 downloaded rates, and you can set your own rate per currency.
@@ -107,7 +107,7 @@ downloaded rates, and you can set your own rate per currency.
 
 ### Calendar reminders (.ics)
 
-**Trip → Calendar with prep reminders** exports one event per prep moment, with an alarm in the time zone you'll be
+**More → Checklists → Calendar with prep reminders** exports one event per prep moment, with an alarm in the time zone you'll be
 in, never between 22:00 and 08:00 (earlier alarms ring the evening before). Every event links back to its checklist.
 
 - **iPhone:** open the file → *Add All* → pick a separate calendar, e.g. a new “Trip prep” calendar.

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ImportResult } from '../../trip/io';
-import { useTrip } from '../../trip/store';
+import { deleteTrip, useTrip } from '../../trip/store';
 import { DownloadIcon } from '../../ui/icons';
 import { Button, Card, PageTitle, SectionTitle } from '../../ui/kit';
 import { SharePanel } from '../trip/SharePanel';
@@ -30,6 +30,15 @@ export function TogetherScreen() {
             <DownloadIcon /> Save the trip as a file (my-trip.json)
           </Button>
           <p className="mt-2 text-sm text-muted">A copy of the whole itinerary, to keep or to import on another phone.</p>
+          <Button
+            variant="ghost"
+            className="mt-2 w-full text-crit"
+            onClick={async () => {
+              if (window.confirm('Delete the trip from this phone? Documents stay.')) await deleteTrip();
+            }}
+          >
+            Delete trip
+          </Button>
         </Card>
       )}
     </>

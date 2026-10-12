@@ -6,6 +6,7 @@ test('tabs and the emergency button work on every screen', async ({ page }) => {
 
   for (const [tab, heading] of [
     ['Trip', 'Trip'],
+    ['Money', 'Money'],
     ['Docs', 'Documents'],
     ['Countries', 'Countries'],
     ['More', 'More'],
