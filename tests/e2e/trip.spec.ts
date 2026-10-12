@@ -121,9 +121,27 @@ test('notes on a day: added on Trip, shown on Today', async ({ page }) => {
   await expect(japan.getByRole('textbox', { name: 'Notes' })).toHaveCount(0);
   await expect(japan.getByText('Book the train ticket today', { exact: true })).toBeVisible();
 
+  // Today shows the same day, and it can be edited there too.
   await page.goto('/#/today');
-  await expect(page.getByRole('heading', { name: "Today's plan" })).toBeVisible();
-  const plan = page.locator('section').filter({ hasText: 'Book the train ticket today' });
-  await expect(plan).toBeVisible();
+  const plan = page.getByRole('list', { name: "Today's plan" });
+  await expect(plan.getByText('Book the train ticket today', { exact: true })).toBeVisible();
   await expect(plan.getByText('Kyoto', { exact: true })).toBeVisible();
+  await plan.getByRole('button', { name: 'Plan and notes for Mon 20 Mar' }).click();
+  await plan.getByRole('textbox', { name: 'Notes' }).fill('Train ticket booked');
+  await plan.getByRole('button', { name: 'Save' }).click();
+  await expect(plan.getByRole('textbox', { name: 'Notes' })).toHaveCount(0);
+  await expect(plan.getByText('Train ticket booked', { exact: true })).toBeVisible();
+  await page.goto('/#/trip');
+  await expect(japan.getByText('Train ticket booked', { exact: true })).toBeVisible();
+});
+
+test('before the trip, Today shows its first day with the bookings', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2028-02-01T10:00:00'));
+  await page.goto('/#/trip');
+  await page.getByRole('button', { name: 'Try the demo trip' }).click();
+  await expect(page.getByText('Imported 7 stays')).toBeVisible();
+  await page.goto('/#/today');
+  const first = page.getByRole('list', { name: 'First day of the trip' });
+  await expect(first.getByText('Amsterdam', { exact: true })).toBeVisible();
+  await expect(first.getByRole('link', { name: /21:30 Flight: Amsterdam \(AMS\) → Fuzhou \(FOC\)/ })).toBeVisible();
 });

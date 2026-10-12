@@ -11,15 +11,17 @@ import { clock, daysBetween, formatDate, formatDateTime, plural, todayIn } from 
 import { readCoverageSummary } from '../../profile/insurance';
 import { updateSettings, useSettings } from '../../settings/settings';
 import { CheckIcon } from '../../ui/icons';
-import { Card, cx, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
+import { Card, cx, LinkButton, Notice, PageTitle, SectionTitle } from '../../ui/kit';
 import { addDays } from '../../rules/itinerary';
 import { itemStatus } from '../../rules/status';
 import { rulesContent } from '../../rules/content';
 import { useCurrentCountry, useRules, type Rules } from '../../rules/useRules';
-import { holidaysOn } from '../../trip/days';
+import { holidaysOn, tripLegs } from '../../trip/days';
+import { bookingsOn } from '../../trip/timeline';
 import { BOOKING_TYPE_LABELS, bookingLabel } from '../../trip/schema';
 import { usePrepStates, useTrip } from '../../trip/store';
 import { formatLocal, toInstant, zoneCity } from '../../trip/time';
+import { DayRow } from '../trip/DayRow';
 import { PrepItemRow, StayCard } from '../trip/parts';
 import { WeatherCard } from '../weather/WeatherScreen';
 import { AdviceChanges } from './AdviceChanges';
@@ -119,24 +121,40 @@ function CountryClock() {
   );
 }
 
-/** Today's place, notes and holidays, from the Trip screen's day by day. */
-function TodayPlan({ rules, country, places }: { rules: Rules; country: string | undefined; places: string[] }) {
-  const { data, today } = rules;
-  const day = data.days.find((d) => d.date === today);
-  const here = country ?? day?.country;
-  const holidays = here ? holidaysOn(rulesContent.holidays, here, places, today) : [];
-  if (!day?.note && !holidays.length) return null;
+/**
+ * Today as it is on Trip → Day by day: place, holidays, notes and bookings,
+ * editable here too. Before the trip it shows the first day.
+ */
+function TodayPlan({ rules }: { rules: Rules }) {
+  const { data, today, itinerary } = rules;
+  const [editing, setEditing] = useState(false);
+  const date = today < data.meta.depart ? data.meta.depart : today;
+  if (date > data.meta.return) return null;
+  const days = new Map(data.days.map((d) => [d.date, d]));
+  // On a travel day you're in two countries; the one you arrive in comes last.
+  const legs = tripLegs(data.meta, itinerary.stays, (d) => days.get(d)?.country).filter((l) => l.from <= date && date <= l.to);
+  const leg = legs.at(-1);
+  if (!leg) return null;
+  const holidays = legs
+    .flatMap((l) => holidaysOn(rulesContent.holidays, l.country, l.stay?.places ?? [], date))
+    .filter((h, i, all) => all.findIndex((x) => x.id === h.id) === i);
+  const title = date === today ? "Today's plan" : 'First day of the trip';
   return (
     <>
-      <SectionTitle action={<a href="#/trip" className="text-sm font-bold">Day by day</a>}>Today's plan</SectionTitle>
-      <Card>
-        {day?.place && <p className="font-bold">{day.place}</p>}
-        {holidays.map((h) => (
-          <p key={h.id} className="mt-1 flex flex-wrap items-center gap-1.5">
-            <Pill tone="info">Holiday</Pill> {h.name}
-          </p>
-        ))}
-        {day?.note && <p className="mt-1 whitespace-pre-line">{day.note}</p>}
+      <SectionTitle action={<a href="#/trip" className="text-sm font-bold">Day by day</a>}>{title}</SectionTitle>
+      <Card className="py-1">
+        <ul aria-label={title}>
+          <DayRow
+            date={date}
+            country={leg.country}
+            day={days.get(date)}
+            bookings={bookingsOn(data, date)}
+            holidays={holidays}
+            isToday={false}
+            editing={editing}
+            onEdit={setEditing}
+          />
+        </ul>
       </Card>
     </>
   );
@@ -176,7 +194,7 @@ function TripToday() {
           <StayCard status={current} countryName={rules.itinerary.countryName(current.stay.country)} />
         </>
       )}
-      <TodayPlan rules={rules} country={current?.stay.country} places={current?.stay.places ?? []} />
+      <TodayPlan rules={rules} />
       {next && (
         <>
           <SectionTitle>Next</SectionTitle>

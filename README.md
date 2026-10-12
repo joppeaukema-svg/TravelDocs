@@ -97,7 +97,8 @@ downloaded rates, and you can set your own rate per currency.
   that every rule still has a source.
 - **More → Checklists** holds the checks (warnings from the entry rules, most serious first), a “before you leave” list
   and one prep list per country. Items whose moment has passed show as **Do now**; tick them off, snooze them or mark
-  them not needed. Today shows what's due, the current stay counter and today's plan.
+  them not needed. Today shows what's due, the current stay counter and today's day from Day by day (before the
+  trip: the first day), with its notes and bookings, editable right there.
 - **Trip → Day by day** has one fold per country (plus leaving and coming home): that country's checks at the top,
   then every day with its place, holidays, notes and bookings. The pencil next to a day edits its place and notes
   (“book the train ticket today”); days are shared, so notes go along when you send the trip to your travel
