@@ -11,6 +11,15 @@ test('share the trip with a travel companion and merge their changes back', asyn
   await page.getByLabel('Who').selectOption('me');
   await page.getByRole('button', { name: 'Save booking' }).click();
   await expect(page.getByRole('button', { name: 'Saved' })).toBeVisible();
+  // …and leave a note on a day, for both of us.
+  await page.goto('/#/trip');
+  const laosA = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Laos' }) });
+  await laosA.locator('summary').click();
+  await laosA.getByRole('button', { name: 'Plan and notes for Fri 28 Apr' }).click();
+  await laosA.getByRole('textbox', { name: 'Notes' }).fill('Buy the train tickets to Vientiane');
+  await laosA.getByRole('button', { name: 'Save' }).click();
+  await expect(laosA.getByRole('textbox', { name: 'Notes' })).toHaveCount(0);
+  await expect(laosA.getByText('Buy the train tickets to Vientiane', { exact: true })).toBeVisible();
 
   await page.goto('/#/together');
   await page.getByRole('button', { name: 'Create a trip code' }).click();
@@ -34,7 +43,9 @@ test('share the trip with a travel companion and merge their changes back', asyn
   await b.getByRole('button', { name: 'Merge into my trip' }).click();
   await expect(b.getByText('Trip merged')).toBeVisible();
   await b.goto('/#/trip');
-  await expect(b.getByRole('link', { name: /Laos.*24 of 30 days/ })).toBeVisible();
+  const laosB = b.locator('details').filter({ has: b.locator('summary', { hasText: 'Laos' }) });
+  await laosB.locator('summary').click();
+  await expect(laosB.getByText('Buy the train tickets to Vientiane')).toBeVisible();
   // A's personal booking didn't travel.
   await b.goto('/#/trip/booking/a-parkrun-osaka');
   await expect(b.getByText('This booking no longer exists')).toBeVisible();

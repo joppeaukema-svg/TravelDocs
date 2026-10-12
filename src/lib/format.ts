@@ -8,6 +8,17 @@ export function formatDate(isoDate: string): string {
   return dateFmt.format(new Date(Date.UTC(d.year, d.month - 1, d.day)));
 }
 
+const dayMonthFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+
+/** "2027-03-14", "2027-04-02" → "14 Mar – 2 Apr"; the same day once. Without years, for places where the year is clear. */
+export function formatDayRange(from: string, to: string): string {
+  const f = (iso: string) => {
+    const d = Temporal.PlainDate.from(iso);
+    return dayMonthFmt.format(new Date(Date.UTC(d.year, d.month - 1, d.day)));
+  };
+  return from === to ? f(from) : `${f(from)} – ${f(to)}`;
+}
+
 /** An instant shown in the phone's current time zone. */
 export function formatDateTime(isoInstant: string): string {
   return new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(isoInstant));

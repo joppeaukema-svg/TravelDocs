@@ -11,10 +11,12 @@ import { clock, daysBetween, formatDate, formatDateTime, plural, todayIn } from 
 import { readCoverageSummary } from '../../profile/insurance';
 import { updateSettings, useSettings } from '../../settings/settings';
 import { CheckIcon } from '../../ui/icons';
-import { Card, cx, LinkButton, Notice, PageTitle, SectionTitle } from '../../ui/kit';
+import { Card, cx, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
 import { addDays } from '../../rules/itinerary';
 import { itemStatus } from '../../rules/status';
-import { useCurrentCountry, useRules } from '../../rules/useRules';
+import { rulesContent } from '../../rules/content';
+import { useCurrentCountry, useRules, type Rules } from '../../rules/useRules';
+import { holidaysOn } from '../../trip/days';
 import { BOOKING_TYPE_LABELS, bookingLabel } from '../../trip/schema';
 import { usePrepStates, useTrip } from '../../trip/store';
 import { formatLocal, toInstant, zoneCity } from '../../trip/time';
@@ -117,6 +119,29 @@ function CountryClock() {
   );
 }
 
+/** Today's place, notes and holidays, from the Trip screen's day by day. */
+function TodayPlan({ rules, country, places }: { rules: Rules; country: string | undefined; places: string[] }) {
+  const { data, today } = rules;
+  const day = data.days.find((d) => d.date === today);
+  const here = country ?? day?.country;
+  const holidays = here ? holidaysOn(rulesContent.holidays, here, places, today) : [];
+  if (!day?.note && !holidays.length) return null;
+  return (
+    <>
+      <SectionTitle action={<a href="#/trip" className="text-sm font-bold">Day by day</a>}>Today's plan</SectionTitle>
+      <Card>
+        {day?.place && <p className="font-bold">{day.place}</p>}
+        {holidays.map((h) => (
+          <p key={h.id} className="mt-1 flex flex-wrap items-center gap-1.5">
+            <Pill tone="info">Holiday</Pill> {h.name}
+          </p>
+        ))}
+        {day?.note && <p className="mt-1 whitespace-pre-line">{day.note}</p>}
+      </Card>
+    </>
+  );
+}
+
 function TripToday() {
   const rules = useRules();
   const states = usePrepStates();
@@ -151,6 +176,7 @@ function TripToday() {
           <StayCard status={current} countryName={rules.itinerary.countryName(current.stay.country)} />
         </>
       )}
+      <TodayPlan rules={rules} country={current?.stay.country} places={current?.stay.places ?? []} />
       {next && (
         <>
           <SectionTitle>Next</SectionTitle>

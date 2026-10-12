@@ -1,20 +1,22 @@
 import { useRef, useState } from 'react';
 import { getCountry } from '../../content';
-import { formatDate, plural } from '../../lib/format';
+import { formatDate, formatDayRange, plural } from '../../lib/format';
 import { shareFile } from '../../lib/share';
 import { buildIcs } from '../../rules/ics';
-import { diffDays, isSynthetic, stayEnd, stayStart } from '../../rules/itinerary';
+import { rulesContent, type Holiday } from '../../rules/content';
+import { diffDays } from '../../rules/itinerary';
 import { useRules, type Rules } from '../../rules/useRules';
 import { exportTripFile, parseTripFile, TripFileError, type ImportResult, type TripData } from '../../trip/io';
-import { BOOKING_TYPE_LABELS, bookingLabel } from '../../trip/schema';
-import { applyTripUpdate, deleteTrip, loadTrip, replaceTrip } from '../../trip/store';
+import { checksByLeg, holidaysOn, tripLegs } from '../../trip/days';
+import { BOOKING_TYPE_LABELS, bookingLabel, type Booking, type Day } from '../../trip/schema';
+import { applyTripUpdate, deleteTrip, loadTrip, replaceTrip, saveDay } from '../../trip/store';
 import { isTripUpdate, parseTripUpdate, planTripUpdate, type UpdatePlan } from '../../trip/update';
 import { bookingsOn, dateRanges, nightsWithoutBed } from '../../trip/timeline';
 import { formatLocal } from '../../trip/time';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
-import { DownloadIcon, PlusIcon, UploadIcon } from '../../ui/icons';
-import { Button, Card, cx, ErrorText, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
-import { StayCard } from './parts';
+import { ChevronRightIcon, DownloadIcon, EditIcon, PlusIcon, UploadIcon } from '../../ui/icons';
+import { Button, Card, cx, ErrorText, LinkButton, Notice, PageTitle, Pill, SectionTitle, TextArea, TextField } from '../../ui/kit';
+import { CheckCard, SourceLinks } from './parts';
 import { useTripCode } from './SharePanel';
 
 export function TripScreen() {
@@ -260,7 +262,7 @@ export function ImportPanel({ replacing, onImported }: { replacing?: boolean; on
 }
 
 function TripView({ rules }: { rules: Rules }) {
-  const { data, result, itinerary } = rules;
+  const { data } = rules;
   const tripDays = diffDays(data.meta.depart, data.meta.return) + 1;
   const noBed = nightsWithoutBed(data);
 
@@ -270,12 +272,10 @@ function TripView({ rules }: { rules: Rules }) {
         {data.meta.title} {data.meta.demo && <Pill tone="info">Demo</Pill>}
       </PageTitle>
 
-      <SectionTitle>Countries</SectionTitle>
-      <div className="space-y-2">
-        {result.stays.map((s) => (
-          <StayCard key={s.stay.id} status={s} countryName={itinerary.countryName(s.stay.country)} />
-        ))}
-      </div>
+      <SectionTitle action={<a href="#/trip/booking/new" className="inline-flex items-center gap-1 text-sm font-bold"><PlusIcon size={16} /> Booking</a>}>
+        Day by day
+      </SectionTitle>
+      <DayByDay rules={rules} />
 
       <SectionTitle>Gaps</SectionTitle>
       <Card>
@@ -289,63 +289,176 @@ function TripView({ rules }: { rules: Rules }) {
         )}
       </Card>
 
-      <SectionTitle action={<a href="#/trip/booking/new" className="inline-flex items-center gap-1 text-sm font-bold"><PlusIcon size={16} /> Booking</a>}>
-        Timeline
-      </SectionTitle>
-      <Timeline rules={rules} />
-
       <SectionTitle>Reminders</SectionTitle>
       <CalendarPanel rules={rules} />
     </>
   );
 }
 
-function Timeline({ rules }: { rules: Rules }) {
-  const { data, today, itinerary } = rules;
+const LEG_TITLES = { departure: 'Leaving home', return: 'Back home', between: 'On the way' } as const;
+
+/** One fold per country: its checks, then every day with the plan, holidays, notes and bookings. */
+function DayByDay({ rules }: { rules: Rules }) {
+  const { data, result, today, itinerary } = rules;
+  const days = new Map(data.days.map((d) => [d.date, d]));
+  const legs = tripLegs(data.meta, itinerary.stays, (date) => days.get(date)?.country);
+  const checks = checksByLeg(legs, result.checks, itinerary.stays);
+  const [editing, setEditing] = useState<string | null>(null);
+
   return (
     <div className="space-y-2">
-      {itinerary.stays
-        .filter((s) => !isSynthetic(s))
-        .map((stay) => {
-          const dates = data.days.filter((d) => d.date >= stayStart(stay) && d.date <= stayEnd(stay)).map((d) => d.date);
-          const isNow = stayStart(stay) <= today && today <= stayEnd(stay);
-          return (
-            <details key={stay.id} open={isNow} className="rounded-2xl border border-line bg-card">
-              <summary className="flex min-h-12 cursor-pointer items-center gap-2 px-4 py-2 font-bold">
-                <span className="font-mono text-sm">{stay.country}</span>
-                {itinerary.countryName(stay.country)}
-                <span className="ml-auto text-sm font-normal text-muted">
-                  {formatDate(stayStart(stay))} – {formatDate(stayEnd(stay))}
+      {legs.map((leg) => {
+        const name = leg.kind === 'stay' ? itinerary.countryName(leg.country) : LEG_TITLES[leg.kind];
+        const legChecks = checks.get(leg.key) ?? [];
+        const attention = legChecks.filter((c) => c.severity !== 'info');
+        const places = leg.stay?.places.join(' · ') ?? '';
+        return (
+          <details key={leg.key} open={leg.from <= today && today <= leg.to} className="group rounded-2xl border border-line bg-card">
+            <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-2.5 [&::-webkit-details-marker]:hidden">
+              <span className="rounded-md border-2 border-ink px-1.5 font-mono text-sm font-medium leading-6">{leg.country}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-bold">{name}</span>
+                <span className="block truncate text-sm text-muted">
+                  {formatDayRange(leg.from, leg.to)}
+                  {places && ` · ${places}`}
                 </span>
-              </summary>
-              <ol className="border-t border-line px-4 py-1">
-                {dates.map((date) => {
-                  const day = data.days.find((d) => d.date === date);
-                  const items = bookingsOn(data, date);
-                  return (
-                    <li key={date} className={cx('border-b border-line py-2 last:border-b-0', date === today && 'bg-accent-soft -mx-4 px-4')}>
-                      <p className="flex gap-2">
-                        <span className="tabular w-20 shrink-0 text-sm text-muted">{formatLocal({ date, time: null, tz: 'UTC' })}</span>
-                        <span className="font-bold">{day?.place ?? '—'}</span>
-                      </p>
-                      {day?.note && <p className="ml-22 text-sm text-muted">{day.note}</p>}
-                      {items.map((b) => (
-                        <a key={b.id} href={`#/trip/booking/${encodeURIComponent(b.id)}`} className="ml-22 mt-1 flex items-center gap-2 text-sm text-ink no-underline">
-                          <Pill tone={b.status === 'booked' ? 'ok' : b.status === 'planned' ? 'muted' : 'info'}>{b.status}</Pill>
-                          <span className="min-w-0 flex-1 truncate">
-                            {b.depart?.time && <span className="tabular font-bold">{b.depart.time} </span>}
-                            {BOOKING_TYPE_LABELS[b.type]}: {bookingLabel(b)}
-                          </span>
-                        </a>
-                      ))}
-                    </li>
-                  );
-                })}
-              </ol>
-            </details>
-          );
-        })}
+              </span>
+              {attention.length > 0 && (
+                <Pill tone={attention.some((c) => c.severity === 'critical') ? 'crit' : 'warn'}>{attention.length} to check</Pill>
+              )}
+              <ChevronRightIcon size={18} className="shrink-0 text-muted transition group-open:rotate-90" />
+            </summary>
+            {legChecks.length > 0 && (
+              <div className="space-y-2 border-t border-line px-3 py-3">
+                <p className="px-1 text-xs font-bold uppercase tracking-[0.12em] text-muted">To check</p>
+                {legChecks.map((c) => (
+                  <CheckCard key={c.id} check={c} />
+                ))}
+              </div>
+            )}
+            <ol className="border-t border-line px-4 py-1" aria-label={`${name}, day by day`}>
+              {leg.dates.map((date) => {
+                const id = `${leg.key}|${date}`;
+                return (
+                  <DayRow
+                    key={date}
+                    date={date}
+                    country={leg.country}
+                    day={days.get(date)}
+                    bookings={bookingsOn(data, date)}
+                    holidays={holidaysOn(rulesContent.holidays, leg.country, leg.stay?.places ?? [], date)}
+                    isToday={date === today}
+                    editing={editing === id}
+                    onEdit={(on) => setEditing(on ? id : null)}
+                  />
+                );
+              })}
+            </ol>
+            {(leg.stay || getCountry(leg.country)) && (
+              <div className="flex flex-wrap gap-x-5 border-t border-line px-4 py-2.5 text-sm font-bold">
+                {getCountry(leg.country) && <a href={`#/countries/${leg.country}`}>{itinerary.countryName(leg.country)} guide</a>}
+                {leg.stay && <a href={`#/trip/stay/${encodeURIComponent(leg.stay.id)}`}>Edit stay</a>}
+              </div>
+            )}
+          </details>
+        );
+      })}
     </div>
+  );
+}
+
+function DayRow({
+  date,
+  country,
+  day,
+  bookings,
+  holidays,
+  isToday,
+  editing,
+  onEdit,
+}: {
+  date: string;
+  country: string;
+  day: Day | undefined;
+  bookings: Booking[];
+  holidays: Holiday[];
+  isToday: boolean;
+  editing: boolean;
+  onEdit: (on: boolean) => void;
+}) {
+  const label = formatLocal({ date, time: null, tz: 'UTC' });
+  return (
+    <li className={cx('border-b border-line py-2 last:border-b-0', isToday && 'bg-accent-soft -mx-4 px-4')}>
+      <div className="flex items-start gap-2">
+        <span className="tabular w-20 shrink-0 pt-0.5 text-sm text-muted">{label}</span>
+        <div className="min-w-0 flex-1">
+          <p className="font-bold">{day?.place || '—'}</p>
+          {holidays.map((h) => (
+            <details key={h.id} className="mt-1 text-sm">
+              <summary className="flex cursor-pointer list-none items-center gap-1.5 [&::-webkit-details-marker]:hidden">
+                <Pill tone="info">Holiday</Pill> <span className="font-bold">{h.name}</span>
+              </summary>
+              <p className="mt-1">{h.detail}</p>
+              <SourceLinks ids={h.sourceIds} />
+            </details>
+          ))}
+          {editing ? (
+            <DayEditor date={date} country={country} day={day} onDone={() => onEdit(false)} />
+          ) : (
+            day?.note && <p className="mt-1 whitespace-pre-line text-sm">{day.note}</p>
+          )}
+          {bookings.map((b) => (
+            <a key={b.id} href={`#/trip/booking/${encodeURIComponent(b.id)}`} className="mt-1 flex items-center gap-2 text-sm text-ink no-underline">
+              <Pill tone={b.status === 'booked' ? 'ok' : b.status === 'planned' ? 'muted' : 'info'}>{b.status}</Pill>
+              <span className="min-w-0 flex-1 truncate">
+                {b.depart?.time && <span className="tabular font-bold">{b.depart.time} </span>}
+                {BOOKING_TYPE_LABELS[b.type]}: {bookingLabel(b)}
+              </span>
+            </a>
+          ))}
+        </div>
+        {!editing && (
+          <button
+            type="button"
+            onClick={() => onEdit(true)}
+            aria-label={`Plan and notes for ${label}`}
+            className="-mr-2 -mt-1.5 grid h-11 w-11 shrink-0 place-items-center rounded-full text-muted active:bg-sunk"
+          >
+            <EditIcon size={18} />
+          </button>
+        )}
+      </div>
+    </li>
+  );
+}
+
+function DayEditor({ date, country, day, onDone }: { date: string; country: string; day: Day | undefined; onDone: () => void }) {
+  const [place, setPlace] = useState(day?.place ?? '');
+  const [note, setNote] = useState(day?.note ?? '');
+  return (
+    <form
+      className="mt-2 space-y-3"
+      onSubmit={(e) => {
+        e.preventDefault();
+        void saveDay(date, country, { place: place.trim() || null, note: note.trim() }).then(onDone);
+      }}
+    >
+      <TextField label="Place" value={place} onChange={setPlace} />
+      <TextArea
+        label="Notes"
+        value={note}
+        onChange={setNote}
+        hint="For example: book the train ticket today. Notes go along when you send the trip to your travel companion."
+      />
+      <div className="grid grid-cols-2 gap-2">
+        <Button type="button" onClick={onDone}>
+          Cancel
+        </Button>
+        <Button type="submit" variant="primary">
+          Save
+        </Button>
+      </div>
+    </form>
   );
 }
 

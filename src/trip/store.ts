@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, getMeta, META, setMeta, type PrepStateRow } from '../db/db';
 import type { TripData } from './io';
-import { Booking, Stay, TripMeta } from './schema';
+import { Booking, Day, Stay, TripMeta } from './schema';
 import { mergeTrip, type MergeStats, type SharePayload, type Tombstones } from './share';
 import type { UpdatePlan } from './update';
 
@@ -190,6 +190,26 @@ export async function deleteBooking(id: string): Promise<void> {
     await addTombstones([`booking:${id}`]);
     await markUnsent();
   }
+}
+
+/**
+ * Saves the place and notes of one day. Days are shared, so the next send
+ * carries the change to a travel companion. A day that isn't in the trip yet
+ * is added for `country`.
+ */
+export async function saveDay(date: string, country: string, patch: { place?: string | null; note?: string }): Promise<void> {
+  const before = await db.days.get(date);
+  const next = Day.parse({ date, country, place: null, note: '', ...before, ...patch, updatedAt: now() });
+  if (before ? before.place === next.place && before.note === next.note : !next.place && !next.note) return;
+  await db.transaction('rw', db.days, db.meta, async () => {
+    await db.days.put(next);
+    const t = await getTombstones();
+    if (t[`day:${date}`]) {
+      delete t[`day:${date}`];
+      await db.meta.put({ key: META.tripDeleted, value: t });
+    }
+  });
+  await markUnsent();
 }
 
 export async function updateTripMeta(patch: Partial<TripMeta>): Promise<void> {

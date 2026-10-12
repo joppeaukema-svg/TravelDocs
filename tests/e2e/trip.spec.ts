@@ -6,12 +6,17 @@ test('import the demo trip, see stays, checklists and export the calendar', asyn
   await page.getByTestId('trip-input').setInputFiles('demo/trip.demo.json');
   await expect(page.getByText('Imported 7 stays')).toBeVisible();
 
-  // Stay counters.
-  await expect(page.getByRole('link', { name: /Japan.*23 of 90 days/ })).toBeVisible();
-  await expect(page.getByRole('link', { name: /Vietnam.*20 of 45 days/ })).toBeVisible();
-  await expect(page.getByRole('link', { name: /Laos.*24 of 30 days/ })).toBeVisible();
-
-  // Checks live in Checklists, not on Trip or Today.
+  // Day by day: one fold per country with every day; visa counters aren't on this screen.
+  const japan = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Japan' }) });
+  await japan.locator('summary').click();
+  await expect(japan.getByRole('list', { name: 'Japan, day by day' }).getByRole('listitem')).toHaveCount(23);
+  await expect(japan.getByText('Flight: Fukuoka (FUK) → Okinawa Naha (OKA)').first()).toBeVisible();
+  await expect(page.getByText(/of 90 days/)).toHaveCount(0);
+  // Checks show per country; the full list is in Checklists.
+  const vietnam = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Vietnam' }) });
+  await expect(vietnam.locator('summary')).toContainText('to check');
+  await vietnam.locator('summary').click();
+  await expect(vietnam.getByText('To check', { exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Checks' })).toHaveCount(0);
   await page.goto('/#/today');
   await expect(page.getByRole('heading', { name: 'Checks' })).toHaveCount(0);
@@ -45,7 +50,9 @@ test('import the demo trip, see stays, checklists and export the calendar', asyn
 test('editing a stay: the stamped date wins', async ({ page }) => {
   await page.goto('/#/trip');
   await page.getByRole('button', { name: 'Try the demo trip' }).click();
-  await page.getByRole('link', { name: /Philippines/ }).first().click();
+  const ph = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Philippines' }) });
+  await ph.locator('summary').click();
+  await ph.getByRole('link', { name: 'Edit stay' }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Philippines' })).toBeVisible();
   const from = await page.getByLabel('Planned arrival').inputValue();
   // A stamp 10 days after arrival makes the planned 22-day stay too long.
@@ -69,7 +76,7 @@ test('a flight across time zones shows local times at both ends', async ({ page 
 test('an update file changes only what it lists, after a preview', async ({ page }) => {
   await page.goto('/#/trip');
   await page.getByRole('button', { name: 'Try the demo trip' }).click();
-  await expect(page.getByText('Timeline')).toBeVisible();
+  await expect(page.getByText('Day by day')).toBeVisible();
 
   const update = {
     format: 'travel-companion-update/1',
@@ -96,4 +103,27 @@ test('an update file changes only what it lists, after a preview', async ({ page
   await page.goto('/#/trip/booking/f-fuk-oka');
   await expect(page.getByLabel('Title')).toHaveValue('XX123 Fukuoka → Okinawa');
   await expect(page.getByLabel('From')).toHaveValue('Fukuoka (FUK)');
+});
+
+test('notes on a day: added on Trip, shown on Today', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2028-03-20T10:00:00'));
+  await page.goto('/#/trip');
+  await page.getByRole('button', { name: 'Try the demo trip' }).click();
+  await expect(page.getByText('Imported 7 stays')).toBeVisible();
+
+  // The fold of the country you're in is open.
+  const japan = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Japan' }) });
+  await expect(japan).toHaveAttribute('open', '');
+  await japan.getByRole('button', { name: 'Plan and notes for Mon 20 Mar' }).click();
+  await japan.getByRole('textbox', { name: 'Place' }).fill('Kyoto');
+  await japan.getByRole('textbox', { name: 'Notes' }).fill('Book the train ticket today');
+  await japan.getByRole('button', { name: 'Save' }).click();
+  await expect(japan.getByRole('textbox', { name: 'Notes' })).toHaveCount(0);
+  await expect(japan.getByText('Book the train ticket today', { exact: true })).toBeVisible();
+
+  await page.goto('/#/today');
+  await expect(page.getByRole('heading', { name: "Today's plan" })).toBeVisible();
+  const plan = page.locator('section').filter({ hasText: 'Book the train ticket today' });
+  await expect(plan).toBeVisible();
+  await expect(plan.getByText('Kyoto', { exact: true })).toBeVisible();
 });
