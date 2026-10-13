@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-10-12T12:06:19.085Z",
+ "fetchedAt": "2026-10-13T11:52:07.825Z",
  "countries": [
   {
    "country": "CN",
@@ -2715,6 +2715,62 @@
       {
        "type": "li",
        "text": "31 december - Oudjaarsdag"
+      },
+      {
+       "type": "h",
+       "text": "2027"
+      },
+      {
+       "type": "li",
+       "text": "1 januari - Nieuwjaarsdag"
+      },
+      {
+       "type": "li",
+       "text": "22 februari - Substitutiedag Makha Bucha-dag"
+      },
+      {
+       "type": "li",
+       "text": "29 maart - Tweede Paasdag"
+      },
+      {
+       "type": "li",
+       "text": "13 en 14 april - Songkran Festival"
+      },
+      {
+       "type": "li",
+       "text": "4 mei - Kroningsdag"
+      },
+      {
+       "type": "li",
+       "text": "5 mei - Bevrijdingsdag"
+      },
+      {
+       "type": "li",
+       "text": "17 mei – Tweede Pinksterdag"
+      },
+      {
+       "type": "li",
+       "text": "3 juni - Verjaardag van Hare Majesteit Koningin Suthida"
+      },
+      {
+       "type": "li",
+       "text": "28 juli - Verjaardag van Zijne Majesteit Maha Vajiralongkorn"
+      },
+      {
+       "type": "li",
+       "text": "12 augustus - Verjaardag van Hare Majesteit Koningin Moeder"
+      },
+      {
+       "type": "li",
+       "text": "13 oktober - Herdenkingsdag Zijne Majesteit Bhumibol Adulyadej"
+      },
+      {
+       "type": "li",
+       "text": "6 december – Subsitutiedag voor verjaardag van Wijlen Zijne Majesteit de Koning"
+      },
+      {
+       "type": "li",
+       "text": "31 december - Oudjaarsdag"
       }
      ],
      "serves": [
@@ -2724,7 +2780,7 @@
      ],
      "lat": 13.74123,
      "lon": 100.544991,
-     "lastModified": "2026-09-28T08:54:00.351Z"
+     "lastModified": "2026-10-13T07:18:18.956Z"
     }
    ],
    "hash": "2494144fa28eb195"
@@ -3485,7 +3541,7 @@
   {
    "country": "TH",
    "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand",
-   "lastModified": "2026-10-06T13:58:22.751Z",
+   "lastModified": "2026-10-12T13:29:28.729Z",
    "modification": "Reist u naar Thailand? Lees welke veiligheidsrisico’s er zijn, wat u kunt doen in geval van nood, en hoe u zich voorbereidt op uw reis.",
    "colours": [
     "red",
@@ -3551,7 +3607,7 @@
         },
         {
          "type": "li",
-         "text": "De districten Chana, Nathawi, Thepha en Sabayoi in de zuidelijke provincie Songkhla."
+         "text": "De districten Chana, Na Thawi, Thepha en Saba Yoi in de zuidelijke provincie Songkhla."
         },
         {
          "type": "li",
@@ -4433,6 +4489,62 @@
       {
        "type": "li",
        "text": "31 december - Oudjaarsdag"
+      },
+      {
+       "type": "h",
+       "text": "2027"
+      },
+      {
+       "type": "li",
+       "text": "1 januari - Nieuwjaarsdag"
+      },
+      {
+       "type": "li",
+       "text": "22 februari - Substitutiedag Makha Bucha-dag"
+      },
+      {
+       "type": "li",
+       "text": "29 maart - Tweede Paasdag"
+      },
+      {
+       "type": "li",
+       "text": "13 en 14 april - Songkran Festival"
+      },
+      {
+       "type": "li",
+       "text": "4 mei - Kroningsdag"
+      },
+      {
+       "type": "li",
+       "text": "5 mei - Bevrijdingsdag"
+      },
+      {
+       "type": "li",
+       "text": "17 mei – Tweede Pinksterdag"
+      },
+      {
+       "type": "li",
+       "text": "3 juni - Verjaardag van Hare Majesteit Koningin Suthida"
+      },
+      {
+       "type": "li",
+       "text": "28 juli - Verjaardag van Zijne Majesteit Maha Vajiralongkorn"
+      },
+      {
+       "type": "li",
+       "text": "12 augustus - Verjaardag van Hare Majesteit Koningin Moeder"
+      },
+      {
+       "type": "li",
+       "text": "13 oktober - Herdenkingsdag Zijne Majesteit Bhumibol Adulyadej"
+      },
+      {
+       "type": "li",
+       "text": "6 december – Subsitutiedag voor verjaardag van Wijlen Zijne Majesteit de Koning"
+      },
+      {
+       "type": "li",
+       "text": "31 december - Oudjaarsdag"
       }
      ],
      "serves": [
@@ -4442,10 +4554,10 @@
      ],
      "lat": 13.74123,
      "lon": 100.544991,
-     "lastModified": "2026-09-28T08:54:00.351Z"
+     "lastModified": "2026-10-13T07:18:18.956Z"
     }
    ],
-   "hash": "9b19b379f0d8cef4"
+   "hash": "c8ecbcbc56aabc1e"
   },
   {
    "country": "VN",
