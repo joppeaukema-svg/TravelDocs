@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { countryCode, isoDate } from '../content/schema';
 import { db, getMeta, setMeta } from '../db/db';
 
-export const ExpenseCategory = z.enum(['food', 'stay', 'transport', 'activities', 'shopping', 'fees', 'health', 'other']);
+export const ExpenseCategory = z.enum(['food', 'stay', 'transport', 'activities', 'shopping', 'fees', 'health', 'esim', 'other']);
 export type ExpenseCategory = z.infer<typeof ExpenseCategory>;
 
 export const CATEGORY_LABELS: Record<ExpenseCategory, string> = {
@@ -14,8 +14,13 @@ export const CATEGORY_LABELS: Record<ExpenseCategory, string> = {
   shopping: 'Shopping',
   fees: 'Visas & fees',
   health: 'Health',
+  esim: 'E-sims',
   other: 'Other',
 };
+
+/** Who an expense is for: both of you, or one of you ("a" and "b"; their names are set on the phone). */
+export const ForWhom = z.enum(['both', 'a', 'b']);
+export type ForWhom = z.infer<typeof ForWhom>;
 
 /** One expense. `eur` is fixed when it's saved, with the rate you had then. */
 export const Expense = z.object({
@@ -27,6 +32,8 @@ export const Expense = z.object({
   /** Where it was spent — for per-country budgets. 'NL' for costs at home. */
   country: countryCode,
   note: z.string().optional(),
+  /** Missing on older entries: those count as for both. */
+  forWhom: ForWhom.optional(),
   eur: z.number().nonnegative().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -49,6 +56,30 @@ export async function deleteExpense(id: string): Promise<void> {
 
 export function useExpenses(): Expense[] | undefined {
   return useLiveQuery(() => db.expenses.orderBy('date').reverse().toArray(), []);
+}
+
+export const forWhomOf = (e: Pick<Expense, 'forWhom'>): ForWhom => e.forWhom ?? 'both';
+
+// --- Travellers -----------------------------------------------------------------
+
+/** The two travellers' names. Kept on this phone only (they're personal), set once in Money. */
+export interface Travellers {
+  a: string;
+  b: string;
+}
+const TRAVELLERS = 'travellers';
+
+export function useTravellers(): Travellers | undefined {
+  return useLiveQuery(async () => ({ a: '', b: '', ...((await getMeta(TRAVELLERS)) as Partial<Travellers> | undefined) }), []);
+}
+
+export async function setTravellers(t: Travellers): Promise<void> {
+  await setMeta(TRAVELLERS, { a: t.a.trim(), b: t.b.trim() });
+}
+
+export function whoLabel(w: ForWhom, t: Travellers | undefined): string {
+  if (w === 'both') return 'Samen';
+  return t?.[w] || (w === 'a' ? 'Traveller 1' : 'Traveller 2');
 }
 
 // --- Budgets --------------------------------------------------------------------
@@ -98,10 +129,11 @@ export function summarise(
   rate: (c: string) => number | undefined,
   daysIn: (country: string) => number,
   budgets: Budgets,
-): { total: number; countries: CountrySummary[]; unknown: number } {
+): { total: number; countries: CountrySummary[]; unknown: number; byWho: Record<ForWhom, number> } {
   const map = new Map<string, CountrySummary>();
   let total = 0;
   let unknown = 0;
+  const byWho: Record<ForWhom, number> = { both: 0, a: 0, b: 0 };
   for (const e of expenses) {
     const s = map.get(e.country) ?? { country: e.country, total: 0, days: 0, perDay: 0, byCategory: {}, unknown: 0 };
     const eur = eurOf(e, rate);
@@ -111,6 +143,7 @@ export function summarise(
     } else {
       s.total += eur;
       total += eur;
+      byWho[forWhomOf(e)] += eur;
       s.byCategory[e.category] = (s.byCategory[e.category] ?? 0) + eur;
     }
     map.set(e.country, s);
@@ -123,7 +156,7 @@ export function summarise(
     s.days = Math.max(1, daysIn(s.country));
     s.perDay = s.total / s.days;
   }
-  return { total, unknown, countries: [...map.values()].sort((a, b) => b.total - a.total) };
+  return { total, unknown, byWho, countries: [...map.values()].sort((a, b) => b.total - a.total) };
 }
 
 export function spentOn(expenses: Expense[], date: string, rate: (c: string) => number | undefined): number {
@@ -135,10 +168,14 @@ const csvCell = (v: string | number | undefined) => {
   return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 };
 
-export function expensesCsv(expenses: Expense[], rate: (c: string) => number | undefined): string {
-  const head = ['date', 'country', 'category', 'amount', 'currency', 'eur', 'note'];
+export function expensesCsv(expenses: Expense[], rate: (c: string) => number | undefined, travellers?: Travellers): string {
+  const head = ['date', 'country', 'category', 'for', 'amount', 'currency', 'eur', 'note'];
   const rows = [...expenses]
     .sort((a, b) => a.date.localeCompare(b.date))
-    .map((e) => [e.date, e.country, CATEGORY_LABELS[e.category], e.amount, e.currency, eurOf(e, rate)?.toFixed(2), e.note].map(csvCell).join(','));
+    .map((e) =>
+      [e.date, e.country, CATEGORY_LABELS[e.category], whoLabel(forWhomOf(e), travellers), e.amount, e.currency, eurOf(e, rate)?.toFixed(2), e.note]
+        .map(csvCell)
+        .join(','),
+    );
   return [head.join(','), ...rows].join('\n') + '\n';
 }

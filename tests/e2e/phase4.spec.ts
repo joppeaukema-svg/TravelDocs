@@ -9,11 +9,31 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
   await page.getByRole('radio', { name: 'Transport' }).click();
   await page.getByLabel('Country').selectOption('TH');
   await page.getByLabel('Note (optional)').fill('Airport taxi');
-  await page.getByRole('button', { name: 'Save' }).click();
+  // For both of us, by default.
+  await expect(page.getByRole('radio', { name: 'Samen' })).toHaveAttribute('aria-checked', 'true');
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
 
   await expect(page.getByRole('heading', { level: 1, name: 'Money' })).toBeVisible();
   await expect(page.getByText('Airport taxi')).toBeVisible();
   await expect(page.getByText('Transport EUR 20.00')).toBeVisible();
+
+  // An e-sim for one of us: names are set once, in the form.
+  await page.getByRole('link', { name: 'Add expense' }).click();
+  await page.getByLabel('Amount').fill('12');
+  await page.getByLabel('Currency').selectOption('EUR');
+  await page.getByRole('radio', { name: 'E-sims' }).click();
+  await page.getByRole('button', { name: 'Set your names' }).click();
+  await page.getByLabel('Name 1').fill('Alex');
+  await page.getByLabel('Name 2').fill('Robin');
+  await page.getByRole('button', { name: 'Save names' }).click();
+  await page.getByRole('radio', { name: 'Robin' }).click();
+  await page.getByLabel('Country').selectOption('TH');
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  const perPerson = page.getByRole('list', { name: 'Per person' });
+  await expect(perPerson.getByRole('listitem').filter({ hasText: 'Samen' })).toContainText('EUR 20.00');
+  await expect(perPerson.getByRole('listitem').filter({ hasText: 'Robin' })).toContainText('EUR 12.00');
+  await expect(page.getByText('With half of Samen each: Alex EUR 10.00 · Robin EUR 22.00')).toBeVisible();
+  await expect(page.getByText('Robin · E-sims · Thailand')).toBeVisible();
 
   await page.getByRole('button', { name: 'Set daily budget' }).first().click();
   await page.getByLabel(/Daily budget for Thailand/).fill('50');
@@ -26,7 +46,7 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
 
   await page.getByRole('link', { name: /Airport taxi/ }).click();
   await page.getByLabel('Amount').fill('25');
-  await page.getByRole('button', { name: 'Save' }).click();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(page.getByText('Transport EUR 25.00')).toBeVisible();
   await page.getByRole('link', { name: /Airport taxi/ }).click();
   await page.getByRole('button', { name: 'Delete expense' }).click();

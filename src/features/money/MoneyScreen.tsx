@@ -11,14 +11,20 @@ import {
   ExpenseCategory,
   expensesCsv,
   eurOf,
+  forWhomOf,
+  ForWhom,
   saveExpense,
   setBudget,
+  setTravellers,
   spentOn,
   summarise,
   useBudgets,
   useExpenses,
+  useTravellers,
+  whoLabel,
   type CountrySummary,
   type Expense,
+  type Travellers,
 } from '../../money/expenses';
 import { diffDays, minDate, stayEnd, stayStart } from '../../rules/itinerary';
 import { useCurrentCountry, useToday } from '../../rules/useRules';
@@ -120,14 +126,80 @@ function CountryCard({ s }: { s: CountrySummary }) {
   );
 }
 
+/** The two names for "for whom". Saved on this phone only. */
+function NamesEditor({ travellers, onDone }: { travellers: Travellers; onDone: () => void }) {
+  const [a, setA] = useState(travellers.a);
+  const [b, setB] = useState(travellers.b);
+  return (
+    // Not a <form>: it also sits inside the expense form.
+    <div className="mt-2">
+      <div className="grid grid-cols-2 gap-2">
+        <TextField label="Name 1" value={a} onChange={setA} autoComplete="off" />
+        <TextField label="Name 2" value={b} onChange={setB} autoComplete="off" />
+      </div>
+      <p className="-mt-1 mb-3 text-sm text-muted">Only on this phone; set them on each phone.</p>
+      <div className="grid grid-cols-2 gap-2">
+        <Button type="button" onClick={onDone}>
+          Cancel
+        </Button>
+        <Button type="button" variant="primary" onClick={() => void setTravellers({ a, b }).then(onDone)}>
+          Save names
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function PerPerson({ byWho, travellers }: { byWho: Record<ForWhom, number>; travellers: Travellers }) {
+  const [editing, setEditing] = useState(false);
+  const half = byWho.both / 2;
+  return (
+    <>
+      <SectionTitle
+        action={
+          !editing && (
+            <button type="button" className="min-h-10 text-sm font-bold text-accent" onClick={() => setEditing(true)}>
+              {travellers.a || travellers.b ? 'Names' : 'Set names'}
+            </button>
+          )
+        }
+      >
+        Per person
+      </SectionTitle>
+      <Card className="py-1">
+        {editing ? (
+          <div className="py-2">
+            <NamesEditor travellers={travellers} onDone={() => setEditing(false)} />
+          </div>
+        ) : (
+          <>
+            <ul aria-label="Per person">
+              {ForWhom.options.map((w) => (
+                <li key={w} className="flex justify-between gap-2 border-b border-line py-2">
+                  <span>{whoLabel(w, travellers)}</span>
+                  <span className="tabular font-bold">{eur(byWho[w])}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="py-2 text-sm text-muted">
+              With half of Samen each: {whoLabel('a', travellers)} {eur(byWho.a + half)} · {whoLabel('b', travellers)} {eur(byWho.b + half)}
+            </p>
+          </>
+        )}
+      </Card>
+    </>
+  );
+}
+
 export function MoneyScreen() {
   const expenses = useExpenses();
   const budgets = useBudgets();
+  const travellers = useTravellers();
   const trip = useTrip();
   const today = useToday();
   const here = useCurrentCountry().code;
   const { rate } = useRateTable();
-  if (!expenses || !budgets) return null;
+  if (!expenses || !budgets || !travellers) return null;
 
   const summary = summarise(expenses, rate, (c) => daysInCountry(trip, c, today), budgets);
   const todaySpent = spentOn(expenses, today, rate);
@@ -159,11 +231,13 @@ export function MoneyScreen() {
         <LinkButton href="#/money/convert">Converter</LinkButton>
         <Button
           disabled={!expenses.length}
-          onClick={() => void shareFile(new Blob([expensesCsv(expenses, rate)], { type: 'text/csv' }), 'expenses.csv', 'download')}
+          onClick={() => void shareFile(new Blob([expensesCsv(expenses, rate, travellers)], { type: 'text/csv' }), 'expenses.csv', 'download')}
         >
           <DownloadIcon size={18} /> CSV
         </Button>
       </div>
+
+      {expenses.length > 0 && <PerPerson byWho={summary.byWho} travellers={travellers} />}
 
       <SectionTitle action={<span className="tabular font-bold">{eur(summary.total)}</span>}>Per country</SectionTitle>
       {summary.countries.length === 0 && routeWithoutSpend.length === 0 && <p className="text-muted">No expenses yet.</p>}
@@ -202,7 +276,7 @@ export function MoneyScreen() {
                         <span className="tabular shrink-0">{formatMoney(e.amount, e.currency)}</span>
                       </span>
                     }
-                    sub={`${CATEGORY_LABELS[e.category]} · ${getCountry(e.country)?.name ?? e.country}${e.currency !== 'EUR' && eurOf(e, rate) !== undefined ? ` · ${eur(eurOf(e, rate)!)}` : ''}`}
+                    sub={`${whoLabel(forWhomOf(e), travellers)} · ${CATEGORY_LABELS[e.category]} · ${getCountry(e.country)?.name ?? e.country}${e.currency !== 'EUR' && eurOf(e, rate) !== undefined ? ` · ${eur(eurOf(e, rate)!)}` : ''}`}
                   />
                 ))}
               </div>
@@ -240,6 +314,9 @@ function ExpenseForm({ existing }: { existing?: Expense | undefined }) {
   const [amount, setAmount] = useState(existing ? String(existing.amount) : '');
   const [currency, setCurrency] = useState(existing?.currency ?? hereCurrency ?? lastCurrency() ?? 'EUR');
   const [category, setCategory] = useState<ExpenseCategory>(existing?.category ?? 'food');
+  const [forWhom, setForWhom] = useState<ForWhom>(existing ? forWhomOf(existing) : 'both');
+  const travellers = useTravellers();
+  const [naming, setNaming] = useState(false);
   const [date, setDate] = useState(existing?.date ?? today);
   const [country, setCountry] = useState(existing?.country ?? here ?? 'NL');
   const [note, setNote] = useState(existing?.note ?? '');
@@ -263,6 +340,7 @@ function ExpenseForm({ existing }: { existing?: Expense | undefined }) {
         currency,
         category,
         country,
+        forWhom,
         ...(note.trim() ? { note: note.trim() } : {}),
         ...(keepEur !== undefined ? { eur: Math.round(keepEur * 100) / 100 } : {}),
       },
@@ -319,6 +397,29 @@ function ExpenseForm({ existing }: { existing?: Expense | undefined }) {
               </button>
             ))}
           </div>
+
+          <p className="mb-1 font-bold">For</p>
+          <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="For">
+            {ForWhom.options.map((w) => (
+              <button
+                key={w}
+                type="button"
+                role="radio"
+                aria-checked={w === forWhom}
+                onClick={() => setForWhom(w)}
+                className={cx('min-h-11 rounded-full border px-3.5 font-bold', w === forWhom ? 'border-ink bg-ink text-paper' : 'border-line bg-card')}
+              >
+                {whoLabel(w, travellers)}
+              </button>
+            ))}
+          </div>
+          {travellers && !naming && !(travellers.a && travellers.b) && (
+            <Button variant="ghost" className="min-h-10 px-0 text-sm" onClick={() => setNaming(true)}>
+              Set your names
+            </Button>
+          )}
+          {travellers && naming && <NamesEditor travellers={travellers} onDone={() => setNaming(false)} />}
+          <div className="mb-3.5" />
 
           <TextField label="Date" type="date" value={date} onChange={setDate} />
           <SelectField

@@ -3,7 +3,7 @@ import { Temporal } from 'temporal-polyfill';
 import { describe, expect, it } from 'vitest';
 import { demoTrip } from '../../src/demo/demo';
 import { daysInCountry } from '../../src/features/money/MoneyScreen';
-import { Expense, expensesCsv, eurOf, spentOn, summarise } from '../../src/money/expenses';
+import { Expense, expensesCsv, eurOf, spentOn, summarise, whoLabel } from '../../src/money/expenses';
 import { shiftDates } from '../../src/trip/shift';
 import type { TripData } from '../../src/trip/io';
 
@@ -36,9 +36,25 @@ describe('expenses', () => {
     expect(spentOn(list, '2026-11-03', rate)).toBe(20);
   });
 
-  it('exports CSV with quoting', () => {
-    const csv = expensesCsv([e({ amount: 400, note: 'Pad thai, "extra" spicy' })], rate);
-    expect(csv).toBe('date,country,category,amount,currency,eur,note\n2026-11-03,TH,Food & drink,400,THB,10.00,"Pad thai, ""extra"" spicy"\n');
+  it('exports CSV with quoting and who it was for', () => {
+    const csv = expensesCsv([e({ amount: 400, note: 'Pad thai, "extra" spicy' }), e({ amount: 40, category: 'esim', forWhom: 'b' })], rate, {
+      a: 'Alex',
+      b: 'Robin',
+    });
+    expect(csv).toBe(
+      'date,country,category,for,amount,currency,eur,note\n' +
+        '2026-11-03,TH,Food & drink,Samen,400,THB,10.00,"Pad thai, ""extra"" spicy"\n' +
+        '2026-11-03,TH,E-sims,Robin,40,THB,1.00,\n',
+    );
+  });
+
+  it('totals per person; older entries without "for" count as Samen', () => {
+    const list = [e({ amount: 400 }), e({ amount: 800, forWhom: 'both' }), e({ amount: 200, forWhom: 'a' }), e({ amount: 120, forWhom: 'b' })];
+    expect(summarise(list, rate, () => 1, {}).byWho).toEqual({ both: 30, a: 5, b: 3 });
+    expect(whoLabel('both', { a: 'Alex', b: 'Robin' })).toBe('Samen');
+    expect(whoLabel('a', { a: 'Alex', b: 'Robin' })).toBe('Alex');
+    // Before the names are set.
+    expect(whoLabel('b', { a: '', b: '' })).toBe('Traveller 2');
   });
 
   it('counts days in a country so far, or the planned days before arrival', () => {

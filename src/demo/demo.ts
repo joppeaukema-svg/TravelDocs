@@ -2,7 +2,7 @@ import { Temporal } from 'temporal-polyfill';
 import { db, DEMO_DB_NAME, getMeta, isDemo, setDemoFlag, setMeta } from '../db/db';
 import { createDocument } from '../docs/docs';
 import { refreshEmergencyCard } from '../emergency/card';
-import { saveExpense, setBudget, type ExpenseCategory } from '../money/expenses';
+import { saveExpense, setBudget, setTravellers, type ExpenseCategory, type ForWhom } from '../money/expenses';
 import { saveInsurance, Insurance } from '../profile/insurance';
 import { Personal, savePersonal } from '../profile/personal';
 import { updateProfile } from '../profile/profile';
@@ -94,20 +94,21 @@ async function seed(): Promise<void> {
   const currency: Record<string, string> = { CN: 'CNY', JP: 'JPY', VN: 'VND', TH: 'THB', LA: 'LAK', PH: 'PHP' };
   const perEur: Record<string, number> = { CNY: 7.6, JPY: 175, VND: 29000, THB: 38, LAK: 25000, PHP: 70 };
   const cur = currency[current.country] ?? 'EUR';
-  const samples: [number, ExpenseCategory, number, string][] = [
-    [0, 'food', 9, 'Street food and coffee'],
-    [0, 'transport', 4, 'Grab'],
-    [-1, 'stay', 28, 'Guesthouse'],
-    [-1, 'food', 14, 'Dinner'],
-    [-2, 'activities', 22, 'Boat trip'],
-    [-2, 'food', 11, ''],
-    [-3, 'shopping', 16, 'Market'],
+  await setTravellers({ a: 'Alex', b: 'Robin' });
+  const samples: [number, ExpenseCategory, number, string, ForWhom][] = [
+    [0, 'food', 9, 'Street food and coffee', 'both'],
+    [0, 'transport', 4, 'Grab', 'a'],
+    [-1, 'stay', 28, 'Guesthouse', 'both'],
+    [-1, 'food', 14, 'Dinner', 'both'],
+    [-2, 'activities', 22, 'Boat trip', 'both'],
+    [-2, 'esim', 11, 'Data top-up', 'b'],
+    [-3, 'shopping', 16, 'Market', 'b'],
   ];
-  for (const [day, category, eur, note] of samples) {
+  for (const [day, category, eur, note, forWhom] of samples) {
     const date = add(today(), day);
     if (date < current.from) continue;
     const amount = Math.round(eur * (perEur[cur] ?? 1));
-    await saveExpense({ date, amount, currency: cur, category, country: current.country, eur, ...(note ? { note } : {}) });
+    await saveExpense({ date, amount, currency: cur, category, country: current.country, forWhom, eur, ...(note ? { note } : {}) });
   }
   await setBudget(current.country, 60);
 
