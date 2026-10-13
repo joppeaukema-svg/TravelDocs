@@ -3,12 +3,13 @@ import { z } from 'zod';
 import { countryCode, isoDate } from '../content/schema';
 import { db, getMeta, setMeta } from '../db/db';
 
-export const ExpenseCategory = z.enum(['food', 'stay', 'transport', 'activities', 'shopping', 'fees', 'health', 'esim', 'other']);
+export const ExpenseCategory = z.enum(['food', 'stay', 'flights', 'transport', 'activities', 'shopping', 'fees', 'health', 'esim', 'other']);
 export type ExpenseCategory = z.infer<typeof ExpenseCategory>;
 
 export const CATEGORY_LABELS: Record<ExpenseCategory, string> = {
   food: 'Food & drink',
   stay: 'Accommodation',
+  flights: 'Flights',
   transport: 'Transport',
   activities: 'Activities',
   shopping: 'Shopping',

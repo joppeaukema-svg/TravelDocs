@@ -21,6 +21,7 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
   await page.getByRole('link', { name: 'Add expense' }).click();
   await page.getByLabel('Amount').fill('12');
   await page.getByLabel('Currency').selectOption('EUR');
+  await expect(page.getByRole('radio', { name: 'Flights' })).toBeVisible();
   await page.getByRole('radio', { name: 'E-sims' }).click();
   await page.getByRole('button', { name: 'Set your names' }).click();
   await page.getByLabel('Name 1').fill('Alex');
