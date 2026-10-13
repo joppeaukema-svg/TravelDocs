@@ -34,7 +34,6 @@ export function MoreScreen() {
         <RowLink href="#/together" icon={<ShareIcon />} title="Travelling together" sub={together} />
         <RowLink href="#/insurance" icon={<ShieldIcon />} title="Insurance" sub="Policy, assistance line, coverage" />
         <RowLink href="#/checklists" icon={<ListIcon />} title="Checklists" sub="Prep, checks and packing" />
-        <RowLink href="#/profile" icon={<ShieldIcon />} title="Profile and bag" sub="Passport, vape, medicines, diving…" />
         <RowLink href="#/personal" icon={<PersonIcon />} title="Personal details" sub="ICE contacts, medical info" />
         <RowLink href="#/emergency" icon={<PhoneIcon />} title="Emergency card" sub="Readable while locked" />
         <RowLink href="#/backup" icon={<DownloadIcon />} title="Backup & restore" sub="One encrypted file" />

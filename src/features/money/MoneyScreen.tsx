@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { go } from '../../app/hooks';
 import { allCountries, getCountry } from '../../content';
 import { db } from '../../db/db';
-import { formatDate } from '../../lib/format';
+import { formatDate, formatDayRange } from '../../lib/format';
 import { shareFile } from '../../lib/share';
 import {
   CATEGORY_LABELS,
@@ -30,7 +30,7 @@ import { diffDays, minDate, stayEnd, stayStart } from '../../rules/itinerary';
 import { useCurrentCountry, useToday } from '../../rules/useRules';
 import { useTrip } from '../../trip/store';
 import type { TripData } from '../../trip/io';
-import { DownloadIcon, PlusIcon } from '../../ui/icons';
+import { ChevronRightIcon, DownloadIcon, PlusIcon } from '../../ui/icons';
 import { Button, Card, cx, ErrorText, Field, inputClass, LinkButton, Notice, PageTitle, RowLink, SectionTitle, SelectField, TextField } from '../../ui/kit';
 import { convert, CURRENCIES, formatMoney, parseAmount, useRateTable } from './Converter';
 
@@ -103,22 +103,85 @@ function BudgetEditor({ country, budget }: { country: string; budget?: number | 
   );
 }
 
-function CountryCard({ s }: { s: CountrySummary }) {
+/** A country's costs per category; tap the country to see every expense under its category. */
+function CountryCard({
+  s,
+  expenses,
+  travellers,
+  rate,
+}: {
+  s: CountrySummary;
+  expenses: Expense[];
+  travellers: Travellers;
+  rate: (c: string) => number | undefined;
+}) {
+  const [open, setOpen] = useState(false);
   const name = s.country === 'NL' ? 'Netherlands (before you leave)' : (getCountry(s.country)?.name ?? s.country);
-  const cats = Object.entries(s.byCategory).sort(([, a], [, b]) => b - a);
+  const mine = expenses.filter((e) => e.country === s.country);
+  const cats = ExpenseCategory.options
+    .filter((c) => mine.some((e) => e.category === c))
+    .sort((a, b) => (s.byCategory[b] ?? 0) - (s.byCategory[a] ?? 0));
   return (
     <Card>
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="font-bold">{name}</p>
-        <p className="tabular text-lg font-bold">{eur(s.total)}</p>
-      </div>
+      <button
+        type="button"
+        aria-expanded={open}
+        disabled={!mine.length}
+        onClick={() => setOpen(!open)}
+        className="flex w-full items-baseline justify-between gap-2 text-left"
+      >
+        <span className="font-bold">{name}</span>
+        <span className="flex shrink-0 items-center gap-1">
+          <span className="tabular text-lg font-bold">{eur(s.total)}</span>
+          {mine.length > 0 && <ChevronRightIcon size={18} className={cx('self-center text-muted transition', open && 'rotate-90')} />}
+        </span>
+      </button>
       <p className="text-sm text-muted">
         {eur(s.perDay)} a day over {s.days} {s.days === 1 ? 'day' : 'days'}
         {s.budget !== undefined && ` · budget ${eur(s.budget)} a day`}
       </p>
       {s.budget !== undefined && <BudgetBar spent={s.perDay} budget={s.budget} />}
       {cats.length > 0 && (
-        <p className="mt-2 text-sm">{cats.map(([c, v]) => `${CATEGORY_LABELS[c as ExpenseCategory]} ${eur(v)}`).join(' · ')}</p>
+        <ul className="mt-2" aria-label={`${name} per category`}>
+          {cats.map((c) => (
+            <li key={c} className="border-b border-line py-1.5 last:border-b-0">
+              <p className="flex justify-between gap-2">
+                <span>{CATEGORY_LABELS[c]}</span>
+                <span className="tabular font-bold">{eur(s.byCategory[c] ?? 0)}</span>
+              </p>
+              {open && (
+                <ul className="mb-1 mt-0.5 border-l-2 border-line pl-3">
+                  {mine
+                    .filter((e) => e.category === c)
+                    .map((e) => {
+                      const value = e.currency !== 'EUR' ? eurOf(e, rate) : undefined;
+                      return (
+                        <li key={e.id}>
+                          <a href={`#/money/expense/${e.id}`} className="flex min-h-10 items-center justify-between gap-2 text-sm text-ink no-underline">
+                            <span className="min-w-0">
+                              <span className="block truncate">{e.note || CATEGORY_LABELS[e.category]}</span>
+                              <span className="block text-muted">
+                                {formatDayRange(e.date, e.date)} · {whoLabel(forWhomOf(e), travellers)}
+                              </span>
+                            </span>
+                            <span className="shrink-0 text-right">
+                              <span className="tabular block">{formatMoney(e.amount, e.currency)}</span>
+                              {value !== undefined && <span className="tabular block text-muted">{eur(value)}</span>}
+                            </span>
+                          </a>
+                        </li>
+                      );
+                    })}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+      {mine.length > 0 && (
+        <Button variant="ghost" className="min-h-10 px-0 text-sm" onClick={() => setOpen(!open)}>
+          {open ? 'Hide the costs' : `Show all ${mine.length} ${mine.length === 1 ? 'cost' : 'costs'}`}
+        </Button>
       )}
       {s.unknown > 0 && <p className="mt-1 text-sm text-warn">{s.unknown} without a rate — not counted.</p>}
       {s.country !== 'NL' && <BudgetEditor country={s.country} budget={s.budget} />}
@@ -243,7 +306,7 @@ export function MoneyScreen() {
       {summary.countries.length === 0 && routeWithoutSpend.length === 0 && <p className="text-muted">No expenses yet.</p>}
       <div className="space-y-2">
         {summary.countries.map((s) => (
-          <CountryCard key={s.country} s={s} />
+          <CountryCard key={s.country} s={s} expenses={expenses} travellers={travellers} rate={rate} />
         ))}
         {routeWithoutSpend.length > 0 && (
           <Card className="py-1">

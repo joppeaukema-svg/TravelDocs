@@ -15,7 +15,8 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
 
   await expect(page.getByRole('heading', { level: 1, name: 'Money' })).toBeVisible();
   await expect(page.getByText('Airport taxi')).toBeVisible();
-  await expect(page.getByText('Transport EUR 20.00')).toBeVisible();
+  const thailand = page.getByRole('list', { name: 'Thailand per category' });
+  await expect(thailand.getByRole('listitem').filter({ hasText: 'Transport' })).toContainText('EUR 20.00');
 
   // An e-sim for one of us: names are set once, in the form.
   await page.getByRole('link', { name: 'Add expense' }).click();
@@ -36,6 +37,15 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
   await expect(page.getByText('With half of Samen each: Alex EUR 10.00 · Robin EUR 22.00')).toBeVisible();
   await expect(page.getByText('Robin · E-sims · Thailand')).toBeVisible();
 
+  // Per country, per category; tapping the country shows every cost under its category.
+  await expect(thailand.getByRole('listitem').filter({ hasText: 'E-sims' })).toContainText('EUR 12.00');
+  await expect(thailand.getByRole('link')).toHaveCount(0);
+  await page.getByRole('button', { name: /^Thailand/ }).click();
+  await expect(thailand.getByRole('link', { name: /Airport taxi/ })).toBeVisible();
+  await expect(thailand.getByRole('link', { name: /E-sims.*Robin/ })).toBeVisible();
+  await page.getByRole('button', { name: 'Hide the costs' }).click();
+  await expect(thailand.getByRole('link')).toHaveCount(0);
+
   await page.getByRole('button', { name: 'Set daily budget' }).first().click();
   await page.getByLabel(/Daily budget for Thailand/).fill('50');
   await page.getByRole('button', { name: 'Save' }).click();
@@ -48,7 +58,7 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
   await page.getByRole('link', { name: /Airport taxi/ }).click();
   await page.getByLabel('Amount').fill('25');
   await page.getByRole('button', { name: 'Save', exact: true }).click();
-  await expect(page.getByText('Transport EUR 25.00')).toBeVisible();
+  await expect(thailand.getByRole('listitem').filter({ hasText: 'Transport' })).toContainText('EUR 25.00');
   await page.getByRole('link', { name: /Airport taxi/ }).click();
   await page.getByRole('button', { name: 'Delete expense' }).click();
   await expect(page.getByText('Airport taxi')).toHaveCount(0);
