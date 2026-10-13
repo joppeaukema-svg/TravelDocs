@@ -13,13 +13,13 @@ import { speak, useVoice } from './speech';
 
 const book = () => phrasebook();
 
-function SpeakButton({ text, lang }: { text: string; lang: string }) {
+function SpeakButton({ text, lang, onError }: { text: string; lang: string; onError: (reason: string) => void }) {
   const voice = useVoice(lang);
   if (!voice) return null;
   return (
     <button
       type="button"
-      onClick={() => speak(text, voice)}
+      onClick={() => speak(text, voice, onError)}
       className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-accent active:bg-sunk"
       aria-label={`Say it aloud`}
     >
@@ -28,9 +28,15 @@ function SpeakButton({ text, lang }: { text: string; lang: string }) {
   );
 }
 
+/** What to do when the phone's speech engine fails. */
+function speechHelp(reason: string, language: string) {
+  return `Reading aloud didn't work on this phone (${reason}). Check that a ${language} voice is installed in the phone's text-to-speech settings, then try again.`;
+}
+
 export function PhraseList({ lang }: { lang: PhraseLang }) {
   const info = book().languages[lang];
   const voice = useVoice(info.speech);
+  const [error, setError] = useState('');
   return (
     <>
       {info.note && <p className="mb-2 text-muted">{info.note}</p>}
@@ -47,27 +53,54 @@ export function PhraseList({ lang }: { lang: PhraseLang }) {
                   </p>
                   {t.roman && <p className="text-sm italic">{t.roman}</p>}
                 </div>
-                <SpeakButton text={t.text} lang={info.speech} />
+                <SpeakButton text={t.text} lang={info.speech} onError={setError} />
               </li>
             );
           })}
         </ul>
       </Card>
+      {error && (
+        <p className="mt-2 text-sm font-bold text-warn" role="alert">
+          {speechHelp(error, info.name)}
+        </p>
+      )}
       <p className="mt-2 text-sm text-muted">
-        {voice ? 'Tap the speaker to hear it.' : 'This phone has no voice for this language, so there is no read-aloud.'} Not checked by a
-        native speaker.
+        {voice
+          ? 'Tap the speaker to hear it.'
+          : `This phone has no ${info.name} voice, so there is no read-aloud. Adding one in the phone's text-to-speech settings turns it on.`}{' '}
+        Not checked by a native speaker.
       </p>
     </>
   );
 }
 
 /** Full-screen, high-contrast text to show someone. */
-function ShowCard({ local, english, lang, onClose }: { local: string; english: string; lang: string; onClose: () => void }) {
+function ShowCard({ local, english, lang, language, onClose }: { local: string; english: string; lang: string; language: string; onClose: () => void }) {
+  const voice = useVoice(lang);
+  const [error, setError] = useState('');
   return (
-    <div role="dialog" aria-modal="true" aria-label="Show this" className="fixed inset-0 z-50 flex flex-col bg-white p-6 text-black">
-      <button type="button" onClick={onClose} className="ml-auto grid h-12 w-12 place-items-center rounded-full bg-black/5" aria-label="Close">
-        <CloseIcon />
-      </button>
+    <div role="dialog" aria-modal="true" aria-label="Show this" className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-white p-6 text-black">
+      <div className="flex items-center justify-between gap-2">
+        {voice ? (
+          <button
+            type="button"
+            onClick={() => speak(local, voice, setError)}
+            className="flex min-h-12 items-center gap-2 rounded-full bg-black/5 px-4 font-bold"
+          >
+            <SpeechIcon size={20} /> Read aloud
+          </button>
+        ) : (
+          <span />
+        )}
+        <button type="button" onClick={onClose} className="grid h-12 w-12 place-items-center rounded-full bg-black/5" aria-label="Close">
+          <CloseIcon />
+        </button>
+      </div>
+      {error && (
+        <p className="mt-3 text-sm font-bold text-[#804a00]" role="alert">
+          {speechHelp(error, language)}
+        </p>
+      )}
       <div className="flex flex-1 flex-col justify-center">
         <p className="whitespace-pre-line text-4xl font-bold leading-snug" lang={lang}>
           {local}
@@ -177,7 +210,7 @@ export function ShowCards({ lang }: { lang: PhraseLang }) {
         })()}
       </Card>
       <p className="mt-2 text-sm text-muted">{book().note}</p>
-      {shown && <ShowCard {...shown} lang={info.speech} onClose={() => setShown(null)} />}
+      {shown && <ShowCard {...shown} lang={info.speech} language={info.name} onClose={() => setShown(null)} />}
     </>
   );
 }

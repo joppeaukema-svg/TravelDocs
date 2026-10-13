@@ -17,7 +17,7 @@ import {
   WrongTripCodeError,
   type MergeStats,
 } from '../../trip/share';
-import { applySharedTrip, getTombstones, loadTrip, markReceived, markSent, unlinkShare, useShareStatus } from '../../trip/store';
+import { applySharedTrip, getTombstones, loadMoney, loadTrip, markReceived, markSent, unlinkShare, useShareStatus } from '../../trip/store';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
 import { DownloadIcon, FileIcon, ShareIcon } from '../../ui/icons';
 import { Button, Card, ErrorText, inputClass, Notice, Pill } from '../../ui/kit';
@@ -31,7 +31,7 @@ export function useTripCode(): string | null | undefined {
 
 /**
  * Travelling together: the shared part of the trip (stays, bookings for both,
- * days) goes to the other phone as an encrypted text message, locked with a trip
+ * days, expenses) goes to the other phone as an encrypted text message, locked with a trip
  * code you tell each other in person. Receiving merges; personal data never leaves.
  */
 export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
@@ -51,7 +51,7 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
     try {
       const trip = await loadTrip();
       if (!trip) return;
-      const blob = await encryptShare(sharePayload(trip, await getTombstones()), code);
+      const blob = await encryptShare(sharePayload(trip, await getTombstones(), await loadMoney()), code);
       setMessage(shareText(new Uint8Array(await blob.arrayBuffer())));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -95,8 +95,9 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
   return (
     <Card>
       <p>
-        Share stays, flights, hotels and tours with your travel companion. Passports, documents, insurance, your passport
-        stamps, checklist ticks and bookings marked “just me” stay on this phone.
+        Share stays, flights, hotels, tours, day notes and expenses (with budgets and your two names) with your travel
+        companion. Passports, documents, insurance, your passport stamps, checklist ticks and bookings marked “just me”
+        stay on this phone.
       </p>
 
       {hasTrip && (

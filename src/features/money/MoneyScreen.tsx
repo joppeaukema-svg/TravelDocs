@@ -200,7 +200,7 @@ function NamesEditor({ travellers, onDone }: { travellers: Travellers; onDone: (
         <TextField label="Name 1" value={a} onChange={setA} autoComplete="off" />
         <TextField label="Name 2" value={b} onChange={setB} autoComplete="off" />
       </div>
-      <p className="-mt-1 mb-3 text-sm text-muted">Only on this phone; set them on each phone.</p>
+      <p className="-mt-1 mb-3 text-sm text-muted">They go along when you send the trip, so set them on one phone.</p>
       <div className="grid grid-cols-2 gap-2">
         <Button type="button" onClick={onDone}>
           Cancel
@@ -275,7 +275,7 @@ export function MoneyScreen() {
 
   return (
     <>
-      <PageTitle sub="Expenses and budgets in EUR. Stays on this phone.">Money</PageTitle>
+      <PageTitle sub="Expenses and budgets in EUR. Shared with your travel companion when you send the trip.">Money</PageTitle>
       <Card>
         <p className="text-sm font-bold uppercase tracking-wide text-muted">Today</p>
         <p className="tabular text-3xl font-bold">{eur(todaySpent)}</p>

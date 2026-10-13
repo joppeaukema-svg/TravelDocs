@@ -1,45 +1,12 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { z } from 'zod';
-import { countryCode, isoDate } from '../content/schema';
 import { db, getMeta, setMeta } from '../db/db';
+import { addTombstones, markUnsent } from '../trip/store';
+import { CATEGORY_LABELS, Expense, ExpenseCategory, ForWhom, forWhomOf, MONEY_META, type Travellers } from './schema';
 
-export const ExpenseCategory = z.enum(['food', 'stay', 'flights', 'transport', 'activities', 'shopping', 'fees', 'health', 'esim', 'other']);
-export type ExpenseCategory = z.infer<typeof ExpenseCategory>;
+export { CATEGORY_LABELS, Expense, ExpenseCategory, ForWhom, forWhomOf, type Travellers } from './schema';
 
-export const CATEGORY_LABELS: Record<ExpenseCategory, string> = {
-  food: 'Food & drink',
-  stay: 'Accommodation',
-  flights: 'Flights',
-  transport: 'Transport',
-  activities: 'Activities',
-  shopping: 'Shopping',
-  fees: 'Visas & fees',
-  health: 'Health',
-  esim: 'E-sims',
-  other: 'Other',
-};
-
-/** Who an expense is for: both of you, or one of you ("a" and "b"; their names are set on the phone). */
-export const ForWhom = z.enum(['both', 'a', 'b']);
-export type ForWhom = z.infer<typeof ForWhom>;
-
-/** One expense. `eur` is fixed when it's saved, with the rate you had then. */
-export const Expense = z.object({
-  id: z.string(),
-  date: isoDate,
-  amount: z.number().positive(),
-  currency: z.string().regex(/^[A-Z]{3}$/),
-  category: ExpenseCategory,
-  /** Where it was spent — for per-country budgets. 'NL' for costs at home. */
-  country: countryCode,
-  note: z.string().optional(),
-  /** Missing on older entries: those count as for both. */
-  forWhom: ForWhom.optional(),
-  eur: z.number().nonnegative().optional(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-});
-export type Expense = z.infer<typeof Expense>;
+// Expenses, budgets and the two names travel with the trip share (see trip/share.ts),
+// so every change here counts as an edit to send to a travel companion.
 
 export type ExpenseInput = Omit<Expense, 'id' | 'createdAt' | 'updatedAt'>;
 
@@ -48,34 +15,33 @@ export async function saveExpense(input: ExpenseInput, id?: string): Promise<str
   const existing = id ? await db.expenses.get(id) : undefined;
   const row = Expense.parse({ ...input, id: id ?? crypto.randomUUID(), createdAt: existing?.createdAt ?? now, updatedAt: now });
   await db.expenses.put(row);
+  await markUnsent();
   return row.id;
 }
 
 export async function deleteExpense(id: string): Promise<void> {
   await db.expenses.delete(id);
+  await addTombstones([`expense:${id}`]);
+  await markUnsent();
 }
 
 export function useExpenses(): Expense[] | undefined {
   return useLiveQuery(() => db.expenses.orderBy('date').reverse().toArray(), []);
 }
 
-export const forWhomOf = (e: Pick<Expense, 'forWhom'>): ForWhom => e.forWhom ?? 'both';
-
 // --- Travellers -----------------------------------------------------------------
 
-/** The two travellers' names. Kept on this phone only (they're personal), set once in Money. */
-export interface Travellers {
-  a: string;
-  b: string;
+export async function getTravellers(): Promise<Travellers> {
+  return { a: '', b: '', ...((await getMeta(MONEY_META.travellers)) as Partial<Travellers> | undefined) };
 }
-const TRAVELLERS = 'travellers';
 
 export function useTravellers(): Travellers | undefined {
-  return useLiveQuery(async () => ({ a: '', b: '', ...((await getMeta(TRAVELLERS)) as Partial<Travellers> | undefined) }), []);
+  return useLiveQuery(getTravellers, []);
 }
 
-export async function setTravellers(t: Travellers): Promise<void> {
-  await setMeta(TRAVELLERS, { a: t.a.trim(), b: t.b.trim() });
+export async function setTravellers(t: Pick<Travellers, 'a' | 'b'>): Promise<void> {
+  await setMeta(MONEY_META.travellers, { a: t.a.trim(), b: t.b.trim(), updatedAt: new Date().toISOString() });
+  await markUnsent();
 }
 
 export function whoLabel(w: ForWhom, t: Travellers | undefined): string {
@@ -87,17 +53,22 @@ export function whoLabel(w: ForWhom, t: Travellers | undefined): string {
 
 /** Daily budget in EUR per country. */
 export type Budgets = Record<string, number>;
-const BUDGETS = 'budgets';
+
+export async function getBudgets(): Promise<Budgets> {
+  return ((await getMeta(MONEY_META.budgets)) as Budgets | undefined) ?? {};
+}
 
 export function useBudgets(): Budgets | undefined {
-  return useLiveQuery(async () => ((await getMeta(BUDGETS)) as Budgets | undefined) ?? {}, []);
+  return useLiveQuery(getBudgets, []);
 }
 
 export async function setBudget(country: string, eurPerDay: number | null): Promise<void> {
-  const next = { ...(((await getMeta(BUDGETS)) as Budgets | undefined) ?? {}) };
+  const next = { ...(await getBudgets()) };
   if (eurPerDay === null) delete next[country];
   else next[country] = eurPerDay;
-  await setMeta(BUDGETS, next);
+  await setMeta(MONEY_META.budgets, next);
+  await setMeta(MONEY_META.budgetsUpdatedAt, new Date().toISOString());
+  await markUnsent();
 }
 
 // --- Totals ---------------------------------------------------------------------

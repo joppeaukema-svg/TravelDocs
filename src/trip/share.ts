@@ -2,11 +2,13 @@ import { z } from 'zod';
 import { concatBytes, fromBase64, randomBytes, toBase64, toBytes, utf8Decode, utf8Encode, type Bytes } from '../crypto/bytes';
 import { PBKDF2_ITERATIONS } from '../crypto/keys';
 import type { TripData } from './io';
+import { Expense, SharedBudgets, Travellers, type ForWhom } from '../money/schema';
 import { Booking, Day, Stay, TripMeta } from './schema';
 
 /**
  * Sharing the trip with a travel companion, without a server:
- * - only the shared part travels: stays, bookings marked "both of us", days, trip dates;
+ * - only the shared part travels: stays, bookings marked "both of us", days, trip dates,
+ *   and the money (expenses, daily budgets, the two names);
  *   never the vault, profile, checklist ticks, passport stamps, linked documents or private notes
  * - the file is encrypted with a trip code both phones know (typed in, never sent with the file)
  * - importing merges: newer edits win, deletions carry over, personal fields stay put
@@ -41,7 +43,7 @@ export function isValidCode(code: string): boolean {
 
 // --- What is shared ---------------------------------------------------------
 
-/** Deletions, keyed "stay:<id>", "booking:<id>" or "day:<date>", with the time of deletion. */
+/** Deletions, keyed "stay:<id>", "booking:<id>", "day:<date>" or "expense:<id>", with the time of deletion. */
 export type Tombstones = Record<string, string>;
 
 export const SharePayload = z.object({
@@ -50,8 +52,19 @@ export const SharePayload = z.object({
   bookings: z.array(Booking),
   days: z.array(Day),
   deleted: z.record(z.string(), z.string()).default({}),
+  // Missing in shares from older versions of the app.
+  expenses: z.array(Expense).default([]),
+  budgets: SharedBudgets.optional(),
+  travellers: Travellers.optional(),
 });
 export type SharePayload = z.infer<typeof SharePayload>;
+
+/** This phone's money, as it goes into a share and comes out of a merge. */
+export interface MoneyData {
+  expenses: Expense[];
+  budgets?: SharedBudgets | undefined;
+  travellers?: Travellers | undefined;
+}
 
 function sharedStay(s: Stay): Stay {
   const { stampedUntil: _personal, ...rest } = s;
@@ -63,7 +76,7 @@ function sharedBooking(b: Booking): Booking {
   return { ...rest, documentIds: [] };
 }
 
-export function sharePayload(data: TripData, deleted: Tombstones): SharePayload {
+export function sharePayload(data: TripData, deleted: Tombstones, money: MoneyData = { expenses: [] }): SharePayload {
   const { importedAt: _i, ...meta } = data.meta;
   return {
     meta: TripMeta.parse(meta),
@@ -71,6 +84,9 @@ export function sharePayload(data: TripData, deleted: Tombstones): SharePayload 
     bookings: data.bookings.filter((b) => b.who !== 'me').map(sharedBooking),
     days: data.days,
     deleted,
+    expenses: money.expenses,
+    ...(money.budgets ? { budgets: money.budgets } : {}),
+    ...(money.travellers && (money.travellers.a || money.travellers.b) ? { travellers: money.travellers } : {}),
   };
 }
 
@@ -93,7 +109,8 @@ export function mergeTrip(
   local: TripData | null,
   localDeleted: Tombstones,
   incoming: SharePayload,
-): { data: TripData; deleted: Tombstones; stats: MergeStats } {
+  localMoney: MoneyData = { expenses: [] },
+): { data: TripData; deleted: Tombstones; stats: MergeStats; money: MoneyData } {
   const stats: MergeStats = { added: 0, updated: 0, removed: 0 };
   const deleted: Tombstones = { ...localDeleted };
   for (const [k, at] of Object.entries(incoming.deleted)) if (newer(at, deleted[k])) deleted[k] = at;
@@ -156,7 +173,22 @@ export function mergeTrip(
       ? local.meta
       : { ...incoming.meta, ...(local?.meta.importedAt ? { importedAt: local.meta.importedAt } : {}) };
 
-  return { data: { meta, stays, bookings, days }, deleted, stats };
+  // Money. "a" and "b" are slots for the two names; if the other phone entered them the other way
+  // round, its expenses are turned around so each one stays with the right person.
+  const mine = localMoney.travellers;
+  const theirs = incoming.travellers;
+  const swapped = !!(mine?.a && mine.b && mine.a !== mine.b && theirs && mine.a === theirs.b && mine.b === theirs.a);
+  const flip = (w: ForWhom | undefined): ForWhom | undefined => (w === 'a' ? 'b' : w === 'b' ? 'a' : w);
+  const theirExpenses = swapped ? incoming.expenses.map((e) => ({ ...e, ...(e.forWhom ? { forWhom: flip(e.forWhom) } : {}) })) : incoming.expenses;
+  const expenses = merge('expense', localMoney.expenses, theirExpenses, (e) => e.id, (_m, t) => t).sort((a, b) =>
+    a.date.localeCompare(b.date),
+  );
+  const budgets = incoming.budgets && newer(incoming.budgets.updatedAt, localMoney.budgets?.updatedAt) ? incoming.budgets : localMoney.budgets;
+  const named = (t: Travellers | undefined) => !!(t && (t.a || t.b));
+  const travellers =
+    !swapped && named(theirs) && (!named(mine) || newer(theirs!.updatedAt, mine!.updatedAt)) ? theirs : mine;
+
+  return { data: { meta, stays, bookings, days }, deleted, stats, money: { expenses, budgets, travellers } };
 }
 
 // --- File format ------------------------------------------------------------

@@ -78,8 +78,9 @@ passphrase.
 The **Money** tab: log expenses in any of the route's currencies with a category and country; the EUR value is fixed with
 the rate of the day you enter it. Set a daily budget per country to see today's spending and each country's average
 per day against it. Each expense is **for** Samen (both of you) or one of you; **Per person** shows the totals, and
-what each spent with half of Samen added. The two names are set once per phone (they stay on the phone, not in this
-repository). **CSV** exports everything for a spreadsheet. The **converter** works offline with the last
+what each spent with half of Samen added. The two names are set once and go along with the trip (they're never in
+this repository). Expenses, budgets and names are shared with your travel companion when you send the trip. **CSV**
+exports everything for a spreadsheet. The **converter** works offline with the last
 downloaded rates, and you can set your own rate per currency.
 
 ## Trip, rules and reminders
@@ -170,7 +171,9 @@ Two people each use the app on their own phone and share the trip, without accou
    a pop-up offers to send them. The newest edit of each stay or
    booking wins, and deletions carry over.
 
-What is shared: stays, bookings marked **Both of us**, the day plan and trip dates. What never leaves the phone: the
+What is shared: stays, bookings marked **Both of us**, the day plan and notes, trip dates, and the money (expenses,
+daily budgets and your two names; if the phones have the names the other way round, expenses still stay with the
+right person). What never leaves the phone: the
 vault (documents, passport, insurance, personal details), the emergency card, profile, checklist ticks, the date
 stamped in your passport, documents linked to a booking, bookings marked **Just me** and each booking's **private
 note**.
@@ -190,7 +193,8 @@ marked **unverified**. More → Sources lists everything, with the date the live
   per currency.
 - **Weather:** More → Weather. 7-day forecast for where you are and your next stop (from the places per day in your
   trip), plus seasonal notes. It's off on each phone until turned on there; Today offers it (*Turn on* / *Not now*).
-- **Phrases:** key phrases with romanisation and read-aloud where the phone has a voice; full-screen cards for your
+- **Phrases:** key phrases with romanisation and read-aloud where the phone has a voice for the language (add one in
+  the phone's text-to-speech settings; the app says when reading aloud fails); full-screen cards, also read aloud, for your
   address (taken from the accommodation's local address when the booking has one), "use the meter", "where is the
   hospital?" and a gluten allergy card ("gluten (wheat, barley, rye and everything made with them, such as flour,
   bread, noodles, soy sauce and beer)"), whose key words were checked in dictionaries. Not checked by native

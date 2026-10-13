@@ -2,7 +2,8 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db, getMeta, META, setMeta, type PrepStateRow } from '../db/db';
 import type { TripData } from './io';
 import { Booking, Day, Stay, TripMeta } from './schema';
-import { mergeTrip, type MergeStats, type SharePayload, type Tombstones } from './share';
+import { MONEY_META, Travellers } from '../money/schema';
+import { mergeTrip, type MergeStats, type MoneyData, type SharePayload, type Tombstones } from './share';
 import type { UpdatePlan } from './update';
 
 const now = () => new Date().toISOString();
@@ -36,7 +37,7 @@ async function updateShareStatus(patch: Partial<ShareStatus>): Promise<void> {
 }
 
 /** Shared edits happened on this phone: they count until the next send. */
-async function markUnsent(count = 1): Promise<void> {
+export async function markUnsent(count = 1): Promise<void> {
   const s = await getShareStatus();
   await updateShareStatus({ unsent: s.unsent + count });
 }
@@ -62,7 +63,7 @@ export async function getTombstones(): Promise<Tombstones> {
   return ((await getMeta(META.tripDeleted)) as Tombstones | undefined) ?? {};
 }
 
-async function addTombstones(keys: string[]): Promise<void> {
+export async function addTombstones(keys: string[]): Promise<void> {
   if (!keys.length) return;
   const t = await getTombstones();
   const at = now();
@@ -123,15 +124,40 @@ export async function applyTripUpdate(plan: UpdatePlan): Promise<number> {
 }
 
 /** Merges a travel companion's shared trip into this phone's. */
+/** This phone's expenses, budgets and names, for a share. */
+export async function loadMoney(): Promise<MoneyData> {
+  const [expenses, values, budgetsAt, travellers] = await Promise.all([
+    db.expenses.toArray(),
+    getMeta(MONEY_META.budgets),
+    getMeta(MONEY_META.budgetsUpdatedAt),
+    getMeta(MONEY_META.travellers),
+  ]);
+  const t = Travellers.safeParse(travellers);
+  // Set before sharing included money: they go along, but lose to any later change.
+  const LONG_AGO = '1970-01-01T00:00:00.000Z';
+  return {
+    expenses,
+    ...(values ? { budgets: { values: values as Record<string, number>, updatedAt: typeof budgetsAt === 'string' ? budgetsAt : LONG_AGO } } : {}),
+    ...(t.success ? { travellers: { ...t.data, updatedAt: t.data.updatedAt ?? LONG_AGO } } : {}),
+  };
+}
+
+/** Merges a travel companion's shared trip (and money) into this phone's. */
 export async function applySharedTrip(payload: SharePayload): Promise<MergeStats> {
-  const { data, deleted, stats } = mergeTrip(await loadTrip(), await getTombstones(), payload);
-  await db.transaction('rw', db.stays, db.bookings, db.days, db.meta, async () => {
-    await Promise.all([db.stays.clear(), db.bookings.clear(), db.days.clear()]);
+  const { data, deleted, stats, money } = mergeTrip(await loadTrip(), await getTombstones(), payload, await loadMoney());
+  await db.transaction('rw', [db.stays, db.bookings, db.days, db.expenses, db.meta], async () => {
+    await Promise.all([db.stays.clear(), db.bookings.clear(), db.days.clear(), db.expenses.clear()]);
     await db.stays.bulkPut(data.stays);
     await db.bookings.bulkPut(data.bookings);
     await db.days.bulkPut(data.days);
+    await db.expenses.bulkPut(money.expenses);
     await db.meta.put({ key: META.trip, value: data.meta });
     await db.meta.put({ key: META.tripDeleted, value: deleted });
+    if (money.budgets) {
+      await db.meta.put({ key: MONEY_META.budgets, value: money.budgets.values });
+      await db.meta.put({ key: MONEY_META.budgetsUpdatedAt, value: money.budgets.updatedAt });
+    }
+    if (money.travellers) await db.meta.put({ key: MONEY_META.travellers, value: money.travellers });
   });
   return stats;
 }

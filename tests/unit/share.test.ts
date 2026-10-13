@@ -11,8 +11,10 @@ import {
   shareText,
   newTripCode,
   sharePayload,
+  SharePayload,
   WrongTripCodeError,
 } from '../../src/trip/share';
+import { Expense } from '../../src/money/schema';
 
 const FAST = 1_000;
 const T1 = '2026-10-01T10:00:00.000Z';
@@ -111,6 +113,50 @@ describe('merging', () => {
     mine.bookings = mine.bookings.slice(1);
     const { data } = mergeTrip(mine, { [`booking:${id}`]: T2 }, sharePayload(demo(), {}));
     expect(data.bookings.some((x) => x.id === id)).toBe(false);
+  });
+});
+
+describe('sharing money', () => {
+  const exp = (id: string, extra: Partial<Expense> = {}): Expense =>
+    Expense.parse({ id, date: '2031-03-01', amount: 10, currency: 'EUR', category: 'food', country: 'JP', createdAt: T1, updatedAt: T1, ...extra });
+
+  it('expenses, budgets and names travel with the trip; newer edits win; deletions carry over', () => {
+    const mine = { expenses: [exp('both-edit', { amount: 10 }), exp('only-mine'), exp('deleted-there')], budgets: { values: { JP: 50 }, updatedAt: T1 } };
+    const theirs = sharePayload(demo(), { 'expense:deleted-there': T2 }, {
+      expenses: [exp('both-edit', { amount: 12, updatedAt: T2 }), exp('only-theirs', { forWhom: 'b' })],
+      budgets: { values: { JP: 60, VN: 30 }, updatedAt: T2 },
+      travellers: { a: 'Alex', b: 'Robin', updatedAt: T2 },
+    });
+    const { money, deleted } = mergeTrip(demo(), {}, theirs, mine);
+    expect(money.expenses.map((e) => [e.id, e.amount]).sort()).toEqual([
+      ['both-edit', 12],
+      ['only-mine', 10],
+      ['only-theirs', 10],
+    ]);
+    expect(deleted['expense:deleted-there']).toBe(T2);
+    expect(money.budgets).toEqual({ values: { JP: 60, VN: 30 }, updatedAt: T2 });
+    // Names set on one phone are taken over by the other.
+    expect(money.travellers).toMatchObject({ a: 'Alex', b: 'Robin' });
+  });
+
+  it('when the other phone has the names the other way round, its expenses stay with the right person', () => {
+    const mine = { expenses: [], travellers: { a: 'Alex', b: 'Robin', updatedAt: T1 } };
+    const theirs = sharePayload(demo(), {}, {
+      expenses: [exp('robin-sim', { forWhom: 'a', category: 'esim' }), exp('together', { forWhom: 'both' })],
+      travellers: { a: 'Robin', b: 'Alex', updatedAt: T3 },
+    });
+    const { money } = mergeTrip(demo(), {}, theirs, mine);
+    expect(money.expenses.find((e) => e.id === 'robin-sim')!.forWhom).toBe('b');
+    expect(money.expenses.find((e) => e.id === 'together')!.forWhom).toBe('both');
+    expect(money.travellers).toMatchObject({ a: 'Alex', b: 'Robin' });
+  });
+
+  it('a share from an older version (no money in it) leaves this phone\'s money alone', () => {
+    const old = { ...sharePayload(demo(), {}) } as Record<string, unknown>;
+    delete old.expenses;
+    const mine = { expenses: [exp('kept')], budgets: { values: { JP: 50 }, updatedAt: T1 }, travellers: { a: 'Alex', b: 'Robin', updatedAt: T1 } };
+    const { money } = mergeTrip(demo(), {}, SharePayload.parse(old), mine);
+    expect(money).toEqual(mine);
   });
 });
 
