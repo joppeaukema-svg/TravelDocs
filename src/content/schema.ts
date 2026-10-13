@@ -83,7 +83,18 @@ export const PhrasesFile = z.object({
   languages: z.record(PhraseLang, z.object({ name: z.string(), speech: z.string(), countries: z.array(countryCode), note: z.string().optional() })),
   phrases: z.array(z.object({ id: z.string(), en: z.string(), t: z.record(PhraseLang, z.object({ text: z.string(), roman: z.string().optional() })) })),
   cards: z.array(z.object({ id: z.string(), en: z.string(), t: z.record(PhraseLang, z.string()) })),
-  allergens: z.array(z.object({ id: z.string(), en: z.string(), t: z.record(PhraseLang, z.string()) })),
+  allergens: z.array(
+    z.object({
+      id: z.string(),
+      en: z.string(),
+      /** Short name for the button; `en` is the full text on the card. */
+      label: z.string().optional(),
+      t: z.record(PhraseLang, z.string()),
+      /** Where the key words were checked (dictionaries, not native speakers). */
+      sources: z.array(z.url()).default([]),
+      verifiedAt: isoDate.optional(),
+    }),
+  ),
 });
 export type PhrasesFile = z.infer<typeof PhrasesFile>;
 

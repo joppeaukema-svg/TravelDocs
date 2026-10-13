@@ -54,7 +54,8 @@ Then, in the app:
 1. **Docs** → create the vault with a passphrase you won't forget (four random words work well). Store it in your
    password manager.
 2. Add your passport: *Camera* for a photo, *Photos* for an existing picture, *Files* for PDFs.
-3. **More → Insurance**, **More → Personal details**, then **More → Emergency card** to choose what the card shows.
+3. Today → *Get ready* → **Enter your insurance**, then **More → Personal details**, then **SOS → Choose what's on this card** to
+   choose what the emergency card shows.
 4. **More → Backup & restore** → *Create backup* → *Share / Save* to your own cloud drive or email.
 5. Test airplane mode: switch it on, close the app fully, reopen it — every screen should work.
 
@@ -188,10 +189,12 @@ marked **unverified**. More → Sources lists everything, with the date the live
 - **Money:** converter for EUR, CNY, JPY, VND, THB, LAK, PHP and USD with the last downloaded rates; set your own rate
   per currency.
 - **Weather:** More → Weather. 7-day forecast for where you are and your next stop (from the places per day in your
-  trip), plus seasonal notes.
+  trip), plus seasonal notes. It's off on each phone until turned on there; Today offers it (*Turn on* / *Not now*).
 - **Phrases:** key phrases with romanisation and read-aloud where the phone has a voice; full-screen cards for your
   address (taken from the accommodation's local address when the booking has one), "use the meter", "where is the
-  hospital?" and allergies. Not checked by native speakers — the English is always shown too.
+  hospital?" and a gluten allergy card ("gluten (wheat, barley, rye and everything made with them, such as flour,
+  bread, noodles, soy sauce and beer)"), whose key words were checked in dictionaries. Not checked by native
+  speakers — the English is always shown too; for a severe allergy, also carry a card from a coeliac organisation.
 - **Packing:** Checklists → Packing, with destination items for the countries on your route, each linked to the fact
   that explains it.
 

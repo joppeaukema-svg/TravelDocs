@@ -437,39 +437,25 @@
   ],
   "allergens": [
     {
-      "id": "peanuts",
-      "en": "peanuts",
+      "id": "gluten",
+      "en": "gluten (wheat, barley, rye and everything made with them, such as flour, bread, noodles, soy sauce and beer)",
+      "label": "Gluten",
+      "sources": [
+        "https://en.wiktionary.org/wiki/wheat",
+        "https://en.wiktionary.org/wiki/barley",
+        "https://en.wiktionary.org/wiki/rye",
+        "https://en.wiktionary.org/wiki/soy_sauce",
+        "https://en.wiktionary.org/wiki/gluten",
+        "https://en.wiktionary.org/wiki/ສາລີ"
+      ],
+      "verifiedAt": "2026-10-13",
       "t": {
-        "zh": "花生",
-        "ja": "ピーナッツ",
-        "vi": "đậu phộng",
-        "th": "ถั่วลิสง",
-        "lo": "ຖົ່ວດິນ",
-        "fil": "mani"
-      }
-    },
-    {
-      "id": "shellfish",
-      "en": "shrimp and crab",
-      "t": {
-        "zh": "虾和蟹",
-        "ja": "えびとかに",
-        "vi": "tôm và cua",
-        "th": "กุ้งและปู",
-        "lo": "ກຸ້ງ ແລະ ປູ",
-        "fil": "hipon at alimango"
-      }
-    },
-    {
-      "id": "penicillin",
-      "en": "penicillin",
-      "t": {
-        "zh": "青霉素",
-        "ja": "ペニシリン",
-        "vi": "penicillin",
-        "th": "เพนิซิลลิน",
-        "lo": "ເປນີຊີລິນ",
-        "fil": "penicillin"
+        "zh": "麸质（小麦、大麦、黑麦，以及用它们做的一切，如面粉、面包、面条、酱油和啤酒）",
+        "ja": "グルテン（小麦・大麦・ライ麦と、それらを使ったすべての食品：小麦粉、パン、麺類、醤油、ビールなど）",
+        "vi": "gluten (lúa mì, lúa mạch, lúa mạch đen và mọi thứ làm từ chúng, như bột mì, bánh mì, mì, nước tương/xì dầu và bia)",
+        "th": "กลูเตน (ข้าวสาลี ข้าวบาร์เลย์ ข้าวไรย์ และทุกอย่างที่ทำจากสิ่งเหล่านี้ เช่น แป้งสาลี ขนมปัง บะหมี่ ซีอิ๊ว และเบียร์)",
+        "lo": "ກລູເຕນ (gluten: ເຂົ້າສາລີ ແລະ ທຸກຢ່າງທີ່ເຮັດຈາກແປ້ງສາລີ ເຊັ່ນ ເຂົ້າຈີ່, ໝີ່, ເຕົ້າຈ້ຽວ ແລະ ເບຍ)",
+        "fil": "gluten (trigo, barley, rye at lahat ng gawa sa mga ito, gaya ng harina, tinapay, noodles, toyo at beer)"
       }
     }
   ]

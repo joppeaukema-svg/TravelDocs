@@ -11,6 +11,8 @@ export const Settings = z.object({
   countryOverride: countryCode.nullable().default(null),
   /** Weather forecasts: sends the names of your stops (no dates) to Open-Meteo. Off until you turn it on. */
   weather: z.boolean().default(false),
+  /** "Not now" on Today's weather offer: don't ask again (it can still be turned on in Weather). */
+  weatherAsked: z.boolean().default(false),
 });
 export type Settings = z.infer<typeof Settings>;
 

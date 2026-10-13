@@ -86,11 +86,11 @@ test('phrases: show-this cards in the local script', async ({ page }) => {
   await page.goto('/#/phrases');
   await page.getByRole('link', { name: /Lao/ }).click();
   await expect(page.getByText('ສະບາຍດີ')).toBeVisible();
-  await page.getByRole('button', { name: 'shrimp and crab' }).click();
-  await page.getByRole('button', { name: 'Show allergy card' }).click();
+  await page.getByRole('button', { name: 'Show gluten allergy card' }).click();
   const card = page.getByRole('dialog', { name: 'Show this' });
-  await expect(card).toContainText('ຂ້ອຍແພ້ກຸ້ງ ແລະ ປູ');
-  await expect(card).toContainText('I am allergic to shrimp and crab.');
+  await expect(card).toContainText('ຂ້ອຍແພ້ກລູເຕນ');
+  await expect(card).toContainText('ເຂົ້າສາລີ');
+  await expect(card).toContainText('I am allergic to gluten (wheat, barley, rye and everything made with them');
   await card.getByRole('button', { name: 'Close' }).click();
 
   await page.getByLabel(/Address/).fill('ບ້ານ ວັດແສນ, ຫຼວງພະບາງ');
@@ -120,6 +120,10 @@ test('weather is off until you turn it on', async ({ page }) => {
   await page.goto('/#/weather');
   await expect(page.getByRole('switch', { name: /Weather forecasts/ })).not.toBeChecked();
   await page.goto('/#/today');
+  // Today offers it; "Not now" hides the offer, and still nothing is sent.
+  await expect(page.getByText('Weather is off on this phone')).toBeVisible();
+  await page.getByRole('button', { name: 'Not now' }).click();
+  await expect(page.getByText('Weather is off on this phone')).toHaveCount(0);
   await page.waitForTimeout(500);
   expect(calls).toEqual([]);
 });
@@ -146,11 +150,10 @@ test('weather on Today sits between the day card and Next', async ({ page }) => 
   await page.goto('/#/trip');
   await page.getByRole('button', { name: 'Try the demo trip' }).click();
   await expect(page.getByText('Imported 7 stays')).toBeVisible();
-  await page.goto('/#/weather');
-  await page.getByText('Weather forecasts', { exact: true }).click();
-  await expect(page.getByRole('switch', { name: /Weather forecasts/ })).toBeChecked();
+  // Turned on from Today's offer.
   await page.goto('/#/today');
-  await expect(page.getByRole('heading', { name: 'Weather' })).toBeVisible();
+  await page.getByRole('button', { name: 'Turn on' }).click();
+  await expect(page.getByText('Clear')).toBeVisible();
   const headings = await page.getByRole('heading', { level: 2 }).allTextContents();
   const at = (name: string) => headings.findIndex((h) => h.toLowerCase() === name.toLowerCase());
   expect(at('First day of the trip')).toBeGreaterThanOrEqual(0);

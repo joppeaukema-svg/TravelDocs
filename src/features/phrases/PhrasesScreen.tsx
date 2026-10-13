@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { getCountry, phrasebook } from '../../content';
 import type { PhraseLang, PhrasesFile } from '../../content/schema';
 import { getMeta, setMeta } from '../../db/db';
+import { formatDate } from '../../lib/format';
 import { useCurrentCountry, useToday } from '../../rules/useRules';
 import { useTrip } from '../../trip/store';
 import { accommodationOn } from '../../trip/timeline';
@@ -131,28 +132,49 @@ export function ShowCards({ lang }: { lang: PhraseLang }) {
 
       <SectionTitle>Allergy</SectionTitle>
       <Card>
-        <div className="flex flex-wrap gap-2">
-          {book().allergens.map((a) => (
-            <button
-              key={a.id}
-              type="button"
-              onClick={() => setAllergen(a.id)}
-              className={cx('min-h-11 rounded-full border px-4 font-bold', a.id === allergen ? 'border-ink bg-ink text-paper' : 'border-line bg-card')}
-            >
-              {a.en}
-            </button>
-          ))}
-        </div>
-        <Button
-          variant="primary"
-          className="mt-3 w-full"
-          onClick={() => {
-            const a = book().allergens.find((x) => x.id === allergen)!;
-            setShown({ local: card('allergic').t[lang].replace('{item}', a.t[lang]), english: card('allergic').en.replace('{item}', a.en) });
-          }}
-        >
-          Show allergy card
-        </Button>
+        {book().allergens.length > 1 && (
+          <div className="mb-3 flex flex-wrap gap-2">
+            {book().allergens.map((a) => (
+              <button
+                key={a.id}
+                type="button"
+                onClick={() => setAllergen(a.id)}
+                className={cx('min-h-11 rounded-full border px-4 font-bold', a.id === allergen ? 'border-ink bg-ink text-paper' : 'border-line bg-card')}
+              >
+                {a.label ?? a.en}
+              </button>
+            ))}
+          </div>
+        )}
+        {(() => {
+          const a = book().allergens.find((x) => x.id === allergen)!;
+          return (
+            <>
+              <p className="mb-3">{card('allergic').en.replace('{item}', a.en)}</p>
+              <Button
+                variant="primary"
+                className="w-full"
+                onClick={() => setShown({ local: card('allergic').t[lang].replace('{item}', a.t[lang]), english: card('allergic').en.replace('{item}', a.en) })}
+              >
+                Show {(a.label ?? a.en).toLowerCase()} allergy card
+              </Button>
+              {a.sources.length > 0 && (
+                <p className="mt-2 text-sm text-muted">
+                  The key words were checked in dictionaries{a.verifiedAt && ` on ${formatDate(a.verifiedAt)}`} (
+                  {a.sources.map((u, i) => (
+                    <span key={u}>
+                      {i > 0 && ', '}
+                      <a href={u} target="_blank" rel="noreferrer" className="text-accent">
+                        {decodeURIComponent(new URL(u).pathname.split('/').pop()!).replace(/_/g, ' ')}
+                      </a>
+                    </span>
+                  ))}
+                  ), not by a native speaker. For a severe allergy, also carry a card from a coeliac organisation.
+                </p>
+              )}
+            </>
+          );
+        })()}
       </Card>
       <p className="mt-2 text-sm text-muted">{book().note}</p>
       {shown && <ShowCard {...shown} lang={info.speech} onClose={() => setShown(null)} />}

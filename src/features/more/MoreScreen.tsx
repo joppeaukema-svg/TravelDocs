@@ -7,8 +7,6 @@ import {
   HeartIcon,
   ListIcon,
   PersonIcon,
-  PhoneIcon,
-  ShieldIcon,
   ShareIcon,
   SpeechIcon,
 } from '../../ui/icons';
@@ -32,10 +30,8 @@ export function MoreScreen() {
       <PageTitle>More</PageTitle>
       <Card className="py-1">
         <RowLink href="#/together" icon={<ShareIcon />} title="Travelling together" sub={together} />
-        <RowLink href="#/insurance" icon={<ShieldIcon />} title="Insurance" sub="Policy, assistance line, coverage" />
         <RowLink href="#/checklists" icon={<ListIcon />} title="Checklists" sub="Prep, checks and packing" />
         <RowLink href="#/personal" icon={<PersonIcon />} title="Personal details" sub="ICE contacts, medical info" />
-        <RowLink href="#/emergency" icon={<PhoneIcon />} title="Emergency card" sub="Readable while locked" />
         <RowLink href="#/backup" icon={<DownloadIcon />} title="Backup & restore" sub="One encrypted file" />
         <RowLink href="#/print" icon={<FileIcon />} title="Paper backup" sub="Print or save as PDF" />
         <RowLink href="#/settings" icon={<GearIcon />} title="Settings" sub="Lock, appearance, storage" />

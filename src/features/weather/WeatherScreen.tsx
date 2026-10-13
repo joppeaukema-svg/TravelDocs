@@ -52,10 +52,43 @@ function ForecastTable({ f, days = 7 }: { f: Forecast; days?: number }) {
 
 /** Compact card for Today: today and tomorrow where you are. */
 export function WeatherCard() {
-  const { weather } = useSettings();
+  const { weather, weatherAsked } = useSettings();
+  const online = useOnline();
   const { list, forecasts } = useStopForecasts();
-  if (!weather || !list.length || !forecasts?.[0]) return null;
-  const f = forecasts[0];
+  if (!list.length) return null;
+  // Off by default on every phone: it sends place names to Open-Meteo, so it's offered, not switched on.
+  if (!weather) {
+    if (weatherAsked) return null;
+    return (
+      <>
+        <SectionTitle>Weather</SectionTitle>
+        <Card>
+          <p className="font-bold">Weather is off on this phone</p>
+          <p className="mt-1 text-sm text-muted">
+            Turning it on sends the names of your current and next stop (no dates, nothing else) to Open-Meteo, a free service
+            without accounts.
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <Button onClick={() => void updateSettings({ weatherAsked: true })}>Not now</Button>
+            <Button variant="primary" onClick={() => void updateSettings({ weather: true })}>
+              Turn on
+            </Button>
+          </div>
+        </Card>
+      </>
+    );
+  }
+  const f = forecasts?.[0];
+  if (!f) {
+    return (
+      <>
+        <SectionTitle>Weather</SectionTitle>
+        <Card>
+          <p className="text-muted">{online ? 'Getting the forecast…' : 'No forecast yet: it downloads when you’re online.'}</p>
+        </Card>
+      </>
+    );
+  }
   return (
     <>
       <SectionTitle action={<a href="#/weather" className="text-sm font-bold">7 days</a>}>Weather</SectionTitle>
