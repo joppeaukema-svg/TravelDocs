@@ -267,8 +267,10 @@ export function MoneyScreen() {
   const summary = summarise(expenses, rate, (c) => daysInCountry(trip, c, today), budgets);
   const todaySpent = spentOn(expenses, today, rate);
   const todayBudget = here ? budgets[here] : undefined;
+  // The three most recent: latest date first, and the last one entered first within a day.
+  const latest = [...expenses].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
   const byDate = new Map<string, Expense[]>();
-  for (const e of expenses.slice(0, 40)) byDate.set(e.date, [...(byDate.get(e.date) ?? []), e]);
+  for (const e of latest) byDate.set(e.date, [...(byDate.get(e.date) ?? []), e]);
   const routeWithoutSpend = [...new Set(trip?.stays.map((s) => s.country) ?? [])].filter((c) => !summary.countries.some((s) => s.country === c));
 
   return (

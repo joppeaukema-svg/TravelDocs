@@ -64,6 +64,22 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
   await expect(page.getByText('Airport taxi')).toHaveCount(0);
 });
 
+test('Latest shows only the three most recent expenses', async ({ page }) => {
+  for (const [amount, note] of [['1', 'First'], ['2', 'Second'], ['3', 'Third'], ['4', 'Fourth']]) {
+    await page.goto('/#/money/add');
+    await page.getByLabel('Amount').fill(amount!);
+    await page.getByLabel('Currency').selectOption('EUR');
+    await page.getByLabel('Note (optional)').fill(note!);
+    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Money' })).toBeVisible();
+  }
+  // Country cards are folded, so these are the Latest rows.
+  const rows = page.locator('a[href^="#/money/expense/"]');
+  await expect(rows).toHaveCount(3);
+  await expect(rows.nth(0)).toContainText('Fourth');
+  await expect(page.getByRole('link', { name: /First/ })).toHaveCount(0);
+});
+
 test('paper backup: numbers, insurance after unlocking, bookings; prints without app chrome', async ({ page }) => {
   await page.goto('/#/trip');
   await page.getByRole('button', { name: 'Try the demo trip' }).click();
