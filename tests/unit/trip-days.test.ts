@@ -5,9 +5,9 @@ import type { Holiday } from '../../src/rules/content';
 import { buildContext } from '../../src/rules/context';
 import { runRules } from '../../src/rules/engine';
 import { Itinerary } from '../../src/rules/itinerary';
-import type { Check } from '../../src/rules/types';
+import type { Check, PrepItem } from '../../src/rules/types';
 import type { TripData } from '../../src/trip/io';
-import { checksByLeg, holidaysOn, tripLegs } from '../../src/trip/days';
+import { checksByLeg, holidaysOn, tasksByDate, tripLegs } from '../../src/trip/days';
 import { getShareStatus, getTombstones, loadTrip, replaceTrip, saveDay } from '../../src/trip/store';
 import { hop, stay, trip } from './rules/helpers';
 
@@ -100,6 +100,39 @@ describe('day by day', () => {
     const { it, legs } = legsOf(data);
     const byLeg = checksByLeg(legs, runRules(buildContext(data, { today: '2031-01-01' })).checks, it.stays);
     expect((byLeg.get('la') ?? []).map((c) => c.id)).toContain('through-leg-a');
+  });
+});
+
+describe('must-dos on their day', () => {
+  it('puts the mandatory forms for the next country in the days before you go there', () => {
+    // Japan, then Vietnam (landing at Hanoi): the pre-arrival form is mandatory, Visit Japan Web is not.
+    const jp = stay({ id: 'jp', country: 'JP', from: '2031-03-02', to: '2031-03-20' });
+    const vn = stay({ id: 'vn', country: 'VN', from: '2031-03-20', to: '2031-04-05', entry: { point: 'Hanoi Noi Bai International Airport (HAN)' } });
+    const data = trip('2031-03-01', '2031-04-05', [jp, vn], [hop('NL', 'JP', '2031-03-01', { arriveDate: '2031-03-02' }), hop('JP', 'VN', '2031-03-20')]);
+    const result = runRules(buildContext(data, { today: '2031-01-01' }));
+    const tasks = tasksByDate(result.prep, data.meta.depart, data.meta.return);
+    const all = [...tasks.entries()].flatMap(([date, list]) => list.map((p) => [date, p.id]));
+    expect(all).toContainEqual(['2031-03-17', 'form-vn-prearrival-vn']);
+    expect(all.some(([, id]) => id!.startsWith('form-jp-vjw'))).toBe(false);
+    expect([...tasks.values()].flat().every((p) => p.severity !== 'info')).toBe(true);
+  });
+
+  it('still-open tasks from before the trip go on the first day; ones due before leaving do not', () => {
+    const item = (id: string, remindOn: string, deadline?: string): PrepItem => ({
+      id,
+      group: 'x',
+      country: 'VN',
+      moment: 't21',
+      title: id,
+      severity: 'warn',
+      remindOn,
+      ...(deadline ? { deadline } : {}),
+      at: { date: remindOn, time: '09:00', tz: 'UTC' },
+      alarm: { date: remindOn, time: '09:00', tz: 'UTC' },
+      sourceIds: [],
+    });
+    const tasks = tasksByDate([item('open', '2031-02-01', '2031-03-05'), item('before', '2031-02-01', '2031-02-27'), item('after', '2031-05-01')], '2031-03-01', '2031-04-01');
+    expect([...tasks.entries()]).toEqual([['2031-03-01', [expect.objectContaining({ id: 'open' })]]]);
   });
 });
 

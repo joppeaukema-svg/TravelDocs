@@ -28,6 +28,16 @@
   --color-info: #1d4a93;
   --color-info-soft: #e4ecf9;
   --color-sos: #c1121f;
+
+  /* Pastel tints per country, for the trip's day-by-day folds. */
+  --color-land-jp: #fbf0c0;
+  --color-land-vn: #f9d8ea;
+  --color-land-la: #d8efd6;
+  --color-land-ph: #d6e5f8;
+  --color-land-th: #e5dcf7;
+  --color-land-cn: #f8d5d2;
+  --color-land-home: #fde2c8;
+  --color-land-other: #d2eeea;
 }
 
 @layer base {
@@ -50,6 +60,14 @@
     --color-info: #a3bff5;
     --color-info-soft: #17243c;
     --color-sos: #ff4d5a;
+    --color-land-jp: #37311a;
+    --color-land-vn: #3a1d2e;
+    --color-land-la: #1b3320;
+    --color-land-ph: #1a2a40;
+    --color-land-th: #2b2340;
+    --color-land-cn: #3b1f1d;
+    --color-land-home: #3b2a19;
+    --color-land-other: #163330;
     color-scheme: dark;
   }
 
@@ -73,6 +91,14 @@
       --color-info: #a3bff5;
       --color-info-soft: #17243c;
       --color-sos: #ff4d5a;
+      --color-land-jp: #37311a;
+      --color-land-vn: #3a1d2e;
+      --color-land-la: #1b3320;
+      --color-land-ph: #1a2a40;
+      --color-land-th: #2b2340;
+      --color-land-cn: #3b1f1d;
+      --color-land-home: #3b2a19;
+      --color-land-other: #163330;
       color-scheme: dark;
     }
   }

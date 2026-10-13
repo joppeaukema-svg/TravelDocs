@@ -101,8 +101,10 @@ downloaded rates, and you can set your own rate per currency.
   and one prep list per country. Items whose moment has passed show as **Do now**; tick them off, snooze them or mark
   them not needed. Today shows what's due, the current stay counter and today's day from Day by day (before the
   trip: the first day), with its notes and bookings, editable right there.
-- **Trip → Day by day** has one fold per country (plus leaving and coming home): that country's checks at the top,
-  then every day with its place, holidays, notes and bookings. The pencil next to a day edits its place and notes
+- **Trip → Day by day** has one fold per country (plus leaving and coming home), each in its own pastel colour: that
+  country's checks at the top, then every day with its place, holidays, must-dos, notes and bookings. Must-dos are the
+  important checklist items — mandatory arrival and departure forms for the next country, visa steps, onward tickets,
+  ticket sales — on the day to act, with a box to tick them off. The pencil next to a day edits its place and notes
   (“book the train ticket today”); days are shared, so notes go along when you send the trip to your travel
   companion. Visa details and stay counters are in Today and on the stay itself (Edit stay); general entry rules in
   Countries.

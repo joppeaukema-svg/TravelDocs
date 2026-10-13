@@ -1,19 +1,56 @@
 import { useState } from 'react';
+import { formatDayRange } from '../../lib/format';
 import type { Holiday } from '../../rules/content';
+import type { ItemStatus } from '../../rules/status';
+import type { PrepItem } from '../../rules/types';
 import { BOOKING_TYPE_LABELS, bookingLabel, type Booking, type Day } from '../../trip/schema';
-import { saveDay } from '../../trip/store';
+import { saveDay, setPrepState } from '../../trip/store';
 import { formatLocal } from '../../trip/time';
-import { EditIcon } from '../../ui/icons';
+import { CheckIcon, EditIcon } from '../../ui/icons';
 import { Button, cx, Pill, TextArea, TextField } from '../../ui/kit';
 import { SourceLinks } from './parts';
 
-/** One day of the trip: place, holidays, notes and bookings, with a pencil to edit the place and notes. */
+/** A must-do from the checklists (a mandatory form, a visa step…) on the day to act, with a box to tick it off. */
+export interface DayTask {
+  item: PrepItem;
+  /** The item's title, with the country in front when the title doesn't name it. */
+  title: string;
+  status: ItemStatus;
+}
+
+function TaskLine({ task: { item, title, status } }: { task: DayTask }) {
+  const closed = status === 'done' || status === 'not-needed';
+  return (
+    <div className="mt-1.5 flex items-start gap-2 text-sm">
+      <button
+        type="button"
+        role="checkbox"
+        aria-checked={status === 'done'}
+        aria-label={`Done: ${title}`}
+        onClick={() => void setPrepState(item.id, status === 'done' ? null : 'done')}
+        className={cx(
+          'grid h-7 w-7 shrink-0 place-items-center rounded-md border-2',
+          status === 'done' ? 'border-ok bg-ok text-card' : 'border-warn bg-card',
+        )}
+      >
+        {status === 'done' && <CheckIcon size={16} />}
+      </button>
+      <a href={`#/checklists/${encodeURIComponent(item.group)}`} className="min-w-0 pt-0.5 text-ink no-underline">
+        <span className={cx('font-bold', closed && 'text-muted line-through')}>{title}</span>
+        {item.deadline && item.deadline !== item.remindOn && <span className="text-muted"> · by {formatDayRange(item.deadline, item.deadline)}</span>}
+      </a>
+    </div>
+  );
+}
+
+/** One day of the trip: place, holidays, must-dos, notes and bookings, with a pencil to edit the place and notes. */
 export function DayRow({
   date,
   country,
   day,
   bookings,
   holidays,
+  tasks = [],
   isToday,
   editing,
   onEdit,
@@ -23,6 +60,7 @@ export function DayRow({
   day: Day | undefined;
   bookings: Booking[];
   holidays: Holiday[];
+  tasks?: DayTask[];
   isToday: boolean;
   editing: boolean;
   onEdit: (on: boolean) => void;
@@ -42,6 +80,9 @@ export function DayRow({
               <p className="mt-1">{h.detail}</p>
               <SourceLinks ids={h.sourceIds} />
             </details>
+          ))}
+          {tasks.map((t) => (
+            <TaskLine key={t.item.id} task={t} />
           ))}
           {editing ? (
             <DayEditor date={date} country={country} day={day} onDone={() => onEdit(false)} />

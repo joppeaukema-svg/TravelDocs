@@ -4,16 +4,17 @@ import { formatDate, formatDayRange, plural } from '../../lib/format';
 import { shareFile } from '../../lib/share';
 import { rulesContent } from '../../rules/content';
 import { diffDays } from '../../rules/itinerary';
+import { itemStatus } from '../../rules/status';
 import { useRules, type Rules } from '../../rules/useRules';
 import { exportTripFile, parseTripFile, TripFileError, type ImportResult, type TripData } from '../../trip/io';
-import { checksByLeg, holidaysOn, tripLegs } from '../../trip/days';
-import { applyTripUpdate, loadTrip, replaceTrip } from '../../trip/store';
+import { checksByLeg, holidaysOn, tasksByDate, tripLegs, type TripLeg } from '../../trip/days';
+import { applyTripUpdate, loadTrip, replaceTrip, usePrepStates } from '../../trip/store';
 import { isTripUpdate, parseTripUpdate, planTripUpdate, type UpdatePlan } from '../../trip/update';
 import { bookingsOn } from '../../trip/timeline';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
 import { ChevronRightIcon, PlusIcon, UploadIcon } from '../../ui/icons';
-import { Button, Card, ErrorText, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
-import { DayRow } from './DayRow';
+import { Button, Card, cx, ErrorText, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
+import { DayRow, type DayTask } from './DayRow';
 import { CheckCard } from './parts';
 import { useTripCode } from './SharePanel';
 
@@ -278,6 +279,17 @@ function TripView({ rules }: { rules: Rules }) {
 
 const LEG_TITLES = { departure: 'Leaving home', return: 'Back home', between: 'On the way' } as const;
 
+/** A pastel tint per country (see index.css), so the folds are easy to tell apart. */
+const LAND: Record<string, string> = {
+  JP: 'bg-land-jp',
+  VN: 'bg-land-vn',
+  LA: 'bg-land-la',
+  PH: 'bg-land-ph',
+  TH: 'bg-land-th',
+  CN: 'bg-land-cn',
+};
+const landOf = (leg: TripLeg) => (leg.kind === 'departure' || leg.kind === 'return' ? 'bg-land-home' : (LAND[leg.country] ?? 'bg-land-other'));
+
 /** One fold per country: its checks, then every day with the plan, holidays, notes and bookings. */
 function DayByDay({ rules }: { rules: Rules }) {
   const { data, result, today, itinerary } = rules;
@@ -285,6 +297,22 @@ function DayByDay({ rules }: { rules: Rules }) {
   const legs = tripLegs(data.meta, itinerary.stays, (date) => days.get(date)?.country);
   const checks = checksByLeg(legs, result.checks, itinerary.stays);
   const [editing, setEditing] = useState<string | null>(null);
+  const states = usePrepStates();
+  const tasks = tasksByDate(result.prep, data.meta.depart, data.meta.return);
+  // On a travel day the date is in two folds; its tasks show once, in the first.
+  const taskLeg = new Map<string, string>();
+  for (const leg of legs) for (const d of leg.dates) if (!taskLeg.has(d)) taskLeg.set(d, leg.key);
+  const tasksOn = (leg: TripLeg, date: string): DayTask[] =>
+    taskLeg.get(date) !== leg.key
+      ? []
+      : (tasks.get(date) ?? []).map((item) => {
+          const country = itinerary.countryName(item.country);
+          return {
+            item,
+            title: item.title.includes(country) ? item.title : `${country}: ${item.title}`,
+            status: itemStatus(item, states.get(item.id), today),
+          };
+        });
 
   return (
     <div className="space-y-2">
@@ -294,7 +322,7 @@ function DayByDay({ rules }: { rules: Rules }) {
         const attention = legChecks.filter((c) => c.severity !== 'info');
         const places = leg.stay?.places.join(' · ') ?? '';
         return (
-          <details key={leg.key} open={leg.from <= today && today <= leg.to} className="group rounded-2xl border border-line bg-card">
+          <details key={leg.key} open={leg.from <= today && today <= leg.to} className={cx('group rounded-2xl border border-line', landOf(leg))}>
             <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-2.5 [&::-webkit-details-marker]:hidden">
               <span className="rounded-md border-2 border-ink px-1.5 font-mono text-sm font-medium leading-6">{leg.country}</span>
               <span className="min-w-0 flex-1">
@@ -328,6 +356,7 @@ function DayByDay({ rules }: { rules: Rules }) {
                     day={days.get(date)}
                     bookings={bookingsOn(data, date)}
                     holidays={holidaysOn(rulesContent.holidays, leg.country, leg.stay?.places ?? [], date)}
+                    tasks={tasksOn(leg, date)}
                     isToday={date === today}
                     editing={editing === id}
                     onEdit={(on) => setEditing(on ? id : null)}

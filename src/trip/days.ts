@@ -1,6 +1,6 @@
 import type { Holiday } from '../rules/content';
 import { addDays, isSynthetic, stayEnd, stayStart } from '../rules/itinerary';
-import type { Check } from '../rules/types';
+import type { Check, PrepItem } from '../rules/types';
 import type { TripMeta, Stay } from './schema';
 
 /**
@@ -92,5 +92,23 @@ export function checksByLeg(legs: TripLeg[], checks: Check[], stays: Stay[]): Ma
   }
   const rank = { critical: 0, warn: 1, info: 2 };
   for (const list of out.values()) list.sort((a, b) => rank[a.severity] - rank[b.severity]);
+  return out;
+}
+
+/**
+ * The must-dos (warnings and critical items from the checklists: mandatory
+ * forms, visa steps, onward tickets, ticket sales) on the day to act. Items
+ * whose moment came before the trip but are still open then go on the first
+ * day; anything due before leaving stays in "Before you leave".
+ */
+export function tasksByDate(prep: PrepItem[], depart: string, ret: string): Map<string, PrepItem[]> {
+  const out = new Map<string, PrepItem[]>();
+  for (const p of prep) {
+    if (p.severity === 'info') continue;
+    if ((p.deadline ?? p.remindOn) < depart) continue;
+    const date = p.remindOn < depart ? depart : p.remindOn;
+    if (date > ret) continue;
+    out.set(date, [...(out.get(date) ?? []), p]);
+  }
   return out;
 }

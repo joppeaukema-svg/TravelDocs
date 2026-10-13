@@ -159,3 +159,25 @@ test('the trip is deleted from More → Travelling together', async ({ page }) =
   await page.goto('/#/trip');
   await expect(page.getByRole('button', { name: 'Import trip file' })).toBeVisible();
 });
+
+test('must-dos for the next country show on their day, each country in its own colour', async ({ page }) => {
+  await page.goto('/#/trip');
+  await page.getByRole('button', { name: 'Try the demo trip' }).click();
+  await expect(page.getByText('Imported 7 stays')).toBeVisible();
+
+  const japan = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Japan' }) });
+  const vietnam = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Vietnam' }) });
+  await expect(japan).toHaveClass(/bg-land-jp/);
+  await expect(vietnam).toHaveClass(/bg-land-vn/);
+
+  // Landing in Hanoi: Vietnam's pre-arrival form, a few days before, in Japan's fold.
+  await japan.locator('summary').click();
+  const day = japan.getByRole('listitem').filter({ hasText: 'Sat 1 Apr' });
+  const task = day.getByRole('checkbox', { name: 'Done: Vietnam pre-arrival form' });
+  await expect(task).toBeVisible();
+  await task.click();
+  await expect(task).toHaveAttribute('aria-checked', 'true');
+
+  await page.goto('/#/checklists/vn');
+  await expect(page.getByRole('checkbox', { name: 'Done: Vietnam pre-arrival form' })).toHaveAttribute('aria-checked', 'true');
+});
