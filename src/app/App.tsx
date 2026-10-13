@@ -31,6 +31,7 @@ import { Header } from './Header';
 import { matchPath, usePath, useVaultState } from './hooks';
 import { TabBar, type Tab } from './TabBar';
 import { useAutoUpdate } from './updates';
+import { useAutoSync } from '../sync/useSync';
 
 interface Route {
   pattern: string;
@@ -115,6 +116,7 @@ export function App() {
   useLiveData();
   useAutoUpdate();
   usePushSync();
+  useAutoSync();
 
   useEffect(() => {
     window.scrollTo(0, 0);

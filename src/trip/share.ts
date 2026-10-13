@@ -6,12 +6,15 @@ import { Expense, SharedBudgets, Travellers, type ForWhom } from '../money/schem
 import { Booking, Day, Stay, TripMeta } from './schema';
 
 /**
- * Sharing the trip with a travel companion, without a server:
- * - only the shared part travels: stays, bookings marked "both of us", days, trip dates,
- *   and the money (expenses, daily budgets, the two names);
- *   never the vault, profile, checklist ticks, passport stamps, linked documents or private notes
- * - the file is encrypted with a trip code both phones know (typed in, never sent with the file)
- * - importing merges: newer edits win, deletions carry over, personal fields stay put
+ * Sharing the trip with a travel companion — pasted in a chat, or synced through
+ * the relay (sync/sync.ts):
+ * - what travels is everything filled in about the trip: stays (with passport stamps), bookings
+ *   marked "both of us", days and notes, checklist and packing ticks, the money (expenses,
+ *   budgets, the two names, your own exchange rates) and the address card;
+ *   never the vault (documents, personal details, insurance), the emergency card, the profile,
+ *   settings, documents linked to a booking, private booking notes or "just me" bookings
+ * - it's encrypted with a trip code both phones know (typed in, never sent with the data)
+ * - receiving merges: newer edits win, deletions carry over
  */
 
 export const SHARE_FORMAT = 'travel-companion-share/1';
@@ -43,8 +46,20 @@ export function isValidCode(code: string): boolean {
 
 // --- What is shared ---------------------------------------------------------
 
-/** Deletions, keyed "stay:<id>", "booking:<id>", "day:<date>" or "expense:<id>", with the time of deletion. */
+/** Deletions, keyed "stay:<id>", "booking:<id>", "day:<date>", "expense:<id>" or "prep:<id>", with the time of deletion. */
 export type Tombstones = Record<string, string>;
+
+/** A checklist or packing tick (same shape as the prepState table). */
+export const PrepTick = z.object({
+  id: z.string(),
+  status: z.enum(['done', 'snoozed', 'not-needed']),
+  snoozedUntil: z.string().optional(),
+  updatedAt: z.string(),
+});
+export type PrepTick = z.infer<typeof PrepTick>;
+
+export const Extra = z.object({ value: z.unknown(), updatedAt: z.string() });
+export type Extra = z.infer<typeof Extra>;
 
 export const SharePayload = z.object({
   meta: TripMeta,
@@ -56,19 +71,20 @@ export const SharePayload = z.object({
   expenses: z.array(Expense).default([]),
   budgets: SharedBudgets.optional(),
   travellers: Travellers.optional(),
+  /** Checklist and packing ticks. */
+  prep: z.array(PrepTick).default([]),
+  /** Small shared settings (own exchange rates, the address card), each with when it was last changed. */
+  extras: z.record(z.string(), Extra).default({}),
 });
 export type SharePayload = z.infer<typeof SharePayload>;
 
-/** This phone's money, as it goes into a share and comes out of a merge. */
-export interface MoneyData {
+/** What this phone has besides the itinerary, as it goes into a share and comes out of a merge. */
+export interface PhoneData {
   expenses: Expense[];
   budgets?: SharedBudgets | undefined;
   travellers?: Travellers | undefined;
-}
-
-function sharedStay(s: Stay): Stay {
-  const { stampedUntil: _personal, ...rest } = s;
-  return rest;
+  prep?: PrepTick[];
+  extras?: Record<string, Extra>;
 }
 
 function sharedBooking(b: Booking): Booking {
@@ -76,17 +92,19 @@ function sharedBooking(b: Booking): Booking {
   return { ...rest, documentIds: [] };
 }
 
-export function sharePayload(data: TripData, deleted: Tombstones, money: MoneyData = { expenses: [] }): SharePayload {
+export function sharePayload(data: TripData, deleted: Tombstones, phone: PhoneData = { expenses: [] }): SharePayload {
   const { importedAt: _i, ...meta } = data.meta;
   return {
     meta: TripMeta.parse(meta),
-    stays: data.stays.map(sharedStay),
+    stays: data.stays,
     bookings: data.bookings.filter((b) => b.who !== 'me').map(sharedBooking),
     days: data.days,
     deleted,
-    expenses: money.expenses,
-    ...(money.budgets ? { budgets: money.budgets } : {}),
-    ...(money.travellers && (money.travellers.a || money.travellers.b) ? { travellers: money.travellers } : {}),
+    expenses: phone.expenses,
+    ...(phone.budgets ? { budgets: phone.budgets } : {}),
+    ...(phone.travellers && (phone.travellers.a || phone.travellers.b) ? { travellers: phone.travellers } : {}),
+    prep: phone.prep ?? [],
+    extras: phone.extras ?? {},
   };
 }
 
@@ -109,8 +127,8 @@ export function mergeTrip(
   local: TripData | null,
   localDeleted: Tombstones,
   incoming: SharePayload,
-  localMoney: MoneyData = { expenses: [] },
-): { data: TripData; deleted: Tombstones; stats: MergeStats; money: MoneyData } {
+  localPhone: PhoneData = { expenses: [] },
+): { data: TripData; deleted: Tombstones; stats: MergeStats; phone: PhoneData } {
   const stats: MergeStats = { added: 0, updated: 0, removed: 0 };
   const deleted: Tombstones = { ...localDeleted };
   for (const [k, at] of Object.entries(incoming.deleted)) if (newer(at, deleted[k])) deleted[k] = at;
@@ -152,7 +170,7 @@ export function mergeTrip(
     local?.stays ?? [],
     incoming.stays,
     (s) => s.id,
-    (m, t) => ({ ...t, ...(m.stampedUntil ? { stampedUntil: m.stampedUntil } : {}) }),
+    (_m, t) => t,
   ).sort((a, b) => a.from.localeCompare(b.from));
 
   const bookings = merge(
@@ -175,20 +193,24 @@ export function mergeTrip(
 
   // Money. "a" and "b" are slots for the two names; if the other phone entered them the other way
   // round, its expenses are turned around so each one stays with the right person.
-  const mine = localMoney.travellers;
+  const mine = localPhone.travellers;
   const theirs = incoming.travellers;
   const swapped = !!(mine?.a && mine.b && mine.a !== mine.b && theirs && mine.a === theirs.b && mine.b === theirs.a);
   const flip = (w: ForWhom | undefined): ForWhom | undefined => (w === 'a' ? 'b' : w === 'b' ? 'a' : w);
   const theirExpenses = swapped ? incoming.expenses.map((e) => ({ ...e, ...(e.forWhom ? { forWhom: flip(e.forWhom) } : {}) })) : incoming.expenses;
-  const expenses = merge('expense', localMoney.expenses, theirExpenses, (e) => e.id, (_m, t) => t).sort((a, b) =>
+  const expenses = merge('expense', localPhone.expenses, theirExpenses, (e) => e.id, (_m, t) => t).sort((a, b) =>
     a.date.localeCompare(b.date),
   );
-  const budgets = incoming.budgets && newer(incoming.budgets.updatedAt, localMoney.budgets?.updatedAt) ? incoming.budgets : localMoney.budgets;
+  const budgets = incoming.budgets && newer(incoming.budgets.updatedAt, localPhone.budgets?.updatedAt) ? incoming.budgets : localPhone.budgets;
   const named = (t: Travellers | undefined) => !!(t && (t.a || t.b));
   const travellers =
     !swapped && named(theirs) && (!named(mine) || newer(theirs!.updatedAt, mine!.updatedAt)) ? theirs : mine;
 
-  return { data: { meta, stays, bookings, days }, deleted, stats, money: { expenses, budgets, travellers } };
+  const prep = merge('prep', localPhone.prep ?? [], incoming.prep, (p) => p.id, (_m, t) => t);
+  const extras = { ...(localPhone.extras ?? {}) };
+  for (const [k, v] of Object.entries(incoming.extras)) if (newer(v.updatedAt, extras[k]?.updatedAt)) extras[k] = v;
+
+  return { data: { meta, stays, bookings, days }, deleted, stats, phone: { expenses, budgets, travellers, prep, extras } };
 }
 
 // --- File format ------------------------------------------------------------
@@ -296,12 +318,17 @@ function fromBase64url(text: string): Bytes {
   return fromBase64(b64 + '='.repeat((4 - (b64.length % 4)) % 4));
 }
 
+/** The encrypted share as one line of text ("TC1.…."), as it's pasted in a chat and kept by the sync relay. */
+export function shareToken(encrypted: Uint8Array): string {
+  return TOKEN + base64url(encrypted) + '.';
+}
+
 export function shareText(encrypted: Uint8Array): string {
   return [
     'Travel Companion — our trip (encrypted).',
     'Open the app → More → Travelling together → paste this whole message.',
     '',
-    TOKEN + base64url(encrypted) + '.',
+    shareToken(encrypted),
   ].join('\n');
 }
 

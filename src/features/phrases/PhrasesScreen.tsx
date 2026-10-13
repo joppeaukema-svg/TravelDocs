@@ -2,10 +2,10 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { getCountry, phrasebook } from '../../content';
 import type { PhraseLang, PhrasesFile } from '../../content/schema';
-import { getMeta, setMeta } from '../../db/db';
+import { getMeta } from '../../db/db';
 import { formatDate } from '../../lib/format';
 import { useCurrentCountry, useToday } from '../../rules/useRules';
-import { useTrip } from '../../trip/store';
+import { setSharedMeta, useTrip } from '../../trip/store';
 import { accommodationOn } from '../../trip/timeline';
 import { CloseIcon, SpeechIcon } from '../../ui/icons';
 import { Button, Card, cx, inputClass, Notice, PageTitle, RowLink, SectionTitle } from '../../ui/kit';
@@ -111,7 +111,7 @@ function ShowCard({ local, english, lang, language, onClose }: { local: string; 
   );
 }
 
-const ADDRESS_KEY = 'showCardAddress';
+const ADDRESS_KEY = 'showCardAddress' as const;
 
 export function ShowCards({ lang }: { lang: PhraseLang }) {
   const info = book().languages[lang];
@@ -150,7 +150,7 @@ export function ShowCards({ lang }: { lang: PhraseLang }) {
           value={address}
           lang={info.speech}
           onChange={(e) => setDraft(e.target.value)}
-          onBlur={() => draft !== null && void setMeta(ADDRESS_KEY, draft)}
+          onBlur={() => draft !== null && void setSharedMeta(ADDRESS_KEY, draft)}
           placeholder="Copy the address from your booking, ideally in the local script"
         />
         <Button

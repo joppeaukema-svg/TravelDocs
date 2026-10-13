@@ -17,7 +17,8 @@ import {
   WrongTripCodeError,
   type MergeStats,
 } from '../../trip/share';
-import { applySharedTrip, getTombstones, loadMoney, loadTrip, markReceived, markSent, unlinkShare, useShareStatus } from '../../trip/store';
+import { applySharedTrip, getTombstones, loadPhoneData, loadTrip, markReceived, markSent, unlinkShare, useShareStatus } from '../../trip/store';
+import { setSyncEnabled, SYNC_AVAILABLE } from '../../sync/sync';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
 import { DownloadIcon, FileIcon, ShareIcon } from '../../ui/icons';
 import { Button, Card, ErrorText, inputClass, Notice, Pill } from '../../ui/kit';
@@ -51,7 +52,7 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
     try {
       const trip = await loadTrip();
       if (!trip) return;
-      const blob = await encryptShare(sharePayload(trip, await getTombstones(), await loadMoney()), code);
+      const blob = await encryptShare(sharePayload(trip, await getTombstones(), await loadPhoneData()), code);
       setMessage(shareText(new Uint8Array(await blob.arrayBuffer())));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -95,9 +96,9 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
   return (
     <Card>
       <p>
-        Share stays, flights, hotels, tours, day notes and expenses (with budgets and your two names) with your travel
-        companion. Passports, documents, insurance, your passport stamps, checklist ticks and bookings marked “just me”
-        stay on this phone.
+        Share everything you fill in about the trip with your travel companion: stays and passport stamps, bookings,
+        day notes, checklist and packing ticks, expenses and budgets. Documents, personal details, insurance, the
+        emergency card, bookings marked “just me” and private booking notes stay on this phone.
       </p>
 
       {hasTrip && (
@@ -148,8 +149,54 @@ export function SharePanel({ hasTrip }: { hasTrip: boolean }) {
         </div>
       )}
       <ErrorText>{error}</ErrorText>
+      {!code && SYNC_AVAILABLE && <JoinWithCode />}
       <ReceiveTrip knownCode={code} />
     </Card>
+  );
+}
+
+/** With automatic sync, a phone only needs the trip code: the trip comes from the other phone. */
+function JoinWithCode() {
+  const [code, setCode] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  return (
+    <form
+      className="mt-4 border-t border-line pt-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setError('');
+        if (!isValidCode(code)) return setError('A trip code has 12 letters and digits, like 7K4Q-M2PX-9RTB.');
+        setBusy(true);
+        void (async () => {
+          await setMeta(META.shareCode, normaliseCode(code));
+          await setSyncEnabled(true);
+        })().finally(() => setBusy(false));
+      }}
+    >
+      <p className="mb-1 font-bold">Join with the trip code</p>
+      <p className="mb-2 text-sm text-muted">
+        If your companion has <strong>Sync automatically</strong> on, type the trip code they tell you: the trip comes
+        over by itself, and this phone syncs from then on.
+      </p>
+      <label htmlFor="join-code" className="sr-only">
+        Trip code to join
+      </label>
+      <input
+        id="join-code"
+        autoCapitalize="characters"
+        autoComplete="off"
+        spellCheck={false}
+        placeholder="XXXX-XXXX-XXXX"
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+        className={`${inputClass} font-mono tracking-wider`}
+      />
+      <Button type="submit" variant="primary" className="mt-2 w-full" disabled={busy}>
+        {busy ? 'Joining…' : 'Join and sync'}
+      </Button>
+      <ErrorText>{error}</ErrorText>
+    </form>
   );
 }
 
@@ -264,7 +311,7 @@ function ReceiveTrip({ knownCode }: { knownCode: string | null }) {
         <div className="mt-3">
           <Notice tone="ok" title="Trip merged">
             From the share of {formatDateTime(done.sentAt)}: {plural(done.stats.added, 'item')} added, {done.stats.updated} updated,{' '}
-            {done.stats.removed} removed. Your own passport stamps, documents and notes are unchanged.
+            {done.stats.removed} removed. Your documents, private notes and “just me” bookings are unchanged.
           </Notice>
         </div>
       )}
@@ -284,7 +331,7 @@ function LinkStatus({ code }: { code: string }) {
         {pretty(code)}
       </p>
       <p className="text-sm text-muted">
-        Both phones keep this code. It's not a live connection: after a change, send the trip again and your companion
+        Both phones keep this code. Without automatic sync, send the trip again after a change and your companion
         receives it.
       </p>
       <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 text-sm">
@@ -306,7 +353,10 @@ function LinkStatus({ code }: { code: string }) {
         type="button"
         className="mt-1 min-h-10 text-sm font-bold text-muted underline"
         onClick={async () => {
-          if (window.confirm('Unlink? This phone forgets the trip code. Your trip stays; you can link again with the code.')) await unlinkShare();
+          if (window.confirm('Unlink? This phone forgets the trip code and stops syncing. Your trip stays; you can link again with the code.')) {
+            await setSyncEnabled(false);
+            await unlinkShare();
+          }
         }}
       >
         Unlink

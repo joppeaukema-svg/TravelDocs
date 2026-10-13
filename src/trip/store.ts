@@ -3,7 +3,7 @@ import { db, getMeta, META, setMeta, type PrepStateRow } from '../db/db';
 import type { TripData } from './io';
 import { Booking, Day, Stay, TripMeta } from './schema';
 import { MONEY_META, Travellers } from '../money/schema';
-import { mergeTrip, type MergeStats, type MoneyData, type SharePayload, type Tombstones } from './share';
+import { mergeTrip, type MergeStats, type PhoneData, type SharePayload, type Tombstones } from './share';
 import type { UpdatePlan } from './update';
 
 const now = () => new Date().toISOString();
@@ -42,8 +42,10 @@ export async function markUnsent(count = 1): Promise<void> {
   await updateShareStatus({ unsent: s.unsent + count });
 }
 
-export async function markSent(at = now()): Promise<void> {
-  await updateShareStatus({ lastSentAt: at, unsent: 0 });
+/** Everything was sent; or, with `count`, the edits counted before an automatic sync started (later ones still wait). */
+export async function markSent(at = now(), count?: number): Promise<void> {
+  const unsent = count === undefined ? 0 : Math.max(0, (await getShareStatus()).unsent - count);
+  await updateShareStatus({ lastSentAt: at, unsent });
 }
 
 export async function markReceived(shareCreatedAt: string): Promise<void> {
@@ -71,6 +73,13 @@ export async function addTombstones(keys: string[]): Promise<void> {
   await setMeta(META.tripDeleted, t);
 }
 
+/** The existing item's time when the new version is the same, else `at`. */
+function keepTime<T extends { updatedAt?: string | undefined }>(before: T | undefined, next: T, at: string): string {
+  if (!before?.updatedAt) return at;
+  const strip = ({ updatedAt: _u, ...rest }: T) => stable(rest);
+  return strip(before) === strip(next) ? before.updatedAt : at;
+}
+
 /**
  * Replaces the whole itinerary (import of a trip file). Counts as an edit of
  * everything in it, and items no longer in the file are recorded as deleted,
@@ -81,9 +90,10 @@ export async function replaceTrip(data: TripData): Promise<void> {
   const before = await loadTrip();
   await db.transaction('rw', db.stays, db.bookings, db.days, db.meta, async () => {
     await Promise.all([db.stays.clear(), db.bookings.clear(), db.days.clear()]);
-    await db.stays.bulkPut(data.stays.map((s) => ({ ...s, updatedAt: at })));
-    await db.bookings.bulkPut(data.bookings.map((b) => ({ ...b, updatedAt: at })));
-    await db.days.bulkPut(data.days.map((d) => ({ ...d, updatedAt: at })));
+    // Items the file doesn't change keep their time, so an import never beats a companion's newer edit of them.
+    await db.stays.bulkPut(data.stays.map((s) => ({ ...s, updatedAt: keepTime(before?.stays.find((x) => x.id === s.id), s, at) })));
+    await db.bookings.bulkPut(data.bookings.map((b) => ({ ...b, updatedAt: keepTime(before?.bookings.find((x) => x.id === b.id), b, at) })));
+    await db.days.bulkPut(data.days.map((d) => ({ ...d, updatedAt: keepTime(before?.days.find((x) => x.date === d.date), d, at) })));
     await db.meta.put({ key: META.trip, value: { ...data.meta, importedAt: at, updatedAt: at } });
   });
   if (before) {
@@ -124,40 +134,71 @@ export async function applyTripUpdate(plan: UpdatePlan): Promise<number> {
 }
 
 /** Merges a travel companion's shared trip into this phone's. */
-/** This phone's expenses, budgets and names, for a share. */
-export async function loadMoney(): Promise<MoneyData> {
-  const [expenses, values, budgetsAt, travellers] = await Promise.all([
+// --- Small shared settings ---------------------------------------------------
+
+/** Settings that travel with the trip, each with when it was last changed (kept in SHARED_TIMES). */
+export const SHARED_META = ['rateOverrides', 'showCardAddress'] as const;
+const SHARED_TIMES = 'sharedMetaTimes';
+// Set before sharing included them: they go along, but lose to any later change.
+const LONG_AGO = '1970-01-01T00:00:00.000Z';
+
+/** Saves one of SHARED_META and counts it as an edit to send. */
+export async function setSharedMeta(key: (typeof SHARED_META)[number], value: unknown): Promise<void> {
+  const times = ((await getMeta(SHARED_TIMES)) as Record<string, string> | undefined) ?? {};
+  await setMeta(key, value);
+  await setMeta(SHARED_TIMES, { ...times, [key]: now() });
+  await markUnsent();
+}
+
+/** Everything on this phone that travels with the trip besides the itinerary. */
+export async function loadPhoneData(): Promise<PhoneData> {
+  const [expenses, values, budgetsAt, travellers, prep, times, ...extraValues] = await Promise.all([
     db.expenses.toArray(),
     getMeta(MONEY_META.budgets),
     getMeta(MONEY_META.budgetsUpdatedAt),
     getMeta(MONEY_META.travellers),
+    db.prepState.toArray(),
+    getMeta(SHARED_TIMES),
+    ...SHARED_META.map((k) => getMeta(k)),
   ]);
   const t = Travellers.safeParse(travellers);
-  // Set before sharing included money: they go along, but lose to any later change.
-  const LONG_AGO = '1970-01-01T00:00:00.000Z';
+  const extras: PhoneData['extras'] = {};
+  SHARED_META.forEach((k, i) => {
+    if (extraValues[i] !== undefined) extras[k] = { value: extraValues[i], updatedAt: (times as Record<string, string> | undefined)?.[k] ?? LONG_AGO };
+  });
   return {
     expenses,
     ...(values ? { budgets: { values: values as Record<string, number>, updatedAt: typeof budgetsAt === 'string' ? budgetsAt : LONG_AGO } } : {}),
     ...(t.success ? { travellers: { ...t.data, updatedAt: t.data.updatedAt ?? LONG_AGO } } : {}),
+    prep,
+    extras,
   };
 }
 
-/** Merges a travel companion's shared trip (and money) into this phone's. */
+/** Merges a travel companion's shared trip (with everything else they filled in) into this phone's. */
 export async function applySharedTrip(payload: SharePayload): Promise<MergeStats> {
-  const { data, deleted, stats, money } = mergeTrip(await loadTrip(), await getTombstones(), payload, await loadMoney());
-  await db.transaction('rw', [db.stays, db.bookings, db.days, db.expenses, db.meta], async () => {
-    await Promise.all([db.stays.clear(), db.bookings.clear(), db.days.clear(), db.expenses.clear()]);
+  const { data, deleted, stats, phone } = mergeTrip(await loadTrip(), await getTombstones(), payload, await loadPhoneData());
+  await db.transaction('rw', [db.stays, db.bookings, db.days, db.expenses, db.prepState, db.meta], async () => {
+    await Promise.all([db.stays.clear(), db.bookings.clear(), db.days.clear(), db.expenses.clear(), db.prepState.clear()]);
     await db.stays.bulkPut(data.stays);
     await db.bookings.bulkPut(data.bookings);
     await db.days.bulkPut(data.days);
-    await db.expenses.bulkPut(money.expenses);
+    await db.expenses.bulkPut(phone.expenses);
+    await db.prepState.bulkPut(phone.prep ?? []);
     await db.meta.put({ key: META.trip, value: data.meta });
     await db.meta.put({ key: META.tripDeleted, value: deleted });
-    if (money.budgets) {
-      await db.meta.put({ key: MONEY_META.budgets, value: money.budgets.values });
-      await db.meta.put({ key: MONEY_META.budgetsUpdatedAt, value: money.budgets.updatedAt });
+    if (phone.budgets) {
+      await db.meta.put({ key: MONEY_META.budgets, value: phone.budgets.values });
+      await db.meta.put({ key: MONEY_META.budgetsUpdatedAt, value: phone.budgets.updatedAt });
     }
-    if (money.travellers) await db.meta.put({ key: MONEY_META.travellers, value: money.travellers });
+    if (phone.travellers) await db.meta.put({ key: MONEY_META.travellers, value: phone.travellers });
+    const times: Record<string, string> = {};
+    for (const [k, v] of Object.entries(phone.extras ?? {})) {
+      if (!(SHARED_META as readonly string[]).includes(k)) continue;
+      await db.meta.put({ key: k, value: v.value });
+      times[k] = v.updatedAt;
+    }
+    await db.meta.put({ key: SHARED_TIMES, value: times });
   });
   return stats;
 }
@@ -186,11 +227,11 @@ export function useTrip(): TripData | null | undefined {
   return useLiveQuery(loadTrip, []);
 }
 
-/** Saves a stay. Only a change to the passport stamp alone is personal and doesn't count as a shared edit. */
+/** Saves a stay (passport stamp included: it travels with the trip). */
 export async function saveStay(stay: Stay): Promise<void> {
   const before = await db.stays.get(stay.id);
-  const { stampedUntil: _a, updatedAt: _b, ...next } = stay;
-  const { stampedUntil: _c, updatedAt: _d, ...prev } = before ?? ({} as Stay);
+  const { updatedAt: _b, ...next } = stay;
+  const { updatedAt: _d, ...prev } = before ?? ({} as Stay);
   const sharedChange = !before || stable(Stay.parse({ ...next })) !== stable(Stay.parse({ ...prev }));
   await db.stays.put(Stay.parse({ ...stay, updatedAt: sharedChange ? now() : before?.updatedAt }));
   if (sharedChange) await markUnsent();
@@ -244,9 +285,18 @@ export async function updateTripMeta(patch: Partial<TripMeta>): Promise<void> {
   await markUnsent();
 }
 
+/** Ticks (or unticks) a checklist or packing item. Ticks travel with the trip. */
 export async function setPrepState(id: string, status: PrepStateRow['status'] | null, snoozedUntil?: string) {
-  if (!status) return db.prepState.delete(id);
+  if (!status) {
+    if (await db.prepState.get(id)) {
+      await db.prepState.delete(id);
+      await addTombstones([`prep:${id}`]);
+      await markUnsent();
+    }
+    return;
+  }
   await db.prepState.put({ id, status, ...(snoozedUntil ? { snoozedUntil } : {}), updatedAt: new Date().toISOString() });
+  await markUnsent();
 }
 
 export function usePrepStates(): Map<string, PrepStateRow> {

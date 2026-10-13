@@ -41,13 +41,13 @@ describe('trip code', () => {
 });
 
 describe('what is shared', () => {
-  it('leaves out passport stamps, linked documents, private notes and "just me" bookings', () => {
+  it('takes passport stamps along, but leaves out linked documents, private notes and "just me" bookings', () => {
     const t = demo();
     t.stays[0] = { ...t.stays[0]!, stampedUntil: '2030-01-01' };
     t.bookings[0] = { ...t.bookings[0]!, documentIds: ['doc-1'], myNote: 'seat 12A' };
     t.bookings[1] = { ...t.bookings[1]!, who: 'me' };
     const p = sharePayload(t, {});
-    expect(p.stays[0]!.stampedUntil).toBeUndefined();
+    expect(p.stays[0]!.stampedUntil).toBe('2030-01-01');
     expect(p.bookings.find((b) => b.id === t.bookings[0]!.id)).toMatchObject({ documentIds: [] });
     expect(p.bookings.find((b) => b.id === t.bookings[0]!.id)?.myNote).toBeUndefined();
     expect(p.bookings.some((b) => b.id === t.bookings[1]!.id)).toBe(false);
@@ -61,13 +61,12 @@ describe('merging', () => {
     expect(stats.added).toBe(7 + demo().bookings.length + 90);
   });
 
-  it('newer edits win, and personal fields on this phone are kept', () => {
+  it('newer edits win (passport stamps too), and private fields on this phone are kept', () => {
     const mine = demo();
-    mine.stays[3] = { ...mine.stays[3]!, stampedUntil: '2029-01-01' };
     mine.bookings[0] = { ...mine.bookings[0]!, documentIds: ['my-ticket'], myNote: 'mine' };
 
     const theirs = clone(demo());
-    theirs.stays[3] = { ...theirs.stays[3]!, entryType: 'e-visa', updatedAt: T2 };
+    theirs.stays[3] = { ...theirs.stays[3]!, entryType: 'e-visa', stampedUntil: '2029-01-01', updatedAt: T2 };
     theirs.bookings[0] = { ...theirs.bookings[0]!, status: 'booked', confirmation: 'ABC123', updatedAt: T2 };
     theirs.bookings[2] = { ...theirs.bookings[2]!, status: 'idea', updatedAt: T1 }; // not newer: ignored
 
@@ -127,7 +126,7 @@ describe('sharing money', () => {
       budgets: { values: { JP: 60, VN: 30 }, updatedAt: T2 },
       travellers: { a: 'Alex', b: 'Robin', updatedAt: T2 },
     });
-    const { money, deleted } = mergeTrip(demo(), {}, theirs, mine);
+    const { phone: money, deleted } = mergeTrip(demo(), {}, theirs, mine);
     expect(money.expenses.map((e) => [e.id, e.amount]).sort()).toEqual([
       ['both-edit', 12],
       ['only-mine', 10],
@@ -145,7 +144,7 @@ describe('sharing money', () => {
       expenses: [exp('robin-sim', { forWhom: 'a', category: 'esim' }), exp('together', { forWhom: 'both' })],
       travellers: { a: 'Robin', b: 'Alex', updatedAt: T3 },
     });
-    const { money } = mergeTrip(demo(), {}, theirs, mine);
+    const { phone: money } = mergeTrip(demo(), {}, theirs, mine);
     expect(money.expenses.find((e) => e.id === 'robin-sim')!.forWhom).toBe('b');
     expect(money.expenses.find((e) => e.id === 'together')!.forWhom).toBe('both');
     expect(money.travellers).toMatchObject({ a: 'Alex', b: 'Robin' });
@@ -155,8 +154,26 @@ describe('sharing money', () => {
     const old = { ...sharePayload(demo(), {}) } as Record<string, unknown>;
     delete old.expenses;
     const mine = { expenses: [exp('kept')], budgets: { values: { JP: 50 }, updatedAt: T1 }, travellers: { a: 'Alex', b: 'Robin', updatedAt: T1 } };
-    const { money } = mergeTrip(demo(), {}, SharePayload.parse(old), mine);
-    expect(money).toEqual(mine);
+    const { phone: money } = mergeTrip(demo(), {}, SharePayload.parse(old), mine);
+    expect(money).toMatchObject(mine);
+  });
+});
+
+describe('sharing ticks and small settings', () => {
+  it('checklist and packing ticks travel; unticking carries over; own rates and the address card too', () => {
+    const tick = (id: string, updatedAt: string) => ({ id, status: 'done' as const, updatedAt });
+    const mine = { expenses: [], prep: [tick('pack-sunscreen', T1), tick('form-x', T1)], extras: { rateOverrides: { value: { LAK: 24000 }, updatedAt: T1 } } };
+    const theirs = sharePayload(demo(), { 'prep:form-x': T2 }, {
+      expenses: [],
+      prep: [tick('pd-clinic', T2)],
+      extras: { rateOverrides: { value: { LAK: 25000 }, updatedAt: T2 }, showCardAddress: { value: 'ບ້ານ ວັດແສນ', updatedAt: T2 } },
+    });
+    const { phone } = mergeTrip(demo(), {}, theirs, mine);
+    expect(phone.prep!.map((p) => p.id).sort()).toEqual(['pack-sunscreen', 'pd-clinic']);
+    expect(phone.extras).toEqual({
+      rateOverrides: { value: { LAK: 25000 }, updatedAt: T2 },
+      showCardAddress: { value: 'ບ້ານ ວັດແສນ', updatedAt: T2 },
+    });
   });
 });
 

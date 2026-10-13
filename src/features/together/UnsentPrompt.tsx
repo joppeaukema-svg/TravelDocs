@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { go, usePath } from '../../app/hooks';
 import { db, META } from '../../db/db';
 import { plural } from '../../lib/format';
+import { getSyncState } from '../../sync/sync';
 import { getShareStatus, loadTrip } from '../../trip/store';
 import { Button } from '../../ui/kit';
 
@@ -10,7 +11,9 @@ const REOPEN_AFTER_MS = 30 * 60_000;
 
 /** Changes not sent yet, if this phone is linked with a travel companion. */
 async function unsentChanges(): Promise<number> {
-  const [code, trip, status] = await Promise.all([db.meta.get(META.shareCode), loadTrip(), getShareStatus()]);
+  const [code, trip, status, sync] = await Promise.all([db.meta.get(META.shareCode), loadTrip(), getShareStatus(), getSyncState()]);
+  // With automatic sync on, changes go by themselves.
+  if (sync.enabled) return 0;
   return code?.value && trip ? status.unsent : 0;
 }
 

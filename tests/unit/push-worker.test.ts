@@ -187,3 +187,56 @@ describe('scheduled sender', () => {
     expect(e.SUBS.data.size).toBe(0);
   });
 });
+
+describe('trip sync relay', () => {
+  const BOX = 'ab'.repeat(32);
+  const PHONE_A = 'phone-a-0123456789abcdef';
+  const PHONE_B = 'phone-b-0123456789abcdef';
+  const TOKEN_B = 'y'.repeat(40);
+  const put = (e: Env, phone: string, text: string, token = TOKEN) =>
+    worker.fetch(
+      new Request(`https://push.example.workers.dev/sync/${BOX}/${phone}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'text/plain', Authorization: `Bearer ${token}` },
+        body: text,
+      }),
+      e,
+    );
+  const get = (e: Env, path: string) => worker.fetch(new Request(`https://push.example.workers.dev${path}`), e);
+
+  it('keeps one encrypted slot per phone, listed in the mailbox', async () => {
+    const e = await env();
+    expect((await put(e, PHONE_A, 'TC1.aaaa.')).status).toBe(200);
+    expect((await put(e, PHONE_B, 'TC1.bbbb.', TOKEN_B)).status).toBe(200);
+    const list = (await (await get(e, `/sync/${BOX}`)).json()) as { phones: Record<string, { at: string; size: number }> };
+    expect(Object.keys(list.phones).sort()).toEqual([PHONE_A, PHONE_B]);
+    expect(list.phones[PHONE_A]).toMatchObject({ size: 9 });
+    // No token hashes in the listing.
+    expect(JSON.stringify(list)).not.toContain('tokenHash');
+    const slot = await get(e, `/sync/${BOX}/${PHONE_B}`);
+    expect(await slot.text()).toBe('TC1.bbbb.');
+    expect(slot.headers.get('Access-Control-Allow-Origin')).toBe('https://example.github.io');
+  });
+
+  it("only the phone that made a slot can replace or remove it", async () => {
+    const e = await env();
+    await put(e, PHONE_A, 'TC1.aaaa.');
+    expect((await put(e, PHONE_A, 'TC1.evil.', TOKEN_B)).status).toBe(403);
+    expect((await put(e, PHONE_A, 'TC1.newer.')).status).toBe(200);
+    const del = (token: string) =>
+      worker.fetch(new Request(`https://push.example.workers.dev/sync/${BOX}/${PHONE_A}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }), e);
+    expect((await del(TOKEN_B)).status).toBe(403);
+    expect((await del(TOKEN)).status).toBe(200);
+    expect((await get(e, `/sync/${BOX}/${PHONE_A}`)).status).toBe(404);
+    expect(e.SUBS.data.size).toBe(0);
+  });
+
+  it('stores nothing but the encrypted share text, and checks the names', async () => {
+    const e = await env();
+    expect((await put(e, PHONE_A, '{"stays":[]}')).status).toBe(400);
+    expect((await put(e, PHONE_A, 'TC1.aaaa.', 'short')).status).toBe(401);
+    expect((await get(e, '/sync/not-a-box')).status).toBe(404);
+    expect((await get(e, `/sync/${BOX}/x`)).status).toBe(404);
+    expect(e.SUBS.data.size).toBe(0);
+  });
+});

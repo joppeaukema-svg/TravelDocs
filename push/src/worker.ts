@@ -1,10 +1,13 @@
 /**
- * The scheduled sender for Travel Companion push notifications.
+ * The scheduled sender for Travel Companion push notifications, and the relay
+ * for syncing a trip between the travellers' phones.
  *
- * It stores, per phone, only the push subscription and a list of
+ * Push: it stores, per phone, only the push subscription and a list of
  * { at, title, url } entries such as "Laos prep: 3 tasks due" — no names,
  * documents, bookings or places beyond the country. Every few minutes the
  * cron trigger sends what's due and forgets it.
+ *
+ * Sync: see "Trip sync" below. It only ever holds trips encrypted on the phones.
  */
 import { generateVapidKeys, sendPush, type PushSubscriptionJSON, type VapidKeys } from './webpush';
 
@@ -112,11 +115,83 @@ async function authorised(env: Env, id: string, token: string | undefined): Prom
 
 const bearer = (req: Request) => req.headers.get('Authorization')?.replace(/^Bearer /, '');
 
+// --- Trip sync ----------------------------------------------------------------
+//
+// A mailbox per trip. Each phone keeps one slot in it: the whole shared trip,
+// encrypted on the phone with the trip code — the same text it would paste into
+// a chat. The mailbox name is derived from the trip code on the phone (PBKDF2),
+// so this worker never learns the code and can't read anything it stores. A slot
+// can only be replaced or removed with the key the phone created it with.
+
+const SYNC_KEEP_SECONDS = 180 * 86400;
+const MAX_SYNC_CHARS = 3_000_000;
+const MAX_PHONES = 8;
+
+interface SyncSlot {
+  at: string;
+  size: number;
+  tokenHash: string;
+}
+type SyncIndex = { [phone: string]: SyncSlot };
+
+const boxKey = (box: string) => `sync:${box}`;
+const slotKey = (box: string, phone: string) => `sync:${box}:${phone}`;
+
+async function syncIndex(env: Env, box: string): Promise<SyncIndex> {
+  const raw = await env.SUBS.get(boxKey(box));
+  return raw ? (JSON.parse(raw) as SyncIndex) : {};
+}
+
+async function handleSync(req: Request, env: Env, box: string, phone: string | undefined): Promise<Response> {
+  const index = await syncIndex(env, box);
+  if (!phone) {
+    if (req.method !== 'GET') throw new HttpError(405, 'Method not allowed');
+    return Response.json({ phones: Object.fromEntries(Object.entries(index).map(([p, s]) => [p, { at: s.at, size: s.size }])) });
+  }
+  if (req.method === 'GET') {
+    const text = index[phone] ? await env.SUBS.get(slotKey(box, phone)) : null;
+    if (!text) throw new HttpError(404, 'Nothing from that phone');
+    return new Response(text, { headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' } });
+  }
+  const token = bearer(req);
+  if (!token || token.length < 32) throw new HttpError(401, 'Missing token');
+  const existing = index[phone];
+  if (existing && (await sha256(token)) !== existing.tokenHash) throw new HttpError(403, 'Wrong token');
+
+  if (req.method === 'PUT') {
+    const text = await req.text();
+    // Only the app's encrypted share text: nothing else can be parked here.
+    if (!/^TC1\.[A-Za-z0-9_-]+\.$/.test(text) || text.length > MAX_SYNC_CHARS) throw new HttpError(400, 'Not an encrypted trip');
+    if (!existing && Object.keys(index).length >= MAX_PHONES) throw new HttpError(409, 'Too many phones on this trip');
+    const at = new Date().toISOString();
+    await env.SUBS.put(slotKey(box, phone), text, { expirationTtl: SYNC_KEEP_SECONDS });
+    // Read again just before writing, so a phone that sent at the same moment isn't dropped.
+    const fresh = await syncIndex(env, box);
+    fresh[phone] = { at, size: text.length, tokenHash: existing?.tokenHash ?? (await sha256(token)) };
+    await env.SUBS.put(boxKey(box), JSON.stringify(fresh), { expirationTtl: SYNC_KEEP_SECONDS });
+    return Response.json({ ok: true, at });
+  }
+  if (req.method === 'DELETE') {
+    if (existing) {
+      await env.SUBS.delete(slotKey(box, phone));
+      const fresh = await syncIndex(env, box);
+      delete fresh[phone];
+      if (Object.keys(fresh).length) await env.SUBS.put(boxKey(box), JSON.stringify(fresh), { expirationTtl: SYNC_KEEP_SECONDS });
+      else await env.SUBS.delete(boxKey(box));
+    }
+    return Response.json({ ok: true });
+  }
+  throw new HttpError(405, 'Method not allowed');
+}
+
 async function handle(req: Request, env: Env): Promise<Response> {
   const url = new URL(req.url);
   const json = (body: unknown, status = 200) => Response.json(body, { status });
 
   if (req.method === 'GET' && url.pathname === '/vapid') return json({ publicKey: (await vapid(env)).publicKey });
+
+  const sync = /^\/sync\/([0-9a-f]{64})(?:\/([A-Za-z0-9_-]{16,64}))?$/.exec(url.pathname);
+  if (sync) return handleSync(req, env, sync[1]!, sync[2]);
 
   const m = /^\/subscriptions\/([A-Za-z0-9_-]{16,64})(\/test)?$/.exec(url.pathname);
   if (!m) throw new HttpError(404, 'Not found');

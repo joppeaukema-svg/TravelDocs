@@ -3,9 +3,13 @@ name: Set up push sender
 # Creates or updates the push-notification sender on your Cloudflare account and
 # then redeploys the app with push switched on. Run it from the Actions tab.
 # Needs two repository secrets: CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID
-# (see README → Push notifications). Safe to run again at any time.
+# (see README → Push notifications). Safe to run again at any time. Also runs by
+# itself when the sender's code in push/ changes on main.
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['push/**']
 
 permissions:
   contents: read

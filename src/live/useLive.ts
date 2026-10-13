@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect } from 'react';
 import { getMeta, setMeta } from '../db/db';
+import { setSharedMeta } from '../trip/store';
 import { AdviceFile, RatesFile, type Advice } from './schema';
 
 /**
@@ -132,6 +133,7 @@ export async function setRateOverride(currency: string, perEur: number | null): 
   const next = { ...current };
   if (perEur === null) delete next[currency];
   else next[currency] = perEur;
-  await setMeta(KEYS.rateOverrides, next);
+  // Your own rates travel with the trip.
+  await setSharedMeta('rateOverrides', next);
 }
 

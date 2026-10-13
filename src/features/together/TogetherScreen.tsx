@@ -4,6 +4,7 @@ import { deleteTrip, useTrip } from '../../trip/store';
 import { DownloadIcon } from '../../ui/icons';
 import { Button, Card, PageTitle, SectionTitle } from '../../ui/kit';
 import { SharePanel } from '../trip/SharePanel';
+import { SyncPanel } from './SyncPanel';
 import { exportTrip, ImportPanel, ImportReport } from '../trip/TripScreen';
 
 /** Everything exchanged with a travel companion or as a file: link, send, receive, import, export. */
@@ -20,7 +21,10 @@ export function TogetherScreen() {
           <ImportReport result={report} onClose={() => setReport(null)} />
         </div>
       )}
-      <SharePanel hasTrip={!!trip} />
+      <SyncPanel />
+      <div className="mt-4">
+        <SharePanel hasTrip={!!trip} />
+      </div>
 
       <SectionTitle>Trip files</SectionTitle>
       <ImportPanel replacing={!!trip} onImported={setReport} />

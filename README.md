@@ -16,13 +16,18 @@ data back.
 
 ## Privacy
 
-- Everything you enter stays on the phone, in the browser's IndexedDB. Nothing is sent anywhere.
+- Everything you enter stays on the phone, in the browser's IndexedDB. Nothing is sent anywhere unless you turn on
+  one of the options below.
 - The app downloads the travel advice and exchange rates from its own site (they're published with it daily), so
   those requests say nothing about you. **Weather is off by default**: turning it on sends the names of your current
   and next stop — no dates, nothing else — to Open-Meteo.
 - **Push notifications are off by default** and only exist if you set up the sender. Turning them on sends your
   phone's push address and a list of times with titles like “Laos prep: 3 tasks due” to that sender — no names,
   documents, bookings or places beyond the country. Turning them off deletes it there.
+- **Automatic sync is off by default** (Travelling together → *Sync automatically*, per phone). When on, the shared
+  trip goes to the relay on your own Cloudflare account **encrypted on the phone** with the trip code, in a mailbox
+  whose name is derived from the code with PBKDF2 — the relay never sees the code and can't read the trip. It does see
+  when a phone syncs and how big the encrypted trip is. Turning it off removes this phone's copy from the relay.
 - **Vault:** document titles, numbers, notes and files, personal and medical details and insurance details are
   encrypted with AES-256-GCM. The key is random; it's wrapped with a key derived from your passphrase
   (PBKDF2-SHA256, 600,000 iterations) and only ever unwrapped into memory. The vault locks after 5 minutes without use
@@ -146,7 +151,8 @@ gives the same reminders as alarms.
    its own VAPID keys and keeps them in its private storage), checks that it answers and redeploys the app with push
    switched on. The run's summary shows the sender's address.
 
-Run the workflow again after changes to `push/`. To use your own keys instead, set `VAPID_PUBLIC_KEY` and
+The same Worker is the relay for **Sync automatically** (Travelling together): it keeps, per trip, one encrypted copy
+per phone and nothing else. The workflow also runs by itself when `push/` changes on `main`. To use your own keys instead, set `VAPID_PUBLIC_KEY` and
 `VAPID_PRIVATE_KEY` on the Worker (`npm run vapid-keys` makes a pair); to point the app at another sender, set a
 `PUSH_URL` repository variable.
 
@@ -154,12 +160,13 @@ Run the workflow again after changes to `push/`. To use your own keys instead, s
 Open **Settings → Notifications**, switch *Push notifications* on, allow notifications, then *Send a test
 notification*. Android (Chrome) works from the installed app or the browser. Push is disabled in demo mode.
 
-The free Cloudflare plan is plenty for this: one cron run every 5 minutes and a handful of storage operations a day.
+The free Cloudflare plan is plenty for this: one cron run every 5 minutes and a handful of storage operations a day
+(sync adds two small writes per change sent, well within the free 1,000 a day).
 The private key never leaves the Worker's storage on your Cloudflare account.
 
 ## Travelling together
 
-Two people each use the app on their own phone and share the trip, without accounts or a server:
+Two people each use the app on their own phone and share the trip, without accounts:
 
 1. One of you: **More → Travelling together → Create a trip code**, then **Prepare trip to send** → **Send as
    message** (WhatsApp, Signal, iMessage, email). The trip travels as an encrypted block of text, so chat apps don't
@@ -168,15 +175,21 @@ Two people each use the app on their own phone and share the trip, without accou
 3. You link once: both phones keep the trip code. It is not a live connection — after changes, either of you sends
    again (Prepare → Send) and the other receives it the same way. **Travelling together** shows the link, when you last
    sent and received, and how many changes on this phone haven't been sent. When you open the app with unsent changes,
-   a pop-up offers to send them. The newest edit of each stay or
-   booking wins, and deletions carry over.
+   a pop-up offers to send them. The newest edit of each item wins, and deletions carry over.
+4. **Or sync automatically** (needs the push sender below): after linking, switch on **Sync automatically** on both
+   phones. Each change then reaches the other phone within a few minutes — when the app opens or comes back to the
+   screen, every two minutes while it's open and a few seconds after an edit — with the same merge rules. A new phone
+   only needs the trip code and the switch to get the whole trip. Offline changes go when the phone is back online.
 
-What is shared: stays, bookings marked **Both of us**, the day plan and notes, trip dates, and the money (expenses,
-daily budgets and your two names; if the phones have the names the other way round, expenses still stay with the
-right person). What never leaves the phone: the
-vault (documents, passport, insurance, personal details), the emergency card, profile, checklist ticks, the date
-stamped in your passport, documents linked to a booking, bookings marked **Just me** and each booking's **private
-note**.
+What is shared — everything you fill in about the trip: stays with the dates stamped in your passport, bookings
+marked **Both of us**, the day plan and notes, trip dates, checklist and packing ticks, the money (expenses, daily
+budgets, your two names and your own exchange rates; if the phones have the names the other way round, expenses still
+stay with the right person) and the address card in Phrases. What never leaves the phone: the vault (documents,
+personal details, insurance), the emergency card, the profile, settings, documents linked to a booking, bookings marked
+**Just me** and each booking's **private note** (those two are per-item choices to keep something to yourself).
+
+Importing a trip file keeps the edit time of every item the file doesn't change, so a later import on one phone never
+overrides notes or changes the other phone made to those items.
 
 ## Country guides and live data
 
