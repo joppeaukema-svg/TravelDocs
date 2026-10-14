@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { go } from '../../app/hooks';
 import { allCountries, getCountry } from '../../content';
 import { db } from '../../db/db';
-import { formatDate, formatDayRange } from '../../lib/format';
+import { formatDayRange } from '../../lib/format';
 import { shareFile } from '../../lib/share';
 import {
   CATEGORY_LABELS,
@@ -267,10 +267,8 @@ export function MoneyScreen() {
   const summary = summarise(expenses, rate, (c) => daysInCountry(trip, c, today), budgets);
   const todaySpent = spentOn(expenses, today, rate);
   const todayBudget = here ? budgets[here] : undefined;
-  // The three most recent: latest date first, and the last one entered first within a day.
-  const latest = [...expenses].sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
-  const byDate = new Map<string, Expense[]>();
-  for (const e of latest) byDate.set(e.date, [...(byDate.get(e.date) ?? []), e]);
+  // The three added last (on either phone), whatever date they're for.
+  const latest = [...expenses].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
   const routeWithoutSpend = [...new Set(trip?.stays.map((s) => s.country) ?? [])].filter((c) => !summary.countries.some((s) => s.country === c));
 
   return (
@@ -324,27 +322,22 @@ export function MoneyScreen() {
         )}
       </div>
 
-      {byDate.size > 0 && (
+      {latest.length > 0 && (
         <>
-          <SectionTitle>Latest</SectionTitle>
+          <SectionTitle>Latest added</SectionTitle>
           <Card className="py-1">
-            {[...byDate.entries()].map(([date, list]) => (
-              <div key={date}>
-                <p className="pt-2 text-sm font-bold text-muted">{formatDate(date)}</p>
-                {list.map((e) => (
-                  <RowLink
-                    key={e.id}
-                    href={`#/money/expense/${e.id}`}
-                    title={
-                      <span className="flex justify-between gap-2">
-                        <span className="truncate">{e.note || CATEGORY_LABELS[e.category]}</span>
-                        <span className="tabular shrink-0">{formatMoney(e.amount, e.currency)}</span>
-                      </span>
-                    }
-                    sub={`${whoLabel(forWhomOf(e), travellers)} · ${CATEGORY_LABELS[e.category]} · ${getCountry(e.country)?.name ?? e.country}${e.currency !== 'EUR' && eurOf(e, rate) !== undefined ? ` · ${eur(eurOf(e, rate)!)}` : ''}`}
-                  />
-                ))}
-              </div>
+            {latest.map((e) => (
+              <RowLink
+                key={e.id}
+                href={`#/money/expense/${e.id}`}
+                title={
+                  <span className="flex justify-between gap-2">
+                    <span className="truncate">{e.note || CATEGORY_LABELS[e.category]}</span>
+                    <span className="tabular shrink-0">{formatMoney(e.amount, e.currency)}</span>
+                  </span>
+                }
+                sub={`${whoLabel(forWhomOf(e), travellers)} · ${CATEGORY_LABELS[e.category]} · ${getCountry(e.country)?.name ?? e.country}${e.currency !== 'EUR' && eurOf(e, rate) !== undefined ? ` · ${eur(eurOf(e, rate)!)}` : ''} · ${formatDayRange(e.date, e.date)}`}
+              />
             ))}
           </Card>
         </>

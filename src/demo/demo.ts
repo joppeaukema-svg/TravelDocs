@@ -104,7 +104,8 @@ async function seed(): Promise<void> {
     [-2, 'esim', 11, 'Data top-up', 'b'],
     [-3, 'shopping', 16, 'Market', 'b'],
   ];
-  for (const [day, category, eur, note, forWhom] of samples) {
+  // Oldest day first, as they'd be logged on the way.
+  for (const [day, category, eur, note, forWhom] of [...samples].sort((x, y) => x[0] - y[0])) {
     const date = add(today(), day);
     if (date < current.from) continue;
     const amount = Math.round(eur * (perEur[cur] ?? 1));

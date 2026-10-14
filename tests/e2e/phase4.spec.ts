@@ -64,19 +64,24 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
   await expect(page.getByText('Airport taxi')).toHaveCount(0);
 });
 
-test('Latest shows only the three most recent expenses', async ({ page }) => {
-  for (const [amount, note] of [['1', 'First'], ['2', 'Second'], ['3', 'Third'], ['4', 'Fourth']]) {
+test('Latest added shows the three expenses entered last, whatever date they are for', async ({ page }) => {
+  // The last one is for a day long ago: it was still added last.
+  for (const [amount, note, date] of [['1', 'First', ''], ['2', 'Second', ''], ['3', 'Third', ''], ['4', 'Fourth', '2026-01-05']]) {
     await page.goto('/#/money/add');
     await page.getByLabel('Amount').fill(amount!);
     await page.getByLabel('Currency').selectOption('EUR');
+    if (date) await page.getByLabel('Date').fill(date);
     await page.getByLabel('Note (optional)').fill(note!);
     await page.getByRole('button', { name: 'Save', exact: true }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'Money' })).toBeVisible();
   }
+  await expect(page.getByRole('heading', { name: 'Latest added' })).toBeVisible();
   // Country cards are folded, so these are the Latest rows.
   const rows = page.locator('a[href^="#/money/expense/"]');
   await expect(rows).toHaveCount(3);
   await expect(rows.nth(0)).toContainText('Fourth');
+  await expect(rows.nth(0)).toContainText('5 Jan');
+  await expect(rows.nth(1)).toContainText('Third');
   await expect(page.getByRole('link', { name: /First/ })).toHaveCount(0);
 });
 
