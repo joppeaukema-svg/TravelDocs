@@ -181,3 +181,36 @@ test('must-dos for the next country show on their day, each country in its own c
   await page.goto('/#/checklists/vn');
   await expect(page.getByRole('checkbox', { name: 'Done: Vietnam pre-arrival form' })).toHaveAttribute('aria-checked', 'true');
 });
+
+test('converter on Today: four fields, the other amount follows as you type', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2028-03-20T10:00:00'));
+  await page.goto('/#/trip');
+  await page.getByRole('button', { name: 'Try the demo trip' }).click();
+  await expect(page.getByText('Imported 7 stays')).toBeVisible();
+  await page.goto('/#/today');
+
+  // In Japan: yen on top, euros below.
+  await expect(page.getByLabel('First currency')).toHaveValue('JPY');
+  await expect(page.getByLabel('Second currency')).toHaveValue('EUR');
+  // All four fields fit on the screen.
+  for (const label of ['First currency', 'First amount', 'Second currency', 'Second amount']) {
+    const box = (await page.getByLabel(label).boundingBox())!;
+    expect(box.x + box.width, label).toBeLessThanOrEqual(page.viewportSize()!.width);
+  }
+  await page.getByLabel('First amount').fill('1000');
+  await expect(page.getByLabel('Second amount')).toHaveValue(/^\d+\.\d{2}$/);
+  const eur = Number(await page.getByLabel('Second amount').inputValue());
+  expect(eur).toBeGreaterThan(1);
+  expect(eur).toBeLessThan(20);
+
+  // Typing in the other field works the other way round, in whole yen.
+  await page.getByLabel('Second amount').fill('10');
+  await expect(page.getByLabel('First amount')).toHaveValue(/^[\d,]+$/);
+  const yen = Number((await page.getByLabel('First amount').inputValue()).replace(/,/g, ''));
+  expect(yen).toBeGreaterThan(1000);
+
+  // Changing a currency recalculates straight away.
+  await page.getByLabel('First currency').selectOption('THB');
+  await expect(page.getByLabel('Second amount')).toHaveValue('10');
+  await expect.poll(async () => Number((await page.getByLabel('First amount').inputValue()).replace(/,/g, ''))).toBeLessThan(1000);
+});

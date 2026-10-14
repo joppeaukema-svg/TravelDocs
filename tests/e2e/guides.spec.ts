@@ -158,5 +158,5 @@ test('weather on Today sits between the day card and Next', async ({ page }) => 
   const at = (name: string) => headings.findIndex((h) => h.toLowerCase() === name.toLowerCase());
   expect(at('First day of the trip')).toBeGreaterThanOrEqual(0);
   expect(at('Weather')).toBe(at('First day of the trip') + 1);
-  expect(at('Next')).toBe(at('Weather') + 1);
+  expect(at('Next')).toBeGreaterThan(at('Weather'));
 });

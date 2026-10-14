@@ -24,6 +24,7 @@ import { formatLocal, toInstant, zoneCity } from '../../trip/time';
 import { DayRow } from '../trip/DayRow';
 import { PrepItemRow, StayCard } from '../trip/parts';
 import { WeatherCard } from '../weather/WeatherScreen';
+import { QuickConverter } from '../money/Converter';
 import { AdviceChanges } from './AdviceChanges';
 import { DemoCard } from '../../demo/DemoBanner';
 
@@ -160,8 +161,17 @@ function TodayPlan({ rules }: { rules: Rules }) {
   );
 }
 
+/** The currency where you are; before the trip, of the first country you go to. */
+function localCurrency(rules: Rules): string {
+  const { result, today, data } = rules;
+  const stays = result.stays.filter((s) => !s.synthetic).map((s) => s.stay);
+  const here = stays.find((s) => s.from <= today && today <= s.to) ?? stays.find((s) => s.from >= today) ?? stays[0];
+  return (here && getCountry(here.country)?.currency) || getCountry(data.days.find((d) => d.date === today)?.country)?.currency || 'EUR';
+}
+
 function TripToday() {
   const rules = useRules();
+  const here = useCurrentCountry().code;
   const states = usePrepStates();
   const now = useNow();
   if (rules === undefined) return null;
@@ -171,6 +181,8 @@ function TripToday() {
         <Notice title="Import your itinerary" action={<LinkButton href="#/trip">Go to Trip</LinkButton>}>
           Stay counters, the next booking, entry-rule checks and prep reminders come from your trip file.
         </Notice>
+        <SectionTitle action={<a href="#/money/convert" className="text-sm font-bold">All currencies</a>}>Converter</SectionTitle>
+        <QuickConverter local={getCountry(here)?.currency ?? 'EUR'} />
       </div>
     );
   }
@@ -196,6 +208,8 @@ function TripToday() {
       )}
       <TodayPlan rules={rules} />
       <WeatherCard />
+      <SectionTitle action={<a href="#/money/convert" className="text-sm font-bold">All currencies</a>}>Converter</SectionTitle>
+      <QuickConverter local={localCurrency(rules)} />
       {next && (
         <>
           <SectionTitle>Next</SectionTitle>

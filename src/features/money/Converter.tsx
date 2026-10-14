@@ -102,6 +102,63 @@ export function MiniConverter({ currency }: { currency: string }) {
   );
 }
 
+/** The number to put in an amount field: no currency code, whole units for the big currencies. */
+function amountText(n: number, currency: string): string {
+  const big = ['VND', 'LAK', 'JPY'].includes(currency);
+  return new Intl.NumberFormat('en-GB', { maximumFractionDigits: big ? 0 : 2, minimumFractionDigits: big ? 0 : 2 }).format(n);
+}
+
+/**
+ * Two currencies, two amounts: type in either amount (or change a currency) and
+ * the other amount follows straight away. For the Today screen.
+ */
+export function QuickConverter({ local }: { local: string }) {
+  const { rate, loaded } = useRateTable();
+  const [cur, setCur] = useState<[string, string]>([local, local === 'EUR' ? 'USD' : 'EUR']);
+  // Only the field you typed in is kept; the other is worked out from it on every render,
+  // so it follows currency changes (and rates arriving) by itself.
+  const [typed, setTyped] = useState<{ field: 0 | 1; text: string }>({ field: 0, text: '' });
+
+  const other = typed.field === 0 ? 1 : 0;
+  const n = parseAmount(typed.text);
+  const result = typed.text.trim() && !Number.isNaN(n) ? convert(n, cur[typed.field], cur[other], rate) : undefined;
+  const shown = (i: 0 | 1) => (i === typed.field ? typed.text : result === undefined ? '' : amountText(result, cur[i]));
+
+  // A grid, not flex: the shared input style is full width, so each one fills its own column.
+  const row = (i: 0 | 1) => (
+    <div className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-2">
+      <select
+        aria-label={i === 0 ? 'First currency' : 'Second currency'}
+        className={inputClass}
+        value={cur[i]}
+        onChange={(e) => setCur(i === 0 ? [e.target.value, cur[1]] : [cur[0], e.target.value])}
+      >
+        {CURRENCIES.map((c) => (
+          <option key={c} value={c}>
+            {c}
+          </option>
+        ))}
+      </select>
+      <input
+        aria-label={i === 0 ? 'First amount' : 'Second amount'}
+        inputMode="decimal"
+        className={`${inputClass} tabular text-right text-lg font-bold`}
+        value={shown(i)}
+        placeholder="0"
+        onChange={(e) => setTyped({ field: i, text: e.target.value })}
+      />
+    </div>
+  );
+
+  return (
+    <Card className="space-y-2">
+      {row(0)}
+      {row(1)}
+      {loaded && (!rate(cur[0]) || !rate(cur[1])) && <p className="text-sm text-warn">No rate for this currency yet — open the app online once.</p>}
+    </Card>
+  );
+}
+
 export function ConverterScreen() {
   const { rate, fetchedAt, providerUpdated, overrides } = useRateTable();
   const [amount, setAmount] = useState('100');

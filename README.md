@@ -82,7 +82,8 @@ passphrase.
 
 The **Money** tab: log expenses in any of the route's currencies with a category and country; the EUR value is fixed with
 the rate of the day you enter it. Set a daily budget per country to see today's spending and each country's average
-per day against it. Each expense is **for** Samen (both of you) or one of you; **Per person** shows the totals, and
+per day against it. **Today** has a small converter: two currencies (yours where you are, and euros), two amounts;
+type in either amount and the other follows. Each expense is **for** Samen (both of you) or one of you; **Per person** shows the totals, and
 what each spent with half of Samen added. The two names are set once and go along with the trip (they're never in
 this repository). Expenses, budgets and names are shared with your travel companion when you send the trip. **CSV**
 exports everything for a spreadsheet. The **converter** works offline with the last
