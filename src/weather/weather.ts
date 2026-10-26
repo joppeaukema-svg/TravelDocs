@@ -50,11 +50,24 @@ export const Forecast = z.object({
   /** The name the geocoder matched, e.g. "Luang Prabang, Laos". */
   matched: z.string(),
   fetchedAt: z.string(),
+  /** The place's time zone, so "now" can be found among the hours. Missing on older forecasts. */
+  timeZone: z.string().optional(),
   days: z.array(
-    z.object({ date: z.string(), code: z.number(), max: z.number(), min: z.number(), rain: z.number().nullable() }),
+    z.object({
+      date: z.string(),
+      code: z.number(),
+      max: z.number(),
+      min: z.number(),
+      rain: z.number().nullable(),
+      /** Hour by hour, local time at the place. Missing on forecasts stored by older versions. */
+      hours: z
+        .array(z.object({ time: z.string(), code: z.number(), temp: z.number(), rain: z.number().nullable(), day: z.boolean() }))
+        .optional(),
+    }),
   ),
 });
 export type Forecast = z.infer<typeof Forecast>;
+export type ForecastHour = NonNullable<Forecast['days'][number]['hours']>[number];
 const Store = z.record(z.string(), Forecast);
 
 const keyOf = (s: { place: string; country: string }) => `${s.country}:${s.place.toLowerCase()}`;
@@ -76,22 +89,47 @@ export async function fetchForecast(stop: Stop): Promise<Forecast> {
       latitude: String(hit.latitude),
       longitude: String(hit.longitude),
       daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max',
+      hourly: 'weather_code,temperature_2m,precipitation_probability,is_day',
       timezone: 'auto',
       forecast_days: '7',
     })}`,
   );
-  const d = f.daily as { time: string[]; weather_code: number[]; temperature_2m_max: number[]; temperature_2m_min: number[]; precipitation_probability_max: (number | null)[] };
+  return toForecast(stop, [hit.name, hit.country].filter(Boolean).join(', '), f);
+}
+
+type Daily = { time: string[]; weather_code: number[]; temperature_2m_max: number[]; temperature_2m_min: number[]; precipitation_probability_max: (number | null)[] };
+type Hourly = { time: string[]; weather_code: number[]; temperature_2m: number[]; precipitation_probability: (number | null)[]; is_day: number[] };
+
+/** An Open-Meteo answer as a stored forecast: days, each with its hours. */
+export function toForecast(stop: Stop, matched: string, f: Record<string, unknown>, now = new Date()): Forecast {
+  const d = f.daily as Daily;
+  const h = f.hourly as Hourly | undefined;
+  const hoursOn = new Map<string, ForecastHour[]>();
+  h?.time.forEach((t, i) => {
+    const [date, time] = t.split('T') as [string, string];
+    const list = hoursOn.get(date) ?? [];
+    list.push({
+      time: time.slice(0, 5),
+      code: h.weather_code[i]!,
+      temp: Math.round(h.temperature_2m[i]!),
+      rain: h.precipitation_probability[i] ?? null,
+      day: h.is_day[i] !== 0,
+    });
+    hoursOn.set(date, list);
+  });
   return {
     place: stop.place,
     country: stop.country,
-    matched: [hit.name, hit.country].filter(Boolean).join(', '),
-    fetchedAt: new Date().toISOString(),
+    matched,
+    fetchedAt: now.toISOString(),
+    ...(typeof f.timezone === 'string' ? { timeZone: f.timezone } : {}),
     days: d.time.map((date, i) => ({
       date,
       code: d.weather_code[i]!,
       max: Math.round(d.temperature_2m_max[i]!),
       min: Math.round(d.temperature_2m_min[i]!),
       rain: d.precipitation_probability_max[i] ?? null,
+      ...(hoursOn.has(date) ? { hours: hoursOn.get(date) } : {}),
     })),
   };
 }
@@ -128,10 +166,10 @@ export async function clearForecasts(): Promise<void> {
   await setMeta(KEY, {});
 }
 
-/** WMO weather codes as used by Open-Meteo. */
-export function describe(code: number): { icon: string; label: string } {
-  if (code === 0) return { icon: '☀️', label: 'Clear' };
-  if (code <= 2) return { icon: '🌤️', label: 'Partly cloudy' };
+/** WMO weather codes as used by Open-Meteo; at night, clear skies get a moon. */
+export function describe(code: number, day = true): { icon: string; label: string } {
+  if (code === 0) return { icon: day ? '☀️' : '🌙', label: 'Clear' };
+  if (code <= 2) return { icon: day ? '🌤️' : '🌙', label: 'Partly cloudy' };
   if (code === 3) return { icon: '☁️', label: 'Overcast' };
   if (code === 45 || code === 48) return { icon: '🌫️', label: 'Fog' };
   if (code >= 51 && code <= 57) return { icon: '🌦️', label: 'Drizzle' };

@@ -5,7 +5,7 @@ import { PackingFile, PhraseLang, PhrasesFile, SourcesFile } from '../../src/con
 import { AdviceFile, RatesFile, type Advice } from '../../src/live/schema';
 import { adviceState, changedParts, partHashes, SUMMARY_PART, type Seen } from '../../src/live/useLive';
 import { convert } from '../../src/features/money/Converter';
-import { currentAndNext, describe as describeWeather, stops } from '../../src/weather/weather';
+import { currentAndNext, describe as describeWeather, stops, toForecast } from '../../src/weather/weather';
 import { rulesContent } from '../../src/rules/content';
 import type { TripData } from '../../src/trip/io';
 
@@ -132,9 +132,34 @@ describe('weather stops', () => {
     expect(currentAndNext(s, '2027-02-01')).toEqual([]);
   });
 
-  it('describes WMO weather codes', () => {
+  it('describes WMO weather codes, with a moon for clear nights', () => {
     expect(describeWeather(0).label).toBe('Clear');
     expect(describeWeather(95).label).toBe('Thunderstorm');
     expect(describeWeather(81).label).toBe('Rain');
+    expect(describeWeather(0, false).icon).toBe('🌙');
+    expect(describeWeather(61, false).label).toBe('Rain');
+  });
+
+  it('keeps the hours of each day with that day, in local time', () => {
+    const hours = (date: string) => Array.from({ length: 24 }, (_, i) => `${date}T${String(i).padStart(2, '0')}:00`);
+    const time = [...hours('2031-03-01'), ...hours('2031-03-02')];
+    const f = toForecast({ place: 'Hanoi', country: 'VN', from: '', to: '' }, 'Hanoi, Vietnam', {
+      timezone: 'Asia/Bangkok',
+      daily: { time: ['2031-03-01', '2031-03-02'], weather_code: [0, 61], temperature_2m_max: [30.4, 25], temperature_2m_min: [20, 19.6], precipitation_probability_max: [0, 80] },
+      hourly: {
+        time,
+        weather_code: time.map((_, i) => (i < 24 ? 0 : 61)),
+        temperature_2m: time.map((_, i) => 18 + (i % 24) / 2),
+        precipitation_probability: time.map((_, i) => (i < 24 ? 0 : 70)),
+        is_day: time.map((_, i) => (i % 24 >= 6 && i % 24 < 18 ? 1 : 0)),
+      },
+    });
+    expect(f.timeZone).toBe('Asia/Bangkok');
+    expect(f.days.map((d) => [d.date, d.max, d.min, d.hours?.length])).toEqual([
+      ['2031-03-01', 30, 20, 24],
+      ['2031-03-02', 25, 20, 24],
+    ]);
+    expect(f.days[1]!.hours![13]).toEqual({ time: '13:00', code: 61, temp: 25, rain: 70, day: true });
+    expect(f.days[0]!.hours![2]!.day).toBe(false);
   });
 });

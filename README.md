@@ -206,7 +206,7 @@ marked **unverified**. More → Sources lists everything, with the date the live
 - **Money:** converter for EUR, CNY, JPY, VND, THB, LAK, PHP and USD with the last downloaded rates; set your own rate
   per currency.
 - **Weather:** More → Weather. 7-day forecast for where you are and your next stop (from the places per day in your
-  trip), plus seasonal notes. It's off on each phone until turned on there; Today offers it (*Turn on* / *Not now*).
+  trip), plus seasonal notes. Tap a day to see it hour by hour (today from the current hour at the place). It's off on each phone until turned on there; Today offers it (*Turn on* / *Not now*).
 - **Phrases:** key phrases with romanisation and read-aloud where the phone has a voice for the language (add one in
   the phone's text-to-speech settings; the app says when reading aloud fails); full-screen cards, also read aloud, for your
   address (taken from the accommodation's local address when the booking has one), "use the meter", "where is the

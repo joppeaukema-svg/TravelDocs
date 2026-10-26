@@ -160,3 +160,46 @@ test('weather on Today sits between the day card and Next', async ({ page }) => 
   expect(at('Weather')).toBe(at('First day of the trip') + 1);
   expect(at('Next')).toBeGreaterThan(at('Weather'));
 });
+
+test('weather: each day folds open to its hours, from now on for today', async ({ page }) => {
+  const hours = (date: string) => Array.from({ length: 24 }, (_, i) => `${date}T${String(i).padStart(2, '0')}:00`);
+  const time = [...hours('2028-02-01'), ...hours('2028-02-02')];
+  await page.route('https://geocoding-api.open-meteo.com/**', (r) =>
+    r.fulfill({ json: { results: [{ latitude: 52.37, longitude: 4.89, name: 'Amsterdam', country: 'Netherlands' }] } }),
+  );
+  await page.route('https://api.open-meteo.com/**', (r) =>
+    r.fulfill({
+      json: {
+        timezone: 'Europe/Amsterdam',
+        daily: { time: ['2028-02-01', '2028-02-02'], weather_code: [0, 61], temperature_2m_max: [9, 7], temperature_2m_min: [2, 3], precipitation_probability_max: [0, 80] },
+        hourly: {
+          time,
+          weather_code: time.map((_, i) => (i < 24 ? 0 : 61)),
+          temperature_2m: time.map((_, i) => i % 24),
+          precipitation_probability: time.map((_, i) => (i < 24 ? 0 : 70)),
+          is_day: time.map((_, i) => (i % 24 >= 8 && i % 24 < 17 ? 1 : 0)),
+        },
+      },
+    }),
+  );
+  await page.clock.setFixedTime(new Date('2028-02-01T10:30:00+01:00'));
+  await page.goto('/#/trip');
+  await page.getByRole('button', { name: 'Try the demo trip' }).click();
+  await expect(page.getByText('Imported 7 stays')).toBeVisible();
+  await page.goto('/#/weather');
+  await page.getByText('Weather forecasts', { exact: true }).click();
+
+  // Where you are now; today from 10:00 on.
+  const here = page.locator('section').filter({ hasText: 'Now ·' });
+  await here.getByLabel('1 Feb, hour by hour').click();
+  const today = here.locator('details[open] ol');
+  await expect(today.getByRole('listitem').first()).toContainText('10:00');
+  await expect(today.getByRole('listitem')).toHaveCount(14);
+  await expect(today.getByRole('listitem').last()).toContainText('🌙');
+  // Tomorrow: all 24 hours, with the rain chance.
+  await here.getByLabel('2 Feb, hour by hour').click();
+  const tomorrow = here.locator('details[open]').last().locator('ol');
+  await expect(tomorrow.getByRole('listitem')).toHaveCount(24);
+  await expect(tomorrow.getByRole('listitem').nth(13)).toContainText('13:00');
+  await expect(tomorrow.getByRole('listitem').nth(13)).toContainText('70%');
+});

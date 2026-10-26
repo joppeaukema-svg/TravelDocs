@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNow, useOnline } from '../../app/hooks';
 import { getCountry } from '../../content';
-import { formatDate, formatDateTime, formatDayRange } from '../../lib/format';
+import { clock, formatDate, formatDateTime, formatDayRange, todayIn } from '../../lib/format';
 import { useToday } from '../../rules/useRules';
 import { updateSettings, useSettings } from '../../settings/settings';
 import { useTrip } from '../../trip/store';
+import { ChevronRightIcon } from '../../ui/icons';
 import { Button, Card, LinkButton, Notice, PageTitle, SectionTitle, Toggle } from '../../ui/kit';
-import { clearForecasts, currentAndNext, describe, refreshForecasts, stops, useForecasts, type Forecast, type Stop } from '../../weather/weather';
+import { clearForecasts, currentAndNext, describe, refreshForecasts, stops, useForecasts, type Forecast, type ForecastHour, type Stop } from '../../weather/weather';
 import { FactList } from '../content/Facts';
 
 const STALE_MS = 3 * 3600_000;
@@ -20,32 +21,81 @@ function useStopForecasts(): { list: Stop[]; forecasts: (Forecast | undefined)[]
   const list = useMemo(() => (trip ? currentAndNext(stops(trip), today) : []), [trip, today]);
   const forecasts = useForecasts(list);
   const now = useNow(60_000).getTime();
-  const stale = forecasts?.some((f) => !f || now - Date.parse(f.fetchedAt) > STALE_MS);
+  // Forecasts stored before hours were included count as stale, so the hours come in at once.
+  const stale = forecasts?.some((f) => !f || now - Date.parse(f.fetchedAt) > STALE_MS || !f.days[0]?.hours);
   useEffect(() => {
     if (weather && online && stale && list.length) void refreshForecasts(list);
   }, [weather, online, stale, list]);
   return { list, forecasts, refresh: () => refreshForecasts(list) };
 }
 
-function ForecastTable({ f, days = 7 }: { f: Forecast; days?: number }) {
+function DayLine({ d }: { d: Forecast['days'][number] }) {
+  const w = describe(d.code);
   return (
-    <ul>
-      {f.days.slice(0, days).map((d) => {
-        const w = describe(d.code);
+    <>
+      <span className="w-16 shrink-0 text-sm text-muted">{formatDayRange(d.date, d.date)}</span>
+      <span className="text-xl" aria-hidden="true">
+        {w.icon}
+      </span>
+      <span className="min-w-0 flex-1 truncate">{w.label}</span>
+      {d.rain !== null && <span className="text-sm text-info">{d.rain}%</span>}
+      <span className="tabular w-20 text-right font-bold">
+        {d.max}° <span className="font-normal text-muted">{d.min}°</span>
+      </span>
+    </>
+  );
+}
+
+/** One day's hours; for today, from the current hour at the place on. */
+function Hours({ hours, from }: { hours: ForecastHour[]; from?: string | undefined }) {
+  const shown = from ? hours.filter((h) => h.time >= from.slice(0, 3) + '00') : hours;
+  return (
+    <ol className="mb-2 rounded-xl bg-sunk px-3 py-1">
+      {shown.map((h) => {
+        const w = describe(h.code, h.day);
         return (
-          <li key={d.date} className="flex items-center gap-3 border-b border-line py-2 last:border-b-0">
-            <span className="w-16 shrink-0 text-sm text-muted">{formatDayRange(d.date, d.date)}</span>
-            <span className="text-xl" aria-hidden="true">
+          <li key={h.time} className="flex items-center gap-3 border-b border-line py-1.5 text-sm last:border-b-0">
+            <span className="tabular w-12 shrink-0 text-muted">{h.time}</span>
+            <span className="text-lg" aria-hidden="true">
               {w.icon}
             </span>
             <span className="min-w-0 flex-1 truncate">{w.label}</span>
-            {d.rain !== null && <span className="text-sm text-info">{d.rain}%</span>}
-            <span className="tabular w-20 text-right font-bold">
-              {d.max}° <span className="font-normal text-muted">{d.min}°</span>
-            </span>
+            {h.rain !== null && <span className="tabular w-10 text-right text-info">{h.rain}%</span>}
+            <span className="tabular w-10 text-right font-bold">{h.temp}°</span>
           </li>
         );
       })}
+    </ol>
+  );
+}
+
+/** The days; with `hourly`, each day folds open to its hours. */
+function ForecastTable({ f, days = 7, hourly = false }: { f: Forecast; days?: number; hourly?: boolean }) {
+  const now = useNow(60_000);
+  const today = f.timeZone ? todayIn(f.timeZone, now) : undefined;
+  const hourNow = f.timeZone ? clock(f.timeZone, now).time : undefined;
+  return (
+    <ul>
+      {f.days.slice(0, days).map((d) =>
+        hourly && d.hours?.length ? (
+          <li key={d.date} className="border-b border-line last:border-b-0">
+            <details className="group">
+              <summary
+                className="flex cursor-pointer list-none items-center gap-3 py-2 [&::-webkit-details-marker]:hidden"
+                aria-label={`${formatDayRange(d.date, d.date)}, hour by hour`}
+              >
+                <DayLine d={d} />
+                <ChevronRightIcon size={16} className="shrink-0 text-muted transition group-open:rotate-90" />
+              </summary>
+              <Hours hours={d.hours} from={d.date === today ? hourNow : undefined} />
+            </details>
+          </li>
+        ) : (
+          <li key={d.date} className="flex items-center gap-3 border-b border-line py-2 last:border-b-0">
+            <DayLine d={d} />
+          </li>
+        ),
+      )}
     </ul>
   );
 }
@@ -136,7 +186,7 @@ export function WeatherScreen() {
               <Card className="py-1">
                 {f ? (
                   <>
-                    <ForecastTable f={f} />
+                    <ForecastTable f={f} hourly />
                     <p className="py-2 text-sm text-muted">
                       {f.matched} · updated {formatDateTime(f.fetchedAt)}
                       {!online && ' · offline'}
