@@ -368,15 +368,18 @@ function ExpenseForm({ existing }: { existing?: Expense | undefined }) {
   const here = useCurrentCountry().code;
   const trip = useTrip();
   const { rate } = useRateTable();
-  const hereCurrency = getCountry(here)?.currency;
   const [amount, setAmount] = useState(existing ? String(existing.amount) : '');
-  const [currency, setCurrency] = useState(existing?.currency ?? hereCurrency ?? lastCurrency() ?? 'EUR');
+  // Only what you pick is kept. Until then the country is where you are (known a moment after the
+  // form opens, once the trip is read) and the currency is that country's.
+  const [pickedCountry, setCountry] = useState<string | null>(existing?.country ?? null);
+  const [pickedCurrency, setCurrency] = useState<string | null>(existing?.currency ?? null);
+  const country = pickedCountry ?? here ?? 'NL';
+  const currency = pickedCurrency ?? (country === 'NL' ? 'EUR' : getCountry(country)?.currency) ?? lastCurrency() ?? 'EUR';
   const [category, setCategory] = useState<ExpenseCategory>(existing?.category ?? 'food');
   const [forWhom, setForWhom] = useState<ForWhom>(existing ? forWhomOf(existing) : 'both');
   const travellers = useTravellers();
   const [naming, setNaming] = useState(false);
   const [date, setDate] = useState(existing?.date ?? today);
-  const [country, setCountry] = useState(existing?.country ?? here ?? 'NL');
   const [note, setNote] = useState(existing?.note ?? '');
   const [error, setError] = useState('');
 
