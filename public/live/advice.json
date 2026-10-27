@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-10-26T10:12:39.962Z",
+ "fetchedAt": "2026-10-27T09:51:46.080Z",
  "countries": [
   {
    "country": "CN",
@@ -900,182 +900,6 @@
      "lastModified": "2026-09-23T06:51:03.859Z"
     },
     {
-     "id": "ambassade-peking",
-     "title": "Nederlandse ambassade in Peking, China",
-     "url": "https://www.nederlandwereldwijd.nl/contact/ambassades-consulaten-generaal/china/ambassade-peking",
-     "embassy": true,
-     "address": [
-      "Liangmahe South Road no. 4",
-      "Chaoyang District",
-      "100600 Peking",
-      "China",
-      "",
-      "亮马河南路4号",
-      "朝阳区",
-      "北京市, 100600"
-     ],
-     "phones": [
-      "+86 10 85 32 02 00",
-      "+31 247 247 247"
-     ],
-     "contact": [
-      {
-       "title": "Telefoonnummer",
-       "blocks": [
-        {
-         "type": "p",
-         "text": "Stel uw vraag via telefoonnummer +86 10 85 32 02 00 ."
-        },
-        {
-         "type": "p",
-         "text": "Let op: belt u vanuit Nederland? Bel dan met +31 247 247 247 ."
-        }
-       ]
-      },
-      {
-       "title": "WhatsApp",
-       "blocks": [
-        {
-         "type": "p",
-         "text": "Stuur direct een WhatsApp-bericht ."
-        },
-        {
-         "type": "p",
-         "text": "Of voeg ons mobiele nummer +31 857 737 400 toe aan de contactlijst van uw smartphone en stuur ons dan uw bericht."
-        },
-        {
-         "type": "h",
-         "text": "Aandachtspunten"
-        },
-        {
-         "type": "li",
-         "text": "U kunt het nummer alleen gebruiken voor WhatsApp. U kunt dus niet naar dit nummer bellen of sms’en."
-        },
-        {
-         "type": "li",
-         "text": "Alleen als u persoonlijk een bericht stuurt, krijgt u een reactie van ons. Stuurt u of iemand anders een bericht vanuit een WhatsApp-groep? Dan krijgt u geen reactie."
-        },
-        {
-         "type": "li",
-         "text": "Deel geen privacygevoelige gegevens met ons via WhatsApp. Zoals een burgerservicenummer of een kopie van een paspoort."
-        }
-       ]
-      },
-      {
-       "title": "Contactformulier",
-       "blocks": [
-        {
-         "type": "p",
-         "text": "Ga naar ons contactformulier"
-        },
-        {
-         "type": "p",
-         "text": "Houd er rekening mee dat het even kan duren voordat u een reactie krijgt. Wilt u sneller antwoord? Kies dan voor een van de andere contactmogelijkheden."
-        }
-       ]
-      }
-     ],
-     "openingTimes": [
-      {
-       "type": "h",
-       "text": "Afspraak maken"
-      },
-      {
-       "type": "p",
-       "text": "Wilt u in China iets regelen bij de Nederlandse overheid? Bekijk hoe u een afspraak maakt ."
-      },
-      {
-       "type": "h",
-       "text": "Openingstijden"
-      },
-      {
-       "type": "li",
-       "text": "Maandag: 9.00 - 12.00 en 14.00 - 16.00 uur"
-      },
-      {
-       "type": "li",
-       "text": "Dinsdag: 9.00 - 12.00 en 14.00 - 16.00 uur"
-      },
-      {
-       "type": "li",
-       "text": "Woensdag: 9.00 - 12.00 en 14.00 - 16.00 uur"
-      },
-      {
-       "type": "li",
-       "text": "Donderdag: 9.00 - 12.00 en 14.00 - 16.00 uur"
-      },
-      {
-       "type": "li",
-       "text": "Vrijdag: 9.00 - 12.00 en 14.00 - 16.00 uur"
-      },
-      {
-       "type": "li",
-       "text": "Zaterdag: gesloten"
-      },
-      {
-       "type": "li",
-       "text": "Zondag: gesloten"
-      },
-      {
-       "type": "h",
-       "text": "Sluitingsdagen"
-      },
-      {
-       "type": "p",
-       "text": "De ambassade in Peking is op de volgende dagen gesloten:"
-      },
-      {
-       "type": "h",
-       "text": "2026"
-      },
-      {
-       "type": "li",
-       "text": "1 januari - Nieuwjaarsdag"
-      },
-      {
-       "type": "li",
-       "text": "16 - 19 februari - Chinees Nieuwjaar"
-      },
-      {
-       "type": "li",
-       "text": "6 april - Tweede Paasdag"
-      },
-      {
-       "type": "li",
-       "text": "27 april - Koningsdag"
-      },
-      {
-       "type": "li",
-       "text": "5 mei - Bevrijdingsdag"
-      },
-      {
-       "type": "li",
-       "text": "14 mei - Hemelvaartsdag"
-      },
-      {
-       "type": "li",
-       "text": "25 mei - Tweede Pinksterdag"
-      },
-      {
-       "type": "li",
-       "text": "1 en 2 oktober - Nationale Feestdagen"
-      },
-      {
-       "type": "li",
-       "text": "25 december - Kerst"
-      }
-     ],
-     "serves": [
-      "china",
-      "hongkong",
-      "macau-sar",
-      "mongolie"
-     ],
-     "lat": 39.94503,
-     "lon": 116.45377,
-     "lastModified": "2026-09-23T06:53:59.780Z"
-    },
-    {
      "id": "consulaat-generaal-hongkong-en-macao",
      "title": "Nederlands consulaat-generaal in Hongkong en Macao, Hongkong",
      "url": "https://www.nederlandwereldwijd.nl/contact/ambassades-consulaten-generaal/hongkong-sar/consulaat-hongkong-en-macao",
@@ -1250,6 +1074,230 @@
      "lat": 22.281049,
      "lon": 114.17486,
      "lastModified": "2026-09-23T10:09:10.196Z"
+    },
+    {
+     "id": "ambassade-peking",
+     "title": "Nederlandse ambassade in Peking, China",
+     "url": "https://www.nederlandwereldwijd.nl/contact/ambassades-consulaten-generaal/china/ambassade-peking",
+     "embassy": true,
+     "address": [
+      "Liangmahe South Road no. 4",
+      "Chaoyang District",
+      "100600 Peking",
+      "China",
+      "",
+      "亮马河南路4号",
+      "朝阳区",
+      "北京市, 100600"
+     ],
+     "phones": [
+      "+86 10 85 32 02 00",
+      "+31 247 247 247"
+     ],
+     "contact": [
+      {
+       "title": "Telefoonnummer",
+       "blocks": [
+        {
+         "type": "p",
+         "text": "Stel uw vraag via telefoonnummer +86 10 85 32 02 00 ."
+        },
+        {
+         "type": "p",
+         "text": "Let op: belt u vanuit Nederland? Bel dan met +31 247 247 247 ."
+        }
+       ]
+      },
+      {
+       "title": "WhatsApp",
+       "blocks": [
+        {
+         "type": "p",
+         "text": "Stuur direct een WhatsApp-bericht ."
+        },
+        {
+         "type": "p",
+         "text": "Of voeg ons mobiele nummer +31 857 737 400 toe aan de contactlijst van uw smartphone en stuur ons dan uw bericht."
+        },
+        {
+         "type": "h",
+         "text": "Aandachtspunten"
+        },
+        {
+         "type": "li",
+         "text": "U kunt het nummer alleen gebruiken voor WhatsApp. U kunt dus niet naar dit nummer bellen of sms’en."
+        },
+        {
+         "type": "li",
+         "text": "Alleen als u persoonlijk een bericht stuurt, krijgt u een reactie van ons. Stuurt u of iemand anders een bericht vanuit een WhatsApp-groep? Dan krijgt u geen reactie."
+        },
+        {
+         "type": "li",
+         "text": "Deel geen privacygevoelige gegevens met ons via WhatsApp. Zoals een burgerservicenummer of een kopie van een paspoort."
+        }
+       ]
+      },
+      {
+       "title": "Contactformulier",
+       "blocks": [
+        {
+         "type": "p",
+         "text": "Ga naar ons contactformulier"
+        },
+        {
+         "type": "p",
+         "text": "Houd er rekening mee dat het even kan duren voordat u een reactie krijgt. Wilt u sneller antwoord? Kies dan voor een van de andere contactmogelijkheden."
+        }
+       ]
+      }
+     ],
+     "openingTimes": [
+      {
+       "type": "h",
+       "text": "Afspraak maken"
+      },
+      {
+       "type": "p",
+       "text": "Wilt u in China iets regelen bij de Nederlandse overheid? Bekijk hoe u een afspraak maakt ."
+      },
+      {
+       "type": "h",
+       "text": "Openingstijden"
+      },
+      {
+       "type": "li",
+       "text": "Maandag: 9.00 - 12.00 en 14.00 - 16.00 uur"
+      },
+      {
+       "type": "li",
+       "text": "Dinsdag: 9.00 - 12.00 en 14.00 - 16.00 uur"
+      },
+      {
+       "type": "li",
+       "text": "Woensdag: 9.00 - 12.00 en 14.00 - 16.00 uur"
+      },
+      {
+       "type": "li",
+       "text": "Donderdag: 9.00 - 12.00 en 14.00 - 16.00 uur"
+      },
+      {
+       "type": "li",
+       "text": "Vrijdag: 9.00 - 12.00 en 14.00 - 16.00 uur"
+      },
+      {
+       "type": "li",
+       "text": "Zaterdag: gesloten"
+      },
+      {
+       "type": "li",
+       "text": "Zondag: gesloten"
+      },
+      {
+       "type": "h",
+       "text": "Sluitingsdagen"
+      },
+      {
+       "type": "p",
+       "text": "De ambassade in Peking is op de volgende dagen gesloten:"
+      },
+      {
+       "type": "h",
+       "text": "2026"
+      },
+      {
+       "type": "li",
+       "text": "1 januari - Nieuwjaarsdag"
+      },
+      {
+       "type": "li",
+       "text": "16 - 19 februari - Chinees Nieuwjaar"
+      },
+      {
+       "type": "li",
+       "text": "6 april - Tweede Paasdag"
+      },
+      {
+       "type": "li",
+       "text": "27 april - Koningsdag"
+      },
+      {
+       "type": "li",
+       "text": "5 mei - Bevrijdingsdag"
+      },
+      {
+       "type": "li",
+       "text": "14 mei - Hemelvaartsdag"
+      },
+      {
+       "type": "li",
+       "text": "25 mei - Tweede Pinksterdag"
+      },
+      {
+       "type": "li",
+       "text": "1 en 2 oktober - Nationale Feestdagen"
+      },
+      {
+       "type": "li",
+       "text": "25 december - Kerst"
+      },
+      {
+       "type": "h",
+       "text": "2027"
+      },
+      {
+       "type": "li",
+       "text": "1 januari - Nieuwjaarsdag"
+      },
+      {
+       "type": "li",
+       "text": "5 - 10 februari - Chinees Nieuwjaar"
+      },
+      {
+       "type": "li",
+       "text": "29 maart - Tweede Paasdag"
+      },
+      {
+       "type": "li",
+       "text": "5 april - Qing Ming dag"
+      },
+      {
+       "type": "li",
+       "text": "27 april - Koningsdag"
+      },
+      {
+       "type": "li",
+       "text": "5 mei - Bevrijdingsdag"
+      },
+      {
+       "type": "li",
+       "text": "6 mei - Hemelvaartsdag"
+      },
+      {
+       "type": "li",
+       "text": "17 mei - Tweede Paasdag"
+      },
+      {
+       "type": "li",
+       "text": "9 juni - Dragon Boat festival"
+      },
+      {
+       "type": "li",
+       "text": "15 september - Midherfstfestival"
+      },
+      {
+       "type": "li",
+       "text": "1 oktober - Nationale Feestdag"
+      }
+     ],
+     "serves": [
+      "china",
+      "hongkong",
+      "macau-sar",
+      "mongolie"
+     ],
+     "lat": 39.94503,
+     "lon": 116.45377,
+     "lastModified": "2026-10-26T12:34:08.417Z"
     }
    ],
    "hash": "0cd4782187a0b1ad"
@@ -3498,7 +3546,7 @@
       },
       {
        "type": "li",
-       "text": "16 - 19 november - Gesloten"
+       "text": "16 - 18 november - Gesloten"
       },
       {
        "type": "li",
@@ -3533,7 +3581,7 @@
      ],
      "lat": 14.557964,
      "lon": 121.023759,
-     "lastModified": "2026-10-06T13:05:06.404Z"
+     "lastModified": "2026-10-26T12:47:08.334Z"
     }
    ],
    "hash": "2be336a845de24b8"
