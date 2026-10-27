@@ -135,6 +135,16 @@ export function spentOn(expenses: Expense[], date: string, rate: (c: string) => 
   return expenses.filter((e) => e.date === date).reduce((sum, e) => sum + (eurOf(e, rate) ?? 0), 0);
 }
 
+/** What a day's expenses add up to per category, in EUR, the largest first. */
+export function spentByCategoryOn(expenses: Expense[], date: string, rate: (c: string) => number | undefined): [ExpenseCategory, number][] {
+  const by = new Map<ExpenseCategory, number>();
+  for (const e of expenses) {
+    const value = e.date === date ? eurOf(e, rate) : undefined;
+    if (value !== undefined) by.set(e.category, (by.get(e.category) ?? 0) + value);
+  }
+  return [...by].sort((a, b) => b[1] - a[1]);
+}
+
 const csvCell = (v: string | number | undefined) => {
   const s = v === undefined ? '' : String(v);
   return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;

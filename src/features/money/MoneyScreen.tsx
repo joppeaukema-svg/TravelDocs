@@ -16,6 +16,7 @@ import {
   saveExpense,
   setBudget,
   setTravellers,
+  spentByCategoryOn,
   spentOn,
   summarise,
   useBudgets,
@@ -267,6 +268,7 @@ export function MoneyScreen() {
   const summary = summarise(expenses, rate, (c) => daysInCountry(trip, c, today), budgets);
   const todaySpent = spentOn(expenses, today, rate);
   const todayBudget = here ? budgets[here] : undefined;
+  const todayByCategory = spentByCategoryOn(expenses, today, rate);
   // The three added last (on either phone), whatever date they're for.
   const latest = [...expenses].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
   const routeWithoutSpend = [...new Set(trip?.stays.map((s) => s.country) ?? [])].filter((c) => !summary.countries.some((s) => s.country === c));
@@ -284,6 +286,16 @@ export function MoneyScreen() {
               {todaySpent <= todayBudget ? `${eur(todayBudget - todaySpent)} left of ${eur(todayBudget)}` : `${eur(todaySpent - todayBudget)} over the ${eur(todayBudget)} budget`}
             </p>
           </>
+        )}
+        {todayByCategory.length > 0 && (
+          <ul className="mt-2" aria-label="Today per category">
+            {todayByCategory.map(([c, value]) => (
+              <li key={c} className="flex justify-between gap-2 border-b border-line py-1.5 last:border-b-0">
+                <span>{CATEGORY_LABELS[c]}</span>
+                <span className="tabular font-bold">{eur(value)}</span>
+              </li>
+            ))}
+          </ul>
         )}
         <LinkButton href="#/money/add" variant="primary" className="mt-3 w-full">
           <PlusIcon /> Add expense

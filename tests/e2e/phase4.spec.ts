@@ -36,6 +36,10 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
   await expect(perPerson.getByRole('listitem').filter({ hasText: 'Robin' })).toContainText('EUR 12.00');
   await expect(page.getByText('With half of Samen each: Alex EUR 10.00 · Robin EUR 22.00')).toBeVisible();
   await expect(page.getByText('Robin · E-sims · Thailand')).toBeVisible();
+  // Today's total, and the same split per category.
+  const today = page.getByRole('list', { name: 'Today per category' });
+  await expect(today.locator('..')).toContainText('EUR 32.00');
+  await expect(today.getByRole('listitem')).toHaveText([/Transport\s*EUR\s20\.00/, /E-sims\s*EUR\s12\.00/]);
 
   // Per country, per category; tapping the country shows every cost under its category.
   await expect(thailand.getByRole('listitem').filter({ hasText: 'E-sims' })).toContainText('EUR 12.00');

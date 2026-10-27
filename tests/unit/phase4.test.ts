@@ -3,7 +3,7 @@ import { Temporal } from 'temporal-polyfill';
 import { describe, expect, it } from 'vitest';
 import { demoTrip } from '../../src/demo/demo';
 import { daysInCountry } from '../../src/features/money/MoneyScreen';
-import { Expense, expensesCsv, eurOf, spentOn, summarise, whoLabel } from '../../src/money/expenses';
+import { Expense, expensesCsv, eurOf, spentByCategoryOn, spentOn, summarise, whoLabel } from '../../src/money/expenses';
 import { shiftDates } from '../../src/trip/shift';
 import type { TripData } from '../../src/trip/io';
 
@@ -34,6 +34,11 @@ describe('expenses', () => {
     expect(s.countries.find((c) => c.country === 'VN')).toMatchObject({ total: 0, budget: 30 });
     expect(s.countries.find((c) => c.country === 'LA')!.unknown).toBe(1);
     expect(spentOn(list, '2026-11-03', rate)).toBe(20);
+    // The same day per category, largest first; without a rate it isn't counted.
+    expect(spentByCategoryOn([...list, e({ amount: 200 })], '2026-11-03', rate)).toEqual([
+      ['food', 15],
+      ['transport', 10],
+    ]);
   });
 
   it('exports CSV with quoting and who it was for', () => {
