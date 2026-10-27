@@ -85,7 +85,7 @@ test('Latest added shows the three expenses entered last, whatever date they are
   await expect(page.getByRole('link', { name: /First/ })).toHaveCount(0);
 });
 
-test('a new expense starts in the country you are in, with its currency', async ({ page }) => {
+test('a new expense starts in the country you are in, in euros', async ({ page }) => {
   await page.clock.setFixedTime(new Date('2028-04-27T10:00:00'));
   await page.goto('/#/trip');
   await page.getByRole('button', { name: 'Try the demo trip' }).click();
@@ -94,13 +94,18 @@ test('a new expense starts in the country you are in, with its currency', async 
   await page.goto('/#/money/add');
   await page.reload();
   await expect(page.getByLabel('Country')).toHaveValue('LA');
-  await expect(page.getByLabel('Currency')).toHaveValue('LAK');
-  // Another country: its currency comes along, until you pick one yourself.
+  await expect(page.getByLabel('Currency')).toHaveValue('EUR');
+  // Another country keeps the currency; one you pick stays too, also for the next expense.
   await page.getByLabel('Country').selectOption('TH');
-  await expect(page.getByLabel('Currency')).toHaveValue('THB');
-  await page.getByLabel('Currency').selectOption('USD');
+  await expect(page.getByLabel('Currency')).toHaveValue('EUR');
+  await page.getByLabel('Amount').fill('300');
+  await page.getByLabel('Currency').selectOption('THB');
   await page.getByLabel('Country').selectOption('VN');
-  await expect(page.getByLabel('Currency')).toHaveValue('USD');
+  await expect(page.getByLabel('Currency')).toHaveValue('THB');
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(page.getByText('Latest added')).toBeVisible();
+  await page.goto('/#/money/add');
+  await expect(page.getByLabel('Currency')).toHaveValue('EUR');
 });
 
 test('paper backup: numbers, insurance after unlocking, bookings; prints without app chrome', async ({ page }) => {

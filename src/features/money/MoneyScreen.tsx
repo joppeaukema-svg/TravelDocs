@@ -346,16 +346,6 @@ export function MoneyScreen() {
   );
 }
 
-const LAST_CURRENCY = 'tc-last-currency';
-
-function lastCurrency(): string | null {
-  try {
-    return localStorage.getItem(LAST_CURRENCY);
-  } catch {
-    return null;
-  }
-}
-
 export function ExpenseScreen({ id }: { id?: string }) {
   const existing = useLiveQuery(async () => (id ? ((await db.expenses.get(id)) ?? null) : null), [id]);
   if (id && existing === undefined) return null;
@@ -369,12 +359,11 @@ function ExpenseForm({ existing }: { existing?: Expense | undefined }) {
   const trip = useTrip();
   const { rate } = useRateTable();
   const [amount, setAmount] = useState(existing ? String(existing.amount) : '');
-  // Only what you pick is kept. Until then the country is where you are (known a moment after the
-  // form opens, once the trip is read) and the currency is that country's.
+  // Until you pick one, the country is where you are (known a moment after the form opens, once
+  // the trip is read). The currency starts in euros.
   const [pickedCountry, setCountry] = useState<string | null>(existing?.country ?? null);
-  const [pickedCurrency, setCurrency] = useState<string | null>(existing?.currency ?? null);
+  const [currency, setCurrency] = useState(existing?.currency ?? 'EUR');
   const country = pickedCountry ?? here ?? 'NL';
-  const currency = pickedCurrency ?? (country === 'NL' ? 'EUR' : getCountry(country)?.currency) ?? lastCurrency() ?? 'EUR';
   const [category, setCategory] = useState<ExpenseCategory>(existing?.category ?? 'food');
   const [forWhom, setForWhom] = useState<ForWhom>(existing ? forWhomOf(existing) : 'both');
   const travellers = useTravellers();
@@ -407,11 +396,6 @@ function ExpenseForm({ existing }: { existing?: Expense | undefined }) {
       },
       existing?.id,
     );
-    try {
-      localStorage.setItem(LAST_CURRENCY, currency);
-    } catch {
-      // Private mode: just don't remember.
-    }
     go('/money');
   }
 
