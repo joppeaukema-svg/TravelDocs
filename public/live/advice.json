@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-10-27T09:51:46.080Z",
+ "fetchedAt": "2026-10-28T10:38:15.988Z",
  "countries": [
   {
    "country": "CN",
@@ -5250,7 +5250,39 @@
       },
       {
        "type": "li",
-       "text": "1 januari - Consulaat-generaal gesloten"
+       "text": "1 januari - Nieuwjaarsdag"
+      },
+      {
+       "type": "li",
+       "text": "4 - 10 februari - Lunar Nieuwjaar"
+      },
+      {
+       "type": "li",
+       "text": "16 april - Hung Kings Herdenkingsdag"
+      },
+      {
+       "type": "li",
+       "text": "30 april - Dag van de Hereniging"
+      },
+      {
+       "type": "li",
+       "text": "3 mei - Dag van de Arbeid"
+      },
+      {
+       "type": "li",
+       "text": "5 mei - Bevrijdingsdag"
+      },
+      {
+       "type": "li",
+       "text": "17 mei - Tweede Pinksterdag"
+      },
+      {
+       "type": "li",
+       "text": "2 en 3 september - Nationale Feestdagen"
+      },
+      {
+       "type": "li",
+       "text": "24 november - Culturele Dag"
       }
      ],
      "serves": [
@@ -5258,7 +5290,7 @@
      ],
      "lat": 10.782853,
      "lon": 106.701037,
-     "lastModified": "2026-09-28T09:58:09.321Z"
+     "lastModified": "2026-10-27T11:40:14.650Z"
     },
     {
      "id": "ambassade-hanoi",
@@ -5439,7 +5471,39 @@
       },
       {
        "type": "li",
-       "text": "1 januari - Ambassade gesloten"
+       "text": "1 januari - Nieuwjaarsdag"
+      },
+      {
+       "type": "li",
+       "text": "4 - 10 februari - Lunar Nieuwjaar"
+      },
+      {
+       "type": "li",
+       "text": "16 april - Hung Kings Herdenkingsdag"
+      },
+      {
+       "type": "li",
+       "text": "30 april - Dag van de Hereniging"
+      },
+      {
+       "type": "li",
+       "text": "3 mei - Dag van de Arbeid"
+      },
+      {
+       "type": "li",
+       "text": "5 mei - Bevrijdingsdag"
+      },
+      {
+       "type": "li",
+       "text": "17 mei - Tweede Pinksterdag"
+      },
+      {
+       "type": "li",
+       "text": "2 en 3 september - Nationale Feestdagen"
+      },
+      {
+       "type": "li",
+       "text": "24 november - Culturele Dag"
       }
      ],
      "serves": [
@@ -5447,7 +5511,7 @@
      ],
      "lat": 21.029717,
      "lon": 105.85719,
-     "lastModified": "2026-09-28T12:40:36.447Z"
+     "lastModified": "2026-10-27T11:40:57.184Z"
     }
    ],
    "hash": "da85ed09117344b0"
