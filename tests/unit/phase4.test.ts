@@ -3,7 +3,7 @@ import { Temporal } from 'temporal-polyfill';
 import { describe, expect, it } from 'vitest';
 import { demoTrip } from '../../src/demo/demo';
 import { daysInCountry } from '../../src/features/money/MoneyScreen';
-import { Expense, expensesCsv, eurOf, spentByCategoryOn, spentOn, summarise, whoLabel } from '../../src/money/expenses';
+import { Expense, expensesCsv, eurOf, spentByCategoryOn, spentOn, spentPerDay, summarise, whoLabel } from '../../src/money/expenses';
 import { shiftDates } from '../../src/trip/shift';
 import type { TripData } from '../../src/trip/io';
 
@@ -38,6 +38,11 @@ describe('expenses', () => {
     expect(spentByCategoryOn([...list, e({ amount: 200 })], '2026-11-03', rate)).toEqual([
       ['food', 15],
       ['transport', 10],
+    ]);
+    // Per date, the latest first.
+    expect(spentPerDay([e({ amount: 400 }), e({ amount: 80, date: '2026-11-04' }), e({ amount: 200 })], rate)).toEqual([
+      ['2026-11-04', 2],
+      ['2026-11-03', 15],
     ]);
   });
 

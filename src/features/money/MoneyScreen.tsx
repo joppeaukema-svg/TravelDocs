@@ -18,6 +18,7 @@ import {
   setTravellers,
   spentByCategoryOn,
   spentOn,
+  spentPerDay,
   summarise,
   useBudgets,
   useExpenses,
@@ -104,7 +105,40 @@ function BudgetEditor({ country, budget }: { country: string; budget?: number | 
   );
 }
 
-/** A country's costs per category; tap the country to see every expense under its category. */
+/** One expense in a country card, linking to its edit screen. */
+function ExpenseLine({
+  e,
+  travellers,
+  rate,
+  withDate,
+}: {
+  e: Expense;
+  travellers: Travellers;
+  rate: (c: string) => number | undefined;
+  withDate: boolean;
+}) {
+  const value = e.currency !== 'EUR' ? eurOf(e, rate) : undefined;
+  const who = whoLabel(forWhomOf(e), travellers);
+  return (
+    <li>
+      <a href={`#/money/expense/${e.id}`} className="flex min-h-10 items-center justify-between gap-2 text-sm text-ink no-underline">
+        <span className="min-w-0">
+          <span className="block truncate">{e.note || CATEGORY_LABELS[e.category]}</span>
+          <span className="block text-muted">{withDate ? `${formatDayRange(e.date, e.date)} · ${who}` : who}</span>
+        </span>
+        <span className="shrink-0 text-right">
+          <span className="tabular block">{formatMoney(e.amount, e.currency)}</span>
+          {value !== undefined && <span className="tabular block text-muted">{eur(value)}</span>}
+        </span>
+      </a>
+    </li>
+  );
+}
+
+/**
+ * A country's costs per category, with food also per day; tap the country to see every expense
+ * under its category (and day).
+ */
 function CountryCard({
   s,
   expenses,
@@ -144,39 +178,47 @@ function CountryCard({
       {s.budget !== undefined && <BudgetBar spent={s.perDay} budget={s.budget} />}
       {cats.length > 0 && (
         <ul className="mt-2" aria-label={`${name} per category`}>
-          {cats.map((c) => (
-            <li key={c} className="border-b border-line py-1.5 last:border-b-0">
-              <p className="flex justify-between gap-2">
-                <span>{CATEGORY_LABELS[c]}</span>
-                <span className="tabular font-bold">{eur(s.byCategory[c] ?? 0)}</span>
-              </p>
-              {open && (
-                <ul className="mb-1 mt-0.5 border-l-2 border-line pl-3">
-                  {mine
-                    .filter((e) => e.category === c)
-                    .map((e) => {
-                      const value = e.currency !== 'EUR' ? eurOf(e, rate) : undefined;
-                      return (
-                        <li key={e.id}>
-                          <a href={`#/money/expense/${e.id}`} className="flex min-h-10 items-center justify-between gap-2 text-sm text-ink no-underline">
-                            <span className="min-w-0">
-                              <span className="block truncate">{e.note || CATEGORY_LABELS[e.category]}</span>
-                              <span className="block text-muted">
-                                {formatDayRange(e.date, e.date)} · {whoLabel(forWhomOf(e), travellers)}
-                              </span>
-                            </span>
-                            <span className="shrink-0 text-right">
-                              <span className="tabular block">{formatMoney(e.amount, e.currency)}</span>
-                              {value !== undefined && <span className="tabular block text-muted">{eur(value)}</span>}
-                            </span>
-                          </a>
-                        </li>
-                      );
-                    })}
-                </ul>
-              )}
-            </li>
-          ))}
+          {cats.map((c) => {
+            const inCategory = mine.filter((e) => e.category === c);
+            return (
+              <li key={c} className="border-b border-line py-1.5 last:border-b-0">
+                <p className="flex justify-between gap-2">
+                  <span>{CATEGORY_LABELS[c]}</span>
+                  <span className="tabular font-bold">{eur(s.byCategory[c] ?? 0)}</span>
+                </p>
+                {c === 'food' ? (
+                  // Food per day, always: what you spent on eating each day. Unfolded, each day's costs.
+                  <ul className="mb-1 mt-0.5 border-l-2 border-line pl-3" aria-label={`${CATEGORY_LABELS.food} per day in ${name}`}>
+                    {spentPerDay(inCategory, rate).map(([date, total]) => (
+                      <li key={date}>
+                        <p className="flex min-h-8 items-center justify-between gap-2 text-sm">
+                          <span>{formatDayRange(date, date)}</span>
+                          <span className="tabular font-bold">{eur(total)}</span>
+                        </p>
+                        {open && (
+                          <ul className="mb-1 border-l-2 border-line pl-3">
+                            {inCategory
+                              .filter((e) => e.date === date)
+                              .map((e) => (
+                                <ExpenseLine key={e.id} e={e} travellers={travellers} rate={rate} withDate={false} />
+                              ))}
+                          </ul>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  open && (
+                    <ul className="mb-1 mt-0.5 border-l-2 border-line pl-3">
+                      {inCategory.map((e) => (
+                        <ExpenseLine key={e.id} e={e} travellers={travellers} rate={rate} withDate />
+                      ))}
+                    </ul>
+                  )
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
       {mine.length > 0 && (

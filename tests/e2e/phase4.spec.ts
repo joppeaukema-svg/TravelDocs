@@ -68,6 +68,30 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
   await expect(page.getByText('Airport taxi')).toHaveCount(0);
 });
 
+test('food and drink per day in each country, with that day\'s costs when unfolded', async ({ page }) => {
+  for (const [amount, note, date] of [['10', 'Lunch', '2026-10-26'], ['5', 'Coffee', '2026-10-26'], ['7', 'Dinner', '2026-10-27']]) {
+    await page.goto('/#/money/add');
+    await page.getByLabel('Amount').fill(amount!);
+    await page.getByLabel('Currency').selectOption('EUR');
+    await page.getByLabel('Country').selectOption('TH');
+    await page.getByLabel('Date').fill(date!);
+    await page.getByLabel('Note (optional)').fill(note!);
+    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Money' })).toBeVisible();
+  }
+  const thailand = page.getByRole('list', { name: 'Thailand per category' });
+  await expect(thailand.getByRole('listitem').filter({ hasText: 'Food & drink' }).first()).toContainText('EUR 22.00');
+  const perDay = page.getByRole('list', { name: 'Food & drink per day in Thailand' });
+  await expect(perDay.getByRole('listitem')).toHaveText([/27 Oct\s*EUR\s7\.00/, /26 Oct\s*EUR\s15\.00/]);
+  await expect(perDay.getByRole('link')).toHaveCount(0);
+
+  await page.getByRole('button', { name: /^Thailand/ }).click();
+  const oct26 = perDay.getByRole('listitem').filter({ hasText: '26 Oct' });
+  // The one added last first.
+  await expect(oct26.getByRole('link')).toHaveText([/Coffee/, /Lunch/]);
+  await expect(perDay.getByRole('listitem').filter({ hasText: '27 Oct' }).getByRole('link')).toHaveText([/Dinner/]);
+});
+
 test('Latest added shows the three expenses entered last, whatever date they are for', async ({ page }) => {
   // The last one is for a day long ago: it was still added last.
   for (const [amount, note, date] of [['1', 'First', ''], ['2', 'Second', ''], ['3', 'Third', ''], ['4', 'Fourth', '2026-01-05']]) {

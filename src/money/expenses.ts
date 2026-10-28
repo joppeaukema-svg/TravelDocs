@@ -25,8 +25,9 @@ export async function deleteExpense(id: string): Promise<void> {
   await markUnsent();
 }
 
+/** The latest date first; on the same date, the one added last first. */
 export function useExpenses(): Expense[] | undefined {
-  return useLiveQuery(() => db.expenses.orderBy('date').reverse().toArray(), []);
+  return useLiveQuery(async () => (await db.expenses.toArray()).sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt)), []);
 }
 
 // --- Travellers -----------------------------------------------------------------
@@ -133,6 +134,13 @@ export function summarise(
 
 export function spentOn(expenses: Expense[], date: string, rate: (c: string) => number | undefined): number {
   return expenses.filter((e) => e.date === date).reduce((sum, e) => sum + (eurOf(e, rate) ?? 0), 0);
+}
+
+/** What expenses add up to per date, in EUR, the latest date first. */
+export function spentPerDay(expenses: Expense[], rate: (c: string) => number | undefined): [string, number][] {
+  const by = new Map<string, number>();
+  for (const e of expenses) by.set(e.date, (by.get(e.date) ?? 0) + (eurOf(e, rate) ?? 0));
+  return [...by].sort((a, b) => b[0].localeCompare(a[0]));
 }
 
 /** What a day's expenses add up to per category, in EUR, the largest first. */
