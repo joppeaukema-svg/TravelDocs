@@ -1,17 +1,17 @@
 {
- "fetchedAt": "2026-10-30T10:53:53.796Z",
+ "fetchedAt": "2026-10-31T10:26:16.594Z",
  "base": "EUR",
  "rates": {
   "EUR": 1,
-  "USD": 1.116158,
-  "CNY": 7.44874,
-  "JPY": 176.236279,
-  "LAK": 24876.05574,
-  "PHP": 71.15578,
-  "THB": 37.624084,
-  "VND": 28805.677678
+  "USD": 1.116586,
+  "CNY": 7.443802,
+  "JPY": 175.835235,
+  "LAK": 24764.214627,
+  "PHP": 71.113134,
+  "THB": 37.667571,
+  "VND": 28812.080274
  },
- "providerUpdated": "2026-10-30T00:02:31.000Z",
+ "providerUpdated": "2026-10-31T00:02:31.000Z",
  "source": {
   "title": "ExchangeRate-API (open access)",
   "url": "https://www.exchangerate-api.com/docs/free"
