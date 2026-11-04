@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-03T11:59:46.482Z",
+ "fetchedAt": "2026-11-04T12:14:06.412Z",
  "countries": [
   {
    "country": "CN",
@@ -3657,7 +3657,7 @@
   {
    "country": "TH",
    "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand",
-   "lastModified": "2026-10-12T13:29:28.729Z",
+   "lastModified": "2026-11-03T15:56:13.902Z",
    "modification": "Reist u naar Thailand? Lees welke veiligheidsrisico’s er zijn, wat u kunt doen in geval van nood, en hoe u zich voorbereidt op uw reis.",
    "colours": [
     "red",
@@ -3668,10 +3668,6 @@
     {
      "type": "h",
      "text": "In het kort"
-    },
-    {
-     "type": "li",
-     "text": "Sinds 15 september 2026 is de visumvrije periode voor toeristen verkort van 60 naar 30 dagen. Lees meer onder Paspoort, visum, rijbewijs."
     },
     {
      "type": "li",
@@ -3715,7 +3711,7 @@
         },
         {
          "type": "li",
-         "text": "Het grensgebied tussen Thailand en Cambodja: de strook van 5 tot 20 kilometer vanaf de grens. De veiligheidssituatie in het grensgebied is onvoorspelbaar. Er zijn militairen aanwezig in het gebied. Er zijn ook militaire checkpoints."
+         "text": "Het grensgebied tussen Thailand en Cambodja: de strook van 5 tot 20 kilometer vanaf de grens. De veiligheidssituatie in het grensgebied is onvoorspelbaar. Er zijn militairen aanwezig in het gebied en er zijn militaire checkpoints."
         },
         {
          "type": "li",
@@ -3731,11 +3727,7 @@
         },
         {
          "type": "p",
-         "text": "In Zuid-Thailand zijn rebellengroepen actief. Deze groepen plegen regelmatig (bom)aanslagen. Doelwitten zijn tot nu toe vooral het Thaise leger en de politie. Aanslagen vinden meestal plaats bij checkpoints van het leger en de politie. En bij gebouwen en infrastructuur van de overheid, het leger en de politie. Maar ook andere doelwitten zijn mogelijk."
-        },
-        {
-         "type": "p",
-         "text": "Voor de meeste districten in de zuidelijkste provincies Narathiwat, Pattani en Yala geldt de noodtoestand. De veiligheidsmaatregelen in het gebied zijn aangescherpt. Houd rekening met strenge controles van politie en leger."
+         "text": "In Zuid-Thailand zijn rebellengroepen actief. Deze groepen plegen regelmatig (bom)aanslagen. Doelwitten zijn tot nu toe vooral het Thaise leger en de politie. Aanslagen vinden meestal plaats bij checkpoints van het leger en de politie. En bij gebouwen en infrastructuur van de overheid, het leger en de politie. Ook andere doelwitten zijn mogelijk."
         },
         {
          "type": "p",
@@ -3759,7 +3751,7 @@
         },
         {
          "type": "li",
-         "text": "Het Myanmarese leger voert dicht bij de Thaise grens militaire acties uit. Dit kan ook over de grens in Thailand tot onveilige situaties leiden."
+         "text": "Het Myanmarese leger voert dicht bij de Thaise grens militaire acties uit. Dit kan ook in het grensgebied in Thailand tot onveilige situaties leiden."
         },
         {
          "type": "li",
@@ -3767,7 +3759,7 @@
         },
         {
          "type": "li",
-         "text": "Op veel plaatsen is het niet duidelijk waar de grens loopt. Het oversteken van de grens buiten de officiële grensovergangen is illegaal en gevaarlijk."
+         "text": "Op veel plaatsen is het niet duidelijk waar de grens loopt. Het oversteken van de grens buiten de officiële grensovergangen is illegaal en gevaarlijk. Steek de grens niet over."
         },
         {
          "type": "p",
@@ -3790,16 +3782,20 @@
          "text": "Volg de aanwijzingen van de lokale autoriteiten."
         },
         {
+         "type": "li",
+         "text": "Lees meer informatie in het reisadvies voor Myanmar"
+        },
+        {
+         "type": "h",
+         "text": "Geel: let op, er zijn risico's"
+        },
+        {
          "type": "p",
          "text": "De kleurcode van het reisadvies voor de rest van Thailand is geel. U kunt reizen naar gebieden met kleurcode geel. Maar let op: er zijn bijzondere veiligheidsrisico's. Lees verder in het reisadvies met welke risico’s u te maken kunt krijgen."
         },
         {
          "type": "p",
          "text": "De grensovergangen Mae Sot en Mae Sai tussen Thailand en Myanmar zijn alleen open voor personen met een Thais of Myanmarees paspoort. De grensovergang bij Ranong is meestal wel open voor buitenlanders, maar u kunt vanaf hier niet verder Myanmar in reizen."
-        },
-        {
-         "type": "p",
-         "text": "In de grensstreek dichtbij het drielandenpunt tussen Thailand, Laos en Myanmar zijn gewapende drugs- en mensensmokkelaars actief en vindt criminaliteit plaats."
         },
         {
          "type": "p",
@@ -3825,6 +3821,14 @@
        "blocks": [
         {
          "type": "h",
+         "text": "Drugs- en mensensmokkelaars drielandenpunt"
+        },
+        {
+         "type": "p",
+         "text": "In de grensstreek dichtbij het drielandenpunt tussen Thailand, Laos en Myanmar zijn gewapende drugs- en mensensmokkelaars actief en vindt criminaliteit plaats."
+        },
+        {
+         "type": "h",
          "text": "Zakkenrollers en diefstal"
         },
         {
@@ -3837,7 +3841,7 @@
         },
         {
          "type": "p",
-         "text": "Veel verhuurders van scooters vragen uw paspoort of rijbewijs als borg. U kunt worden opgelicht wanneer u schade heeft gemaakt. U krijgt uw paspoort of rijbewijs dan pas terug nadat u veel geld betaalt. Verhuurders gaan soms over tot (dreiging met) geweld. Veel huurscooters zijn niet verzekerd."
+         "text": "Veel verhuurders van scooters vragen uw paspoort of rijbewijs als borg. Als u schade heeft gemaakt kunt u te maken krijgen met oplichting. U krijgt uw paspoort of rijbewijs pas terug nadat u veel geld betaalt. Verhuurders gaan soms over tot (dreiging met) geweld. Veel huurscooters zijn niet verzekerd."
         },
         {
          "type": "p",
@@ -3865,7 +3869,7 @@
         },
         {
          "type": "p",
-         "text": "Krijgt u een goedbetaalde baan in Thailand aangeboden? Pas op voor oplichting. Regelmatig worden buitenlanders met valse beloften naar Thailand gelokt. Eenmaal in Thailand worden zij door een criminele organisatie illegaal naar een buurland vervoerd en daar onder dwang aan het werk gezet. Hierbij worden paspoorten ingenomen, zodat slachtoffers niet kunnen vluchten. Of slachtoffers moeten veel geld betalen om vrij te komen."
+         "text": "Krijgt u een goedbetaalde baan in Thailand aangeboden? Pas op voor oplichting. Regelmatig worden buitenlanders met valse beloften naar Thailand gelokt. Eenmaal in Thailand vervoeren criminele organisaties buitenlanders illegaal naar een buurland en worden daar onder dwang aan het werk gezet. De criminele organisaties nemen paspoorten in, zodat slachtoffers niet kunnen vluchten. Of slachtoffers moeten veel geld betalen om vrij te komen."
         },
         {
          "type": "h",
@@ -3886,7 +3890,7 @@
         },
         {
          "type": "p",
-         "text": "In Thailand vallen elk jaar duizenden doden en honderdduizenden gewonden in het verkeer, waaronder ook toeristen. Het risico op een ongeval met dodelijke afloop is vele malen groter dan in Nederland. Ongelukken gebeuren vooral met motorscooters. Nagenoeg alle scooters in Thailand zijn officieel motoren. Heeft u geen geldig (internationaal) motorrijbewijs? Dan vergoedt uw reisverzekering vaak niet schade of medische kosten na een ongeluk."
+         "text": "In Thailand vallen elk jaar duizenden doden en honderdduizenden gewonden in het verkeer, waaronder ook toeristen. Het risico op een ongeval met dodelijke afloop is vele malen groter dan in Nederland. Ongelukken gebeuren vooral met motorscooters. Bijna alle scooters in Thailand zijn officieel motoren. Heeft u geen geldig (internationaal) motorrijbewijs? Dan vergoedt uw reisverzekering vaak niet schade of medische kosten na een ongeluk."
         },
         {
          "type": "p",
@@ -3931,7 +3935,7 @@
         },
         {
          "type": "p",
-         "text": "In 2025 zijn de wetten in Thailand aangescherpt. Er wordt strenger gecontroleerd op het gebruik, bezit en kopen van cannabisproducten. Winkels en ‘coffeeshops’ bieden mogelijk cannabisproducten aan die illegaal en onveilig zijn om te gebruiken. Houd hier rekening mee."
+         "text": "In 2025 zijn de wetten in Thailand aangescherpt. De Thaise overheid controleert strenger op het gebruik, bezit en kopen van cannabisproducten. Winkels en ‘coffeeshops’ bieden mogelijk cannabisproducten aan die illegaal en onveilig zijn om te gebruiken. Houd hier rekening mee."
         },
         {
          "type": "p",
@@ -4000,7 +4004,7 @@
         },
         {
          "type": "p",
-         "text": "Zware regenval kan overstromingen en aardverschuivingen veroorzaken. Houd er rekening mee dat elektriciteit, telefoon- en internetverbindingen regelmatig kunnen uitvallen. Ook kunnen wegen en vliegvelden (tijdelijk) afgesloten worden."
+         "text": "Zware regenval kan overstromingen en aardverschuivingen veroorzaken. Houd er rekening mee dat elektriciteit, telefoon- en internetverbindingen regelmatig kunnen uitvallen. Ook kan de lokale overheid wegen en vliegvelden (tijdelijk) sluiten."
         },
         {
          "type": "p",
@@ -4029,6 +4033,10 @@
         {
          "type": "li",
          "text": "Volg altijd de aanwijzingen van de lokale autoriteiten."
+        },
+        {
+         "type": "p",
+         "text": "Lees wat u verder kunt doen bij een overstroming in het buitenland"
         },
         {
          "type": "h",
@@ -4077,6 +4085,10 @@
         {
          "type": "li",
          "text": "US Federal Emergency Management Agency"
+        },
+        {
+         "type": "p",
+         "text": "Lees wat u verder kunt doen bij een aardbeving in het buitenland"
         },
         {
          "type": "h",
@@ -4208,8 +4220,8 @@
          "text": "Gaat u een (extreme) sport beoefenen? Sluit een extra verzekering af."
         },
         {
-         "type": "li",
-         "text": "Let op: Bij een oranje of rood reisadvies passen veel Nederlandse verzekeraars de voorwaarden van hun reisverzekeringen aan. Bepaalde risico’s of kosten bij schade zijn dan niet meer gedekt. Vraag dit na bij uw verzekeraar."
+         "type": "p",
+         "text": "[Let op-tekst] Bij een oranje of rood reisadvies passen veel Nederlandse verzekeraars de voorwaarden van hun reisverzekeringen aan. Bepaalde risico’s of kosten bij schade zijn dan niet meer gedekt. Vraag dit na bij uw verzekeraar."
         }
        ]
       },
@@ -4246,27 +4258,23 @@
         },
         {
          "type": "p",
-         "text": "Of u een visum nodig heeft, hangt af van uw reisdoel, uw aankomstdatum in Thailand en hoelang u in Thailand blijft."
-        },
-        {
-         "type": "p",
-         "text": "Alleen toeristen reizen visumvrij naar Thailand. Andere reizigers moeten een visum aanvragen. Voor vragen kunt u contact opnemen met de ambassade van Thailand in Den Haag (informatie in het Engels)."
-        },
-        {
-         "type": "p",
-         "text": "Hoelang u als toerist zonder visum in Thailand mag blijven, hangt af van uw aankomstdatum:"
+         "text": "Of u een visum nodig heeft, hangt af van uw reisdoel en hoelang u in Thailand blijft."
         },
         {
          "type": "li",
-         "text": "Bent u vóór 15 september 2026 aangekomen in Thailand? Met een Nederlands paspoort kunt u maximaal 60 dagen zonder visum in Thailand blijven."
+         "text": "Alleen toeristen reizen visumvrij naar Thailand. Andere reizigers moeten een visum aanvragen."
         },
         {
          "type": "li",
-         "text": "Bent u na 15 september 2026 aangekomen in Thailand? Met een Nederlands paspoort kunt u maximaal 30 dagen zonder visum in Thailand verblijven."
+         "text": "Voor vragen kunt u contact opnemen met de ambassade van Thailand in Den Haag (informatie in het Engels)."
         },
         {
          "type": "p",
          "text": "Reist u als toerist zonder visum naar Thailand?"
+        },
+        {
+         "type": "li",
+         "text": "Met een Nederlands paspoort kunt u maximaal 30 dagen zonder visum in Thailand verblijven."
         },
         {
          "type": "li",
@@ -4302,7 +4310,7 @@
         },
         {
          "type": "p",
-         "text": "Reist u naar Thailand? En reist u met een Nederlands paspoort? Dan moet u de de Thailand Digital Arrival Card invullen. Dit kan vanaf 3 dagen voor aankomst in Thailand."
+         "text": "Reist u naar Thailand? En reist u met een Nederlands paspoort? Dan moet u de Thailand Digital Arrival Card invullen. Dit kan vanaf 3 dagen voor aankomst in Thailand."
         },
         {
          "type": "li",
@@ -4673,7 +4681,7 @@
      "lastModified": "2026-10-13T07:18:18.956Z"
     }
    ],
-   "hash": "c8ecbcbc56aabc1e"
+   "hash": "675737f85e16346b"
   },
   {
    "country": "VN",
