@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-05T12:27:21.215Z",
+ "fetchedAt": "2026-11-06T12:11:25.782Z",
  "countries": [
   {
    "country": "CN",
@@ -3657,7 +3657,7 @@
   {
    "country": "TH",
    "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand",
-   "lastModified": "2026-11-03T15:56:13.902Z",
+   "lastModified": "2026-11-05T16:21:02.440Z",
    "modification": "Reist u naar Thailand? Lees welke veiligheidsrisico’s er zijn, wat u kunt doen in geval van nood, en hoe u zich voorbereidt op uw reis.",
    "colours": [
     "red",
@@ -3735,7 +3735,7 @@
         },
         {
          "type": "li",
-         "text": "Blijf niet langer dan nodig bij checkpoints van het Thaise leger en de politie. Blijf weg bij gebouwen van de overheid, het leger en de politie. En vermijd drukke plekken."
+         "text": "Blijf niet langer dan nodig bij checkpoints van het Thaise leger en de politie. Blijf weg bij gebouwen van de overheid, het leger en de politie. Vermijd drukke plekken."
         },
         {
          "type": "li",
@@ -3799,10 +3799,6 @@
         },
         {
          "type": "p",
-         "text": "De situatie in de grensgebieden in Myanmar is op dit moment onveilig. Steek de grens naar Myanmar daarom niet over. Lees meer informatie in het reisadvies voor Myanmar ."
-        },
-        {
-         "type": "p",
          "text": "Reist u naar Mae Sai, Mae Sot of Ranong? Bereid u goed voor en reis met een betrouwbare (lokale) gids."
         }
        ]
@@ -3860,16 +3856,12 @@
          "text": "Zet de scooter altijd op slot als u parkeert."
         },
         {
-         "type": "p",
-         "text": "Er gebeuren veel ongelukken met scooters in Thailand. Lees meer onder Verkeersongevallen."
-        },
-        {
          "type": "h",
          "text": "Oplichting en dwangarbeid"
         },
         {
          "type": "p",
-         "text": "Krijgt u een goedbetaalde baan in Thailand aangeboden? Pas op voor oplichting. Regelmatig worden buitenlanders met valse beloften naar Thailand gelokt. Eenmaal in Thailand vervoeren criminele organisaties buitenlanders illegaal naar een buurland en worden daar onder dwang aan het werk gezet. De criminele organisaties nemen paspoorten in, zodat slachtoffers niet kunnen vluchten. Of slachtoffers moeten veel geld betalen om vrij te komen."
+         "text": "Krijgt u een goedbetaalde baan in Thailand aangeboden? Pas op voor oplichting. Regelmatig worden buitenlanders met valse beloften naar Thailand gelokt. Eenmaal in Thailand vervoeren criminele organisaties illegaal buitenlanders naar een buurland en worden daar onder dwang aan het werk gezet. De criminele organisaties nemen paspoorten in, zodat slachtoffers niet kunnen vluchten. Of slachtoffers moeten veel geld betalen om vrij te komen."
         },
         {
          "type": "h",
@@ -4261,12 +4253,8 @@
          "text": "Of u een visum nodig heeft, hangt af van uw reisdoel en hoelang u in Thailand blijft."
         },
         {
-         "type": "li",
+         "type": "p",
          "text": "Alleen toeristen reizen visumvrij naar Thailand. Andere reizigers moeten een visum aanvragen."
-        },
-        {
-         "type": "li",
-         "text": "Voor vragen kunt u contact opnemen met de ambassade van Thailand in Den Haag (informatie in het Engels)."
         },
         {
          "type": "p",
@@ -4290,7 +4278,7 @@
         },
         {
          "type": "p",
-         "text": "Reist u niet als toerist naar Thailand? Of wilt u langer dan de visumvrije periode in Thailand blijven? Dan moet u een visum aanvragen:"
+         "text": "Maakt u geen toeristische reis naar Thailand maar bijvoorbeeld een zakenreis? Of wilt u langer dan de visumvrije periode in Thailand blijven? Dan moet u een visum aanvragen:"
         },
         {
          "type": "li",
@@ -4298,11 +4286,11 @@
         },
         {
          "type": "li",
-         "text": "Wilt u uw verblijfsduur in Thailand verlengen wanneer u in het land bent? Dat kan soms elektronisch via de website van de Thaise Immigratiedienst (informatie in het Engels). In andere gevallen dient u direct contact op te nemen met de Thaise Immigratiedienst."
+         "text": "Wilt u uw verblijfsduur in Thailand verlengen wanneer u in het land bent? Dat kan soms elektronisch via de website van de Thaise Immigratiedienst (informatie in het Engels). In andere gevallen dient u direct contact op te nemen met de Thaise Immigratiedienst. Let op: er wordt streng gecontroleerd op zogenoemde ‘visa-runs’. Dit betekent dat u kort de grens overgaat en daarna direct terugkeert naar Thailand. Een visa-run is maximaal twee keer per jaar toegestaan."
         },
         {
          "type": "p",
-         "text": "Let op: er wordt streng gecontroleerd op zogenoemde ‘visa-runs’. Dit betekent dat u kort de grens overgaat en daarna direct terugkeert naar Thailand. Een visa-run is maximaal twee keer per jaar toegestaan."
+         "text": "Voor vragen kunt u contact opnemen met de ambassade van Thailand in Den Haag (informatie in het Engels)."
         },
         {
          "type": "h",
@@ -4310,7 +4298,7 @@
         },
         {
          "type": "p",
-         "text": "Reist u naar Thailand? En reist u met een Nederlands paspoort? Dan moet u de Thailand Digital Arrival Card invullen. Dit kan vanaf 3 dagen voor aankomst in Thailand."
+         "text": "Reist u naar Thailand met een Nederlands paspoort? Dan moet u de Thailand Digital Arrival Card invullen. Dit kan vanaf 3 dagen voor aankomst in Thailand."
         },
         {
          "type": "li",
@@ -4681,7 +4669,7 @@
      "lastModified": "2026-10-13T07:18:18.956Z"
     }
    ],
-   "hash": "675737f85e16346b"
+   "hash": "8229782a2c143df8"
   },
   {
    "country": "VN",
