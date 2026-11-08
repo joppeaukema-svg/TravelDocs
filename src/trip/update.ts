@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { formatDayRange } from '../lib/format';
 import type { Rejected, TripData } from './io';
 import { Booking, bookingLabel, Day, Stay } from './schema';
 
@@ -7,7 +8,8 @@ import { Booking, bookingLabel, Day, Stay } from './schema';
  * flight times, a booking that's now confirmed — without replacing the rest.
  * Each item names an existing booking or stay by `id` (a day by `date`) and
  * lists only the fields that change; `null` clears a field. A booking that
- * doesn't exist yet is added, so it must be complete.
+ * doesn't exist yet is added, so it must be complete. A new day without a
+ * `country` gets the country you stay in on that date.
  *
  *   { "format": "travel-companion-update/1", "title": "Flights",
  *     "bookings": [{ "id": "flight-1", "status": "booked", "provider": "Some Air" }],
@@ -44,6 +46,8 @@ export interface UpdateChange {
   action: 'add' | 'update';
   /** The fields that change. */
   fields: string[];
+  /** For a day: the note already on the phone that this replaces. */
+  replaces?: string;
 }
 
 export interface UpdatePlan {
@@ -82,6 +86,14 @@ function changedFields(before: object | undefined, after: object): string[] {
   const b = (before ?? {}) as Record<string, unknown>;
   const a = after as Record<string, unknown>;
   return [...new Set([...Object.keys(b), ...Object.keys(a)])].filter((k) => !IGNORED.has(k) && stable(b[k]) !== stable(a[k])).sort();
+}
+
+/** The country you stay in on a date (on a travel day, the one you arrive in); else home. */
+function stayCountryOn(trip: TripData, date: string): string {
+  const here = trip.stays
+    .filter((s) => (s.actualFrom ?? s.from) <= date && date <= (s.actualTo ?? s.to))
+    .sort((a, b) => (b.actualFrom ?? b.from).localeCompare(a.actualFrom ?? a.from));
+  return here[0]?.country ?? trip.meta.homeCountry;
 }
 
 const issue = (e: z.ZodError) => e.issues.slice(0, 2).map((i) => (i.path.length ? `${i.path.join('.')}: ${i.message}` : i.message)).join('; ');
@@ -125,7 +137,8 @@ export function planTripUpdate(trip: TripData, update: TripUpdate): UpdatePlan {
 
   for (const p of update.days) {
     const existing = trip.days.find((d) => d.date === p.date);
-    const parsed = Day.safeParse(patch(existing, p));
+    const base = existing ?? (p.country === undefined ? { country: stayCountryOn(trip, p.date) } : undefined);
+    const parsed = Day.safeParse(patch(base, p));
     if (!parsed.success) {
       plan.problems.push({ where: `Day ${p.date}`, reason: issue(parsed.error) });
       continue;
@@ -135,7 +148,15 @@ export function planTripUpdate(trip: TripData, update: TripUpdate): UpdatePlan {
       plan.unchanged++;
       continue;
     }
-    plan.changes.push({ kind: 'day', key: p.date, label: parsed.data.place ?? p.date, action: existing ? 'update' : 'add', fields });
+    const date = formatDayRange(p.date, p.date);
+    plan.changes.push({
+      kind: 'day',
+      key: p.date,
+      label: parsed.data.place ? `${date} · ${parsed.data.place}` : date,
+      action: existing ? 'update' : 'add',
+      fields,
+      ...(existing?.note && existing.note !== parsed.data.note ? { replaces: existing.note } : {}),
+    });
     plan.write.days.push(parsed.data);
   }
   return plan;

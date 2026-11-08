@@ -5,6 +5,7 @@ import { db } from '../../src/db/db';
 import { parseTripFile } from '../../src/trip/io';
 import { applyTripUpdate, getShareStatus, getTombstones, loadTrip, replaceTrip } from '../../src/trip/store';
 import { isTripUpdate, parseTripUpdate, planTripUpdate, TRIP_UPDATE_FORMAT, withUpdate } from '../../src/trip/update';
+import { stay as stayOf, trip as tripOf } from './rules/helpers';
 
 const demo = () => parseTripFile(JSON.parse(readFileSync('demo/trip.demo.json', 'utf8'))).data;
 
@@ -53,6 +54,43 @@ describe('trip update files', () => {
     expect(isTripUpdate({ format: TRIP_UPDATE_FORMAT })).toBe(true);
     expect(isTripUpdate({ format: 'travel-companion-trip/1' })).toBe(false);
     expect(() => parseTripUpdate({ format: TRIP_UPDATE_FORMAT, bookings: [{ status: 'booked' }] })).toThrow(/incomplete/);
+  });
+
+  it('notes per day: a new day gets the country you stay in, and a note it replaces is shown', () => {
+    // Made-up dates only (see the privacy test).
+    const t = tripOf('2031-02-28', '2031-03-13', [
+      stayOf({ id: 'jp', country: 'JP', from: '2031-03-01', to: '2031-03-05' }),
+      stayOf({ id: 'vn', country: 'VN', from: '2031-03-05', to: '2031-03-12' }),
+    ]);
+    t.days = [
+      { date: '2031-03-02', country: 'JP', place: 'Kyoto', note: 'Typed on the phone' },
+      { date: '2031-03-03', country: 'JP', place: null, note: '' },
+    ];
+    const plan = planTripUpdate(
+      t,
+      parseTripUpdate({
+        format: TRIP_UPDATE_FORMAT,
+        days: [
+          { date: '2031-03-02', note: 'From the sheet' },
+          { date: '2031-03-03', note: 'Temple day' },
+          { date: '2031-03-05', note: 'Fly to Hanoi' },
+          { date: '2031-03-13', note: 'Home again' },
+          { date: '2031-02-28', country: 'CN', note: 'Night in Fuzhou' },
+        ],
+      }),
+    );
+    expect(plan.write.days.map((d) => [d.date, d.country, d.place, d.note])).toEqual([
+      ['2031-03-02', 'JP', 'Kyoto', 'From the sheet'],
+      ['2031-03-03', 'JP', null, 'Temple day'],
+      // A travel day belongs to the country you arrive in; outside the stays, home.
+      ['2031-03-05', 'VN', null, 'Fly to Hanoi'],
+      ['2031-03-13', 'NL', null, 'Home again'],
+      ['2031-02-28', 'CN', null, 'Night in Fuzhou'],
+    ]);
+    expect(plan.changes[0]).toMatchObject({ label: '2 Mar · Kyoto', action: 'update', fields: ['note'], replaces: 'Typed on the phone' });
+    // An empty note isn't worth a warning.
+    expect(plan.changes[1]).toMatchObject({ label: '3 Mar', action: 'update' });
+    expect(plan.changes.slice(1).every((c) => c.replaces === undefined)).toBe(true);
   });
 
   it('refuses a stay change that would break the stay', () => {

@@ -109,6 +109,39 @@ test('an update file changes only what it lists, after a preview', async ({ page
   await expect(page.getByLabel('From')).toHaveValue('Fukuoka (FUK)');
 });
 
+test('an update file can fill in day notes, and shows a note it would replace', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2028-03-20T10:00:00'));
+  await page.goto('/#/trip');
+  await page.getByRole('button', { name: 'Try the demo trip' }).click();
+  await expect(page.getByText('Imported 7 stays')).toBeVisible();
+  const japan = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Japan' }) });
+  await japan.getByRole('button', { name: 'Plan and notes for Mon 20 Mar' }).click();
+  await japan.getByRole('textbox', { name: 'Notes' }).fill('Typed on the phone');
+  await japan.getByRole('button', { name: 'Save' }).click();
+  await expect(japan.getByRole('textbox', { name: 'Notes' })).toHaveCount(0);
+
+  const update = {
+    format: 'travel-companion-update/1',
+    title: 'Notes',
+    days: [
+      { date: '2028-03-20', note: 'Temple day' },
+      { date: '2028-03-21', note: 'Market in the morning\nDinner near the station' },
+    ],
+  };
+  await page.goto('/#/together');
+  await page.getByTestId('trip-input').setInputFiles({ name: 'notes-update.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(update)) });
+  const changes = page.getByRole('list', { name: 'Changes' });
+  await expect(changes.getByRole('listitem').filter({ hasText: '20 Mar' })).toContainText('Replaces your note: Typed on the phone');
+  await expect(changes.getByRole('listitem').filter({ hasText: '21 Mar' })).not.toContainText('Replaces');
+  await page.getByRole('button', { name: 'Apply 2 changes' }).click();
+  await expect(page.getByText('Trip updated: 2 changes')).toBeVisible();
+
+  await page.goto('/#/trip');
+  await expect(japan.getByText('Temple day', { exact: true })).toBeVisible();
+  await expect(japan.getByText(/Market in the morning\s+Dinner near the station/)).toBeVisible();
+  await expect(japan.getByText('Typed on the phone')).toHaveCount(0);
+});
+
 test('notes on a day: added on Trip, shown on Today', async ({ page }) => {
   await page.clock.setFixedTime(new Date('2028-03-20T10:00:00'));
   await page.goto('/#/trip');

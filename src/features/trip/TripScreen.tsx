@@ -119,6 +119,7 @@ function UpdatePreview({ plan, onApply, onCancel }: { plan: UpdatePlan; onApply:
                 {kinds[c.kind]}
                 {c.action === 'update' && ` · ${c.fields.map((f) => FIELD_LABELS[f] ?? f).join(', ')}`}
               </span>
+              {c.replaces && <span className="block whitespace-pre-line text-sm text-warn">Replaces your note: {c.replaces}</span>}
             </span>
           </li>
         ))}
@@ -134,7 +135,7 @@ function UpdatePreview({ plan, onApply, onCancel }: { plan: UpdatePlan; onApply:
           </ul>
         </Notice>
       )}
-      <p className="text-sm text-muted">Only these items change; the rest of your trip, your notes and checklists stay as they are.</p>
+      <p className="text-sm text-muted">Only these items change; the rest of your trip, your other notes and checklists stay as they are.</p>
       <div className="grid grid-cols-2 gap-2">
         <Button onClick={onCancel}>Cancel</Button>
         <Button variant="primary" disabled={!plan.changes.length} onClick={onApply}>
