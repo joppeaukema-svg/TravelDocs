@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-08T11:20:48.630Z",
+ "fetchedAt": "2026-11-09T12:58:03.059Z",
  "countries": [
   {
    "country": "CN",
@@ -4412,12 +4412,12 @@
     {
      "file": "maps/th-legend.png",
      "type": "legend",
-     "title": "Reisadvies_Thailand_11-02-2026"
+     "title": "/19422515"
     },
     {
      "file": "maps/th-standard.png",
      "type": "standard",
-     "title": "AppVersie_Reisadvies_Thailand_11-02-2026"
+     "title": "/19422522"
     }
    ],
    "representations": [
