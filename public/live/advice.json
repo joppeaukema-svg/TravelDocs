@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-09T12:58:03.059Z",
+ "fetchedAt": "2026-11-10T12:43:48.106Z",
  "countries": [
   {
    "country": "CN",
@@ -2896,7 +2896,7 @@
      ],
      "lat": 13.74123,
      "lon": 100.544991,
-     "lastModified": "2026-10-13T07:18:18.956Z"
+     "lastModified": "2026-11-10T10:10:12.633Z"
     }
    ],
    "hash": "2494144fa28eb195"
@@ -3657,7 +3657,7 @@
   {
    "country": "TH",
    "url": "https://www.nederlandwereldwijd.nl/reisadvies/thailand",
-   "lastModified": "2026-11-05T16:21:02.440Z",
+   "lastModified": "2026-11-09T14:58:19.028Z",
    "modification": "Reist u naar Thailand? Lees welke veiligheidsrisico’s er zijn, wat u kunt doen in geval van nood, en hoe u zich voorbereidt op uw reis.",
    "colours": [
     "red",
@@ -3723,7 +3723,7 @@
         },
         {
          "type": "li",
-         "text": "Het grensgebied tussen Thailand en Myanmar: de strook van 10 kilometer vanaf de grens. Dit geldt niet voor de grenssteden Mae Sai, Mae Sot en Ranong."
+         "text": "Het grensgebied tussen Thailand en Myanmar: de strook van 10 kilometer vanaf de grens."
         },
         {
          "type": "p",
@@ -3747,7 +3747,7 @@
         },
         {
          "type": "p",
-         "text": "Grens met Myanmar: Het grensgebied tussen Thailand en Myanmar (behalve de steden Mae Sai, Mae Sot en Ranong) is niet veilig:"
+         "text": "Grens met Myanmar: Het grensgebied tussen Thailand en Myanmar is niet veilig:"
         },
         {
          "type": "li",
@@ -3791,15 +3791,11 @@
         },
         {
          "type": "p",
-         "text": "De kleurcode van het reisadvies voor de rest van Thailand is geel. U kunt reizen naar gebieden met kleurcode geel. Maar let op: er zijn bijzondere veiligheidsrisico's. Lees verder in het reisadvies met welke risico’s u te maken kunt krijgen."
+         "text": "De kleurcode van het reisadvies voor de rest van Thailand is geel. U kunt reizen naar gebieden met kleurcode geel. Maar let op: er zijn bijzondere veiligheidsrisico's."
         },
         {
          "type": "p",
-         "text": "De grensovergangen Mae Sot en Mae Sai tussen Thailand en Myanmar zijn alleen open voor personen met een Thais of Myanmarees paspoort. De grensovergang bij Ranong is meestal wel open voor buitenlanders, maar u kunt vanaf hier niet verder Myanmar in reizen."
-        },
-        {
-         "type": "p",
-         "text": "Reist u naar Mae Sai, Mae Sot of Ranong? Bereid u goed voor en reis met een betrouwbare (lokale) gids."
+         "text": "Lees verder in het reisadvies met welke risico’s u te maken kunt krijgen."
         }
        ]
       },
@@ -4412,12 +4408,12 @@
     {
      "file": "maps/th-legend.png",
      "type": "legend",
-     "title": "/19422515"
+     "title": "Reisadvies_Thailand_09-11-2026_PDF"
     },
     {
      "file": "maps/th-standard.png",
      "type": "standard",
-     "title": "/19422522"
+     "title": "AppVersie_Reisadvies_Thailand_09-11-2026"
     }
    ],
    "representations": [
@@ -4666,10 +4662,10 @@
      ],
      "lat": 13.74123,
      "lon": 100.544991,
-     "lastModified": "2026-10-13T07:18:18.956Z"
+     "lastModified": "2026-11-10T10:10:12.633Z"
     }
    ],
-   "hash": "8229782a2c143df8"
+   "hash": "481690514a090387"
   },
   {
    "country": "VN",
