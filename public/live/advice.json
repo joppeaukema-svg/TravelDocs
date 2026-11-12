@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-11T11:55:45.839Z",
+ "fetchedAt": "2026-11-12T12:50:34.487Z",
  "countries": [
   {
    "country": "CN",
@@ -978,6 +978,156 @@
      "lastModified": "2026-10-26T12:34:08.417Z"
     },
     {
+     "id": "consulaat-generaal-shanghai",
+     "title": "Nederlands consulaat-generaal in Shanghai, China",
+     "url": "https://www.nederlandwereldwijd.nl/contact/ambassades-consulaten-generaal/china/consulaat-generaal-shanghai",
+     "embassy": false,
+     "address": [
+      "Dawning Center Tower B floor 10",
+      "Hongbaoshi Road no. 500",
+      "Changning District",
+      "201103 Shanghai",
+      "China",
+      "",
+      "东银中心B塔10楼",
+      "红宝石路500号",
+      "长宁区",
+      "上海市, 201103"
+     ],
+     "phones": [
+      "+86 21 22 08 72 88",
+      "+31 247 247 247"
+     ],
+     "contact": [
+      {
+       "title": "Telefoonnummer",
+       "blocks": [
+        {
+         "type": "p",
+         "text": "Stel uw vraag via telefoonnummer +86 21 22 08 72 88 ."
+        },
+        {
+         "type": "p",
+         "text": "Let op: belt u vanuit Nederland? Bel dan met +31 247 247 247 ."
+        }
+       ]
+      },
+      {
+       "title": "Contactformulier",
+       "blocks": [
+        {
+         "type": "p",
+         "text": "Ga naar ons contactformulier"
+        },
+        {
+         "type": "p",
+         "text": "Houd er rekening mee dat het even kan duren voordat u een reactie krijgt. Wilt u sneller antwoord? Kies dan voor een van de andere contactmogelijkheden."
+        }
+       ]
+      }
+     ],
+     "openingTimes": [
+      {
+       "type": "h",
+       "text": "Afspraak maken"
+      },
+      {
+       "type": "p",
+       "text": "Wilt u in China iets regelen bij de Nederlandse overheid? Bekijk hoe u een afspraak maakt ."
+      },
+      {
+       "type": "h",
+       "text": "Openingstijden"
+      },
+      {
+       "type": "li",
+       "text": "Maandag: 9.00 - 12.00 en 13.00 - 16.00 uur (alleen op afspraak)"
+      },
+      {
+       "type": "li",
+       "text": "Dinsdag: 9.00 - 12.00 en 13.00 - 16.00 uur (alleen op afspraak)"
+      },
+      {
+       "type": "li",
+       "text": "Woensdag: 9.00 - 12.00 en 13.00 - 16.00 uur (alleen op afspraak)"
+      },
+      {
+       "type": "li",
+       "text": "Donderdag: 9.00 - 12.00 en 13.00 - 16.00 uur (alleen op afspraak)"
+      },
+      {
+       "type": "li",
+       "text": "Vrijdag: 9.00 - 12.00 en 13.00 - 16.00 uur (alleen op afspraak)"
+      },
+      {
+       "type": "li",
+       "text": "Zaterdag: gesloten"
+      },
+      {
+       "type": "li",
+       "text": "Zondag: gesloten"
+      },
+      {
+       "type": "h",
+       "text": "Sluitingsdagen"
+      },
+      {
+       "type": "p",
+       "text": "Het consulaat-generaal in Shanghai is op de volgende dagen gesloten:"
+      },
+      {
+       "type": "h",
+       "text": "2026"
+      },
+      {
+       "type": "li",
+       "text": "1 januari - Nieuwjaarsdag"
+      },
+      {
+       "type": "li",
+       "text": "16 - 19 februari - Chinees Nieuwjaar"
+      },
+      {
+       "type": "li",
+       "text": "6 april - Tweede Paasdag"
+      },
+      {
+       "type": "li",
+       "text": "27 april - Koningsdag"
+      },
+      {
+       "type": "li",
+       "text": "1 mei - Dag van de Arbeid"
+      },
+      {
+       "type": "li",
+       "text": "5 mei - Bevrijdingsdag"
+      },
+      {
+       "type": "li",
+       "text": "25 mei - Tweede Pinksterdag"
+      },
+      {
+       "type": "li",
+       "text": "1 en 2 oktober - Nationale Feestdagen"
+      },
+      {
+       "type": "li",
+       "text": "30 oktober - Consulaat-generaal gesloten"
+      },
+      {
+       "type": "li",
+       "text": "25 december - Kerstmis"
+      }
+     ],
+     "serves": [
+      "china"
+     ],
+     "lat": 31.20001,
+     "lon": 121.39459,
+     "lastModified": "2026-10-29T09:06:25.702Z"
+    },
+    {
      "id": "consulaat-generaal-hongkong-en-macao",
      "title": "Nederlands consulaat-generaal in Hongkong en Macao, Hongkong",
      "url": "https://www.nederlandwereldwijd.nl/contact/ambassades-consulaten-generaal/hongkong-sar/consulaat-hongkong-en-macao",
@@ -1189,7 +1339,7 @@
       },
       {
        "type": "li",
-       "text": "1 juli - Oprichtingsdag"
+       "text": "1 juli - Hongkong SAR Oprichtingsdag"
       },
       {
        "type": "li",
@@ -1201,7 +1351,7 @@
       },
       {
        "type": "li",
-       "text": "8 oktober - Dag na Chung Yeung Festival"
+       "text": "8 oktober - Chung Yeung Festival"
       },
       {
        "type": "li",
@@ -1215,157 +1365,7 @@
      ],
      "lat": 22.281049,
      "lon": 114.17486,
-     "lastModified": "2026-10-28T12:27:25.227Z"
-    },
-    {
-     "id": "consulaat-generaal-shanghai",
-     "title": "Nederlands consulaat-generaal in Shanghai, China",
-     "url": "https://www.nederlandwereldwijd.nl/contact/ambassades-consulaten-generaal/china/consulaat-generaal-shanghai",
-     "embassy": false,
-     "address": [
-      "Dawning Center Tower B floor 10",
-      "Hongbaoshi Road no. 500",
-      "Changning District",
-      "201103 Shanghai",
-      "China",
-      "",
-      "东银中心B塔10楼",
-      "红宝石路500号",
-      "长宁区",
-      "上海市, 201103"
-     ],
-     "phones": [
-      "+86 21 22 08 72 88",
-      "+31 247 247 247"
-     ],
-     "contact": [
-      {
-       "title": "Telefoonnummer",
-       "blocks": [
-        {
-         "type": "p",
-         "text": "Stel uw vraag via telefoonnummer +86 21 22 08 72 88 ."
-        },
-        {
-         "type": "p",
-         "text": "Let op: belt u vanuit Nederland? Bel dan met +31 247 247 247 ."
-        }
-       ]
-      },
-      {
-       "title": "Contactformulier",
-       "blocks": [
-        {
-         "type": "p",
-         "text": "Ga naar ons contactformulier"
-        },
-        {
-         "type": "p",
-         "text": "Houd er rekening mee dat het even kan duren voordat u een reactie krijgt. Wilt u sneller antwoord? Kies dan voor een van de andere contactmogelijkheden."
-        }
-       ]
-      }
-     ],
-     "openingTimes": [
-      {
-       "type": "h",
-       "text": "Afspraak maken"
-      },
-      {
-       "type": "p",
-       "text": "Wilt u in China iets regelen bij de Nederlandse overheid? Bekijk hoe u een afspraak maakt ."
-      },
-      {
-       "type": "h",
-       "text": "Openingstijden"
-      },
-      {
-       "type": "li",
-       "text": "Maandag: 9.00 - 12.00 en 13.00 - 16.00 uur (alleen op afspraak)"
-      },
-      {
-       "type": "li",
-       "text": "Dinsdag: 9.00 - 12.00 en 13.00 - 16.00 uur (alleen op afspraak)"
-      },
-      {
-       "type": "li",
-       "text": "Woensdag: 9.00 - 12.00 en 13.00 - 16.00 uur (alleen op afspraak)"
-      },
-      {
-       "type": "li",
-       "text": "Donderdag: 9.00 - 12.00 en 13.00 - 16.00 uur (alleen op afspraak)"
-      },
-      {
-       "type": "li",
-       "text": "Vrijdag: 9.00 - 12.00 en 13.00 - 16.00 uur (alleen op afspraak)"
-      },
-      {
-       "type": "li",
-       "text": "Zaterdag: gesloten"
-      },
-      {
-       "type": "li",
-       "text": "Zondag: gesloten"
-      },
-      {
-       "type": "h",
-       "text": "Sluitingsdagen"
-      },
-      {
-       "type": "p",
-       "text": "Het consulaat-generaal in Shanghai is op de volgende dagen gesloten:"
-      },
-      {
-       "type": "h",
-       "text": "2026"
-      },
-      {
-       "type": "li",
-       "text": "1 januari - Nieuwjaarsdag"
-      },
-      {
-       "type": "li",
-       "text": "16 - 19 februari - Chinees Nieuwjaar"
-      },
-      {
-       "type": "li",
-       "text": "6 april - Tweede Paasdag"
-      },
-      {
-       "type": "li",
-       "text": "27 april - Koningsdag"
-      },
-      {
-       "type": "li",
-       "text": "1 mei - Dag van de Arbeid"
-      },
-      {
-       "type": "li",
-       "text": "5 mei - Bevrijdingsdag"
-      },
-      {
-       "type": "li",
-       "text": "25 mei - Tweede Pinksterdag"
-      },
-      {
-       "type": "li",
-       "text": "1 en 2 oktober - Nationale Feestdagen"
-      },
-      {
-       "type": "li",
-       "text": "30 oktober - Consulaat-generaal gesloten"
-      },
-      {
-       "type": "li",
-       "text": "25 december - Kerstmis"
-      }
-     ],
-     "serves": [
-      "china"
-     ],
-     "lat": 31.20001,
-     "lon": 121.39459,
-     "lastModified": "2026-10-29T09:06:25.702Z"
+     "lastModified": "2026-11-11T12:57:12.571Z"
     }
    ],
    "hash": "0cd4782187a0b1ad"
