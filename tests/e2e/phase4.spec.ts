@@ -69,8 +69,9 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
 });
 
 test('food and drink per day in each country, with that day\'s costs when unfolded', async ({ page }) => {
-  await page.clock.setFixedTime(new Date('2026-10-27T12:00:00'));
-  for (const [amount, note, date] of [['10', 'Lunch', '2026-10-26'], ['5', 'Coffee', '2026-10-26'], ['7', 'Dinner', '2026-10-27']]) {
+  // It's 27 Oct; each expense is added a minute after the one before.
+  for (const [minute, amount, note, date] of [['01', '10', 'Lunch', '2026-10-26'], ['02', '5', 'Coffee', '2026-10-26'], ['03', '7', 'Dinner', '2026-10-27']]) {
+    await page.clock.setFixedTime(new Date(`2026-10-27T12:${minute}:00`));
     await page.goto('/#/money/add');
     await page.getByLabel('Amount').fill(amount!);
     await page.getByLabel('Currency').selectOption('EUR');
