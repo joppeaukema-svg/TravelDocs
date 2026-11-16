@@ -3,7 +3,7 @@ import { Temporal } from 'temporal-polyfill';
 import { describe, expect, it } from 'vitest';
 import { demoTrip } from '../../src/demo/demo';
 import { daysInCountry } from '../../src/features/money/MoneyScreen';
-import { Expense, expensesCsv, eurOf, spentByCategoryOn, spentOn, spentPerDay, summarise, whoLabel } from '../../src/money/expenses';
+import { averageBefore, Expense, expensesCsv, eurOf, spentByCategoryOn, spentOn, spentPerDay, summarise, whoLabel } from '../../src/money/expenses';
 import { shiftDates } from '../../src/trip/shift';
 import type { TripData } from '../../src/trip/io';
 
@@ -44,6 +44,11 @@ describe('expenses', () => {
       ['2026-11-04', 2],
       ['2026-11-03', 15],
     ]);
+    // The average a day leaves out today, and days to come.
+    const perDay: [string, number][] = [['2026-11-05', 9], ['2026-11-04', 30], ['2026-11-03', 15], ['2026-11-02', 12]];
+    expect(averageBefore(perDay, '2026-11-04')).toEqual({ perDay: 13.5, days: 2 });
+    expect(averageBefore(perDay, '2026-11-06')).toEqual({ perDay: 16.5, days: 4 });
+    expect(averageBefore(perDay, '2026-11-02')).toBeUndefined();
   });
 
   it('exports CSV with quoting and who it was for', () => {

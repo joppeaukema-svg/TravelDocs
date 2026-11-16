@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { go } from '../../app/hooks';
 import { allCountries, getCountry } from '../../content';
 import { db } from '../../db/db';
-import { formatDayRange } from '../../lib/format';
+import { formatDayRange, plural } from '../../lib/format';
 import { shareFile } from '../../lib/share';
 import {
+  averageBefore,
   CATEGORY_LABELS,
   deleteExpense,
   ExpenseCategory,
@@ -144,11 +145,13 @@ function CountryCard({
   expenses,
   travellers,
   rate,
+  today,
 }: {
   s: CountrySummary;
   expenses: Expense[];
   travellers: Travellers;
   rate: (c: string) => number | undefined;
+  today: string;
 }) {
   const [open, setOpen] = useState(false);
   const name = s.country === 'NL' ? 'Netherlands (before you leave)' : (getCountry(s.country)?.name ?? s.country);
@@ -180,16 +183,25 @@ function CountryCard({
         <ul className="mt-2" aria-label={`${name} per category`}>
           {cats.map((c) => {
             const inCategory = mine.filter((e) => e.category === c);
+            const perDay = c === 'food' ? spentPerDay(inCategory, rate) : [];
+            // Only whole days: today is still going.
+            const average = averageBefore(perDay, today);
             return (
               <li key={c} className="border-b border-line py-1.5 last:border-b-0">
                 <p className="flex justify-between gap-2">
                   <span>{CATEGORY_LABELS[c]}</span>
                   <span className="tabular font-bold">{eur(s.byCategory[c] ?? 0)}</span>
                 </p>
+                {average && (
+                  <p className="text-sm text-muted">
+                    Average {eur(average.perDay)} a day over {plural(average.days, 'day')}
+                    {perDay.some(([date]) => date === today) && ', today not counted'}
+                  </p>
+                )}
                 {c === 'food' ? (
                   // Food per day, always: what you spent on eating each day. Unfolded, each day's costs.
                   <ul className="mb-1 mt-0.5 border-l-2 border-line pl-3" aria-label={`${CATEGORY_LABELS.food} per day in ${name}`}>
-                    {spentPerDay(inCategory, rate).map(([date, total]) => (
+                    {perDay.map(([date, total]) => (
                       <li key={date}>
                         <p className="flex min-h-8 items-center justify-between gap-2 text-sm">
                           <span>{formatDayRange(date, date)}</span>
@@ -360,7 +372,7 @@ export function MoneyScreen() {
       {summary.countries.length === 0 && routeWithoutSpend.length === 0 && <p className="text-muted">No expenses yet.</p>}
       <div className="space-y-2">
         {summary.countries.map((s) => (
-          <CountryCard key={s.country} s={s} expenses={expenses} travellers={travellers} rate={rate} />
+          <CountryCard key={s.country} s={s} expenses={expenses} travellers={travellers} rate={rate} today={today} />
         ))}
         {routeWithoutSpend.length > 0 && (
           <Card className="py-1">

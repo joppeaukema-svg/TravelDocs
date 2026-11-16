@@ -143,6 +143,12 @@ export function spentPerDay(expenses: Expense[], rate: (c: string) => number | u
   return [...by].sort((a, b) => b[0].localeCompare(a[0]));
 }
 
+/** The average a day over the days before `today` in a spentPerDay list; nothing without such days. */
+export function averageBefore(perDay: [string, number][], today: string): { perDay: number; days: number } | undefined {
+  const past = perDay.filter(([date]) => date < today);
+  return past.length ? { perDay: past.reduce((sum, [, value]) => sum + value, 0) / past.length, days: past.length } : undefined;
+}
+
 /** What a day's expenses add up to per category, in EUR, the largest first. */
 export function spentByCategoryOn(expenses: Expense[], date: string, rate: (c: string) => number | undefined): [ExpenseCategory, number][] {
   const by = new Map<ExpenseCategory, number>();

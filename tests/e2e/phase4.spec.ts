@@ -69,6 +69,7 @@ test('expenses: add, budget, edit, delete, CSV', async ({ page }) => {
 });
 
 test('food and drink per day in each country, with that day\'s costs when unfolded', async ({ page }) => {
+  await page.clock.setFixedTime(new Date('2026-10-27T12:00:00'));
   for (const [amount, note, date] of [['10', 'Lunch', '2026-10-26'], ['5', 'Coffee', '2026-10-26'], ['7', 'Dinner', '2026-10-27']]) {
     await page.goto('/#/money/add');
     await page.getByLabel('Amount').fill(amount!);
@@ -84,6 +85,9 @@ test('food and drink per day in each country, with that day\'s costs when unfold
   const perDay = page.getByRole('list', { name: 'Food & drink per day in Thailand' });
   await expect(perDay.getByRole('listitem')).toHaveText([/27 Oct\s*EUR\s7\.00/, /26 Oct\s*EUR\s15\.00/]);
   await expect(perDay.getByRole('link')).toHaveCount(0);
+  // The average leaves out today: only 26 Oct is a whole day.
+  const food = thailand.getByRole('listitem').filter({ hasText: 'Food & drink' }).first();
+  await expect(food).toContainText(/Average EUR\s15\.00 a day over 1 day, today not counted/);
 
   await page.getByRole('button', { name: /^Thailand/ }).click();
   const oct26 = perDay.getByRole('listitem').filter({ hasText: '26 Oct' });
