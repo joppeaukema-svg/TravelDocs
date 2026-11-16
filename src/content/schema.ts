@@ -81,7 +81,16 @@ export type PhraseLang = z.infer<typeof PhraseLang>;
 export const PhrasesFile = z.object({
   note: z.string(),
   languages: z.record(PhraseLang, z.object({ name: z.string(), speech: z.string(), countries: z.array(countryCode), note: z.string().optional() })),
-  phrases: z.array(z.object({ id: z.string(), en: z.string(), t: z.record(PhraseLang, z.object({ text: z.string(), roman: z.string().optional() })) })),
+  phrases: z.array(
+    z.object({
+      id: z.string(),
+      en: z.string(),
+      t: z.record(PhraseLang, z.object({ text: z.string(), roman: z.string().optional() })),
+      /** Where a key word was checked (dictionaries, not native speakers), as for allergens. */
+      sources: z.array(z.url()).default([]),
+      verifiedAt: isoDate.optional(),
+    }),
+  ),
   cards: z.array(z.object({ id: z.string(), en: z.string(), t: z.record(PhraseLang, z.string()) })),
   allergens: z.array(
     z.object({

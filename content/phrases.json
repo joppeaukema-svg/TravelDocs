@@ -329,6 +329,45 @@
       }
     },
     {
+      "id": "rice-flour",
+      "en": "Do you use rice flour?",
+      "sources": [
+        "https://en.wiktionary.org/wiki/米粉",
+        "https://en.wiktionary.org/wiki/bột",
+        "https://en.wiktionary.org/wiki/แป้งข้าวเจ้า",
+        "https://en.wiktionary.org/wiki/ແປ້ງ",
+        "https://en.wiktionary.org/wiki/ເຂົ້າ",
+        "https://en.wiktionary.org/wiki/arina",
+        "https://en.wiktionary.org/wiki/bigas",
+        "https://en.wiktionary.org/wiki/galapong"
+      ],
+      "verifiedAt": "2026-11-16",
+      "t": {
+        "zh": {
+          "text": "你们用米粉（大米磨的粉）吗？",
+          "roman": "nǐmen yòng mǐfěn (dàmǐ mò de fěn) ma?"
+        },
+        "ja": {
+          "text": "米粉（こめこ）を使っていますか？",
+          "roman": "komeko o tsukatte imasu ka?"
+        },
+        "vi": {
+          "text": "Bạn có dùng bột gạo không?"
+        },
+        "th": {
+          "text": "ใช้แป้งข้าวเจ้าไหมครับ / คะ",
+          "roman": "chái pâeng khâao jâo mǎi khráp / khá?"
+        },
+        "lo": {
+          "text": "ໃຊ້ແປ້ງເຂົ້າບໍ່?",
+          "roman": "sai paeng khao bo?"
+        },
+        "fil": {
+          "text": "Gumagamit po ba kayo ng harina ng bigas (galapong)?"
+        }
+      }
+    },
+    {
       "id": "delicious",
       "en": "Delicious",
       "t": {

@@ -93,6 +93,16 @@ test('phrases: show-this cards in the local script', async ({ page }) => {
   await expect(card).toContainText('I am allergic to gluten (wheat, barley, rye and everything made with them');
   await card.getByRole('button', { name: 'Close' }).click();
 
+  // What you ask next: rice flour, and thank you.
+  await page.getByRole('button', { name: 'Do you use rice flour?' }).click();
+  await expect(card).toContainText('ໃຊ້ແປ້ງເຂົ້າບໍ່?');
+  await expect(card).toContainText('Do you use rice flour?');
+  await card.getByRole('button', { name: 'Close' }).click();
+  await page.getByRole('button', { name: 'Thank you' }).click();
+  await expect(card).toContainText('ຂອບໃຈ');
+  await card.getByRole('button', { name: 'Close' }).click();
+  await expect(page.getByText('sai paeng khao bo?')).toBeVisible();
+
   await page.getByLabel(/Address/).fill('ບ້ານ ວັດແສນ, ຫຼວງພະບາງ');
   await page.getByRole('button', { name: 'Show address' }).click();
   await expect(page.getByRole('dialog')).toContainText('ບ້ານ ວັດແສນ');

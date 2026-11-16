@@ -44,6 +44,10 @@ describe('content files', () => {
       for (const a of book.allergens) expect(a.t[lang], `${a.id} ${lang}`).toBeTruthy();
     }
     expect(book.cards.find((c) => c.id === 'allergic')!.t.ja).toContain('{item}');
+    // The rice flour question names the flour; that word was looked up for every language.
+    const rice = book.phrases.find((p) => p.id === 'rice-flour')!;
+    expect(rice.sources.length).toBeGreaterThan(0);
+    expect(rice.verifiedAt).toBeTruthy();
     expect(phrasebook().languages.lo.countries).toEqual(['LA']);
   });
 

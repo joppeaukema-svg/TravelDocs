@@ -74,6 +74,22 @@ export function PhraseList({ lang }: { lang: PhraseLang }) {
   );
 }
 
+/** Links to the dictionary entries a key word was checked in, named after the word. */
+function DictionaryLinks({ urls }: { urls: string[] }) {
+  return (
+    <>
+      {urls.map((u, i) => (
+        <span key={u}>
+          {i > 0 && ', '}
+          <a href={u} target="_blank" rel="noreferrer" className="text-accent">
+            {decodeURIComponent(new URL(u).pathname.split('/').pop()!).replace(/_/g, ' ')}
+          </a>
+        </span>
+      ))}
+    </>
+  );
+}
+
 /** Full-screen, high-contrast text to show someone. */
 function ShowCard({ local, english, lang, language, onClose }: { local: string; english: string; lang: string; language: string; onClose: () => void }) {
   const voice = useVoice(lang);
@@ -123,6 +139,9 @@ export function ShowCards({ lang }: { lang: PhraseLang }) {
   const [allergen, setAllergen] = useState(book().allergens[0]!.id);
   const [shown, setShown] = useState<{ local: string; english: string } | null>(null);
   const card = (id: string) => book().cards.find((c) => c.id === id)!;
+  const phrase = (id: string) => book().phrases.find((p) => p.id === id)!;
+  const showPhrase = (id: string) => setShown({ local: phrase(id).t[lang].text, english: phrase(id).en });
+  const riceFlour = phrase('rice-flour');
   const address = draft ?? (saved || bed?.addressLocal || bed?.address || '');
 
   const tile = (label: string, onClick: () => void) => (
@@ -191,18 +210,23 @@ export function ShowCards({ lang }: { lang: PhraseLang }) {
               >
                 Show {(a.label ?? a.en).toLowerCase()} allergy card
               </Button>
+              {/* What you ask next at the table. */}
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <Button onClick={() => showPhrase('rice-flour')}>{riceFlour.en}</Button>
+                <Button onClick={() => showPhrase('thanks')}>{phrase('thanks').en}</Button>
+              </div>
               {a.sources.length > 0 && (
                 <p className="mt-2 text-sm text-muted">
                   The key words were checked in dictionaries{a.verifiedAt && ` on ${formatDate(a.verifiedAt)}`} (
-                  {a.sources.map((u, i) => (
-                    <span key={u}>
-                      {i > 0 && ', '}
-                      <a href={u} target="_blank" rel="noreferrer" className="text-accent">
-                        {decodeURIComponent(new URL(u).pathname.split('/').pop()!).replace(/_/g, ' ')}
-                      </a>
-                    </span>
-                  ))}
+                  <DictionaryLinks urls={a.sources} />
                   ), not by a native speaker. For a severe allergy, also carry a card from a coeliac organisation.
+                </p>
+              )}
+              {riceFlour.sources.length > 0 && (
+                <p className="mt-1 text-sm text-muted">
+                  "Rice flour" was checked the same way{riceFlour.verifiedAt && ` on ${formatDate(riceFlour.verifiedAt)}`} (
+                  <DictionaryLinks urls={riceFlour.sources} />
+                  ).
                 </p>
               )}
             </>
