@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { beforeEach, describe, expect, it } from 'vitest';
 import worker, { type Env, type KV } from '../../push/src/worker';
 import { db, META } from '../../src/db/db';
-import { saveExpense, setTravellers } from '../../src/money/expenses';
+import { saveExpense, setAverageSkip, setTravellers } from '../../src/money/expenses';
 import { getSyncState, mailboxId, setSyncEnabled, syncOnce } from '../../src/sync/sync';
 import { parseTripFile } from '../../src/trip/io';
 import { getShareStatus, loadTrip, replaceTrip, saveDay, setPrepState, setSharedMeta } from '../../src/trip/store';
@@ -54,6 +54,7 @@ describe('automatic sync', () => {
     await saveExpense({ date: '2028-03-20', amount: 12, currency: 'EUR', category: 'esim', country: 'JP', forWhom: 'b', note: 'Data top-up' });
     await setPrepState('pack-sunscreen', 'done');
     await setSharedMeta('rateOverrides', { LAK: 25000 });
+    await setAverageSkip('JP', '2028-03-19', true);
     await setSyncEnabled(true, relay);
     const a = await getSyncState();
     expect(a.error).toBeUndefined();
@@ -77,6 +78,7 @@ describe('automatic sync', () => {
     expect((await db.meta.get('travellers'))?.value).toMatchObject({ a: 'Alex', b: 'Robin' });
     expect(await db.prepState.get('pack-sunscreen')).toMatchObject({ status: 'done' });
     expect((await db.meta.get('rateOverrides'))?.value).toEqual({ LAK: 25000 });
+    expect((await db.meta.get('averageSkips'))?.value).toEqual(['JP:2028-03-19']);
 
     // B's own slot is there too, so A will pick up B's changes.
     const index = JSON.parse(env.SUBS.data.get(`sync:${mailbox}`)!) as Record<string, unknown>;

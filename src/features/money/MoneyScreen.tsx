@@ -15,12 +15,15 @@ import {
   forWhomOf,
   ForWhom,
   saveExpense,
+  setAverageSkip,
   setBudget,
   setTravellers,
+  skippedIn,
   spentByCategoryOn,
   spentOn,
   spentPerDay,
   summarise,
+  useAverageSkips,
   useBudgets,
   useExpenses,
   useTravellers,
@@ -154,6 +157,7 @@ function CountryCard({
   today: string;
 }) {
   const [open, setOpen] = useState(false);
+  const leaveOut = skippedIn(useAverageSkips(), s.country);
   const name = s.country === 'NL' ? 'Netherlands (before you leave)' : (getCountry(s.country)?.name ?? s.country);
   const mine = expenses.filter((e) => e.country === s.country);
   const cats = ExpenseCategory.options
@@ -184,8 +188,8 @@ function CountryCard({
           {cats.map((c) => {
             const inCategory = mine.filter((e) => e.category === c);
             const perDay = c === 'food' ? spentPerDay(inCategory, rate) : [];
-            // Only whole days: today is still going.
-            const average = averageBefore(perDay, today);
+            // Only whole days: today is still going. Days you left out (a travel day, say) don't count.
+            const average = averageBefore(perDay, today, leaveOut);
             return (
               <li key={c} className="border-b border-line py-1.5 last:border-b-0">
                 <p className="flex justify-between gap-2">
@@ -195,6 +199,8 @@ function CountryCard({
                 {average && (
                   <p className="text-sm text-muted">
                     Average {eur(average.perDay)} a day over {plural(average.days, 'day')}
+                    {average.leftOut.length > 0 &&
+                      `, ${average.leftOut.length === 1 ? formatDayRange(average.leftOut[0]!, average.leftOut[0]!) : `${average.leftOut.length} days`} left out`}
                     {perDay.some(([date]) => date === today) && ', today not counted'}
                   </p>
                 )}
@@ -204,9 +210,21 @@ function CountryCard({
                     {perDay.map(([date, total]) => (
                       <li key={date}>
                         <p className="flex min-h-8 items-center justify-between gap-2 text-sm">
-                          <span>{formatDayRange(date, date)}</span>
+                          <span>
+                            {formatDayRange(date, date)}
+                            {leaveOut.has(date) && <span className="text-muted"> · not in the average</span>}
+                          </span>
                           <span className="tabular font-bold">{eur(total)}</span>
                         </p>
+                        {open && (
+                          <button
+                            type="button"
+                            className="-mt-1 min-h-10 text-sm font-bold text-accent"
+                            onClick={() => void setAverageSkip(s.country, date, !leaveOut.has(date))}
+                          >
+                            {leaveOut.has(date) ? 'Count in the average' : 'Leave out of the average'}
+                          </button>
+                        )}
                         {open && (
                           <ul className="mb-1 border-l-2 border-line pl-3">
                             {inCategory

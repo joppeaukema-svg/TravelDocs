@@ -95,6 +95,21 @@ test('food and drink per day in each country, with that day\'s costs when unfold
   // The one added last first.
   await expect(oct26.getByRole('link')).toHaveText([/Coffee/, /Lunch/]);
   await expect(perDay.getByRole('listitem').filter({ hasText: '27 Oct' }).getByRole('link')).toHaveText([/Dinner/]);
+
+  // The next morning both days are whole. A day can be left out of the average (an arrival day, say).
+  await page.clock.setFixedTime(new Date('2026-10-28T09:00:00'));
+  await page.reload();
+  const average = food.getByText(/^Average/);
+  await expect(average).toHaveText(/^Average EUR\s11\.00 a day over 2 days$/);
+  await page.getByRole('button', { name: /^Thailand/ }).click();
+  await oct26.getByRole('button', { name: 'Leave out of the average' }).click();
+  await expect(average).toHaveText(/^Average EUR\s7\.00 a day over 1 day, 26 Oct left out$/);
+  await expect(oct26).toContainText('26 Oct · not in the average');
+  await page.reload();
+  await expect(average).toHaveText(/26 Oct left out$/);
+  await page.getByRole('button', { name: /^Thailand/ }).click();
+  await oct26.getByRole('button', { name: 'Count in the average' }).click();
+  await expect(average).toHaveText(/^Average EUR\s11\.00 a day over 2 days$/);
 });
 
 test('Latest added shows the three expenses entered last, whatever date they are for', async ({ page }) => {

@@ -46,9 +46,12 @@ describe('expenses', () => {
     ]);
     // The average a day leaves out today, and days to come.
     const perDay: [string, number][] = [['2026-11-05', 9], ['2026-11-04', 30], ['2026-11-03', 15], ['2026-11-02', 12]];
-    expect(averageBefore(perDay, '2026-11-04')).toEqual({ perDay: 13.5, days: 2 });
-    expect(averageBefore(perDay, '2026-11-06')).toEqual({ perDay: 16.5, days: 4 });
+    expect(averageBefore(perDay, '2026-11-04')).toEqual({ perDay: 13.5, days: 2, leftOut: [] });
+    expect(averageBefore(perDay, '2026-11-06')).toEqual({ perDay: 16.5, days: 4, leftOut: [] });
     expect(averageBefore(perDay, '2026-11-02')).toBeUndefined();
+    // A day you leave out (an arrival day, say) doesn't count; one still to come isn't listed as left out.
+    expect(averageBefore(perDay, '2026-11-05', new Set(['2026-11-02', '2026-11-05']))).toEqual({ perDay: 22.5, days: 2, leftOut: ['2026-11-02'] });
+    expect(averageBefore(perDay, '2026-11-03', new Set(['2026-11-02']))).toBeUndefined();
   });
 
   it('exports CSV with quoting and who it was for', () => {

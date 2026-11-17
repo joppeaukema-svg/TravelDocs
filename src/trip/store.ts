@@ -137,7 +137,7 @@ export async function applyTripUpdate(plan: UpdatePlan): Promise<number> {
 // --- Small shared settings ---------------------------------------------------
 
 /** Settings that travel with the trip, each with when it was last changed (kept in SHARED_TIMES). */
-export const SHARED_META = ['rateOverrides', 'showCardAddress'] as const;
+export const SHARED_META = ['rateOverrides', 'showCardAddress', 'averageSkips'] as const;
 const SHARED_TIMES = 'sharedMetaTimes';
 // Set before sharing included them: they go along, but lose to any later change.
 const LONG_AGO = '1970-01-01T00:00:00.000Z';

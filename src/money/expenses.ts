@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, getMeta, setMeta } from '../db/db';
-import { addTombstones, markUnsent } from '../trip/store';
+import { addTombstones, markUnsent, setSharedMeta } from '../trip/store';
 import { CATEGORY_LABELS, Expense, ExpenseCategory, ForWhom, forWhomOf, MONEY_META, type Travellers } from './schema';
 
 export { CATEGORY_LABELS, Expense, ExpenseCategory, ForWhom, forWhomOf, type Travellers } from './schema';
@@ -143,10 +143,46 @@ export function spentPerDay(expenses: Expense[], rate: (c: string) => number | u
   return [...by].sort((a, b) => b[0].localeCompare(a[0]));
 }
 
-/** The average a day over the days before `today` in a spentPerDay list; nothing without such days. */
-export function averageBefore(perDay: [string, number][], today: string): { perDay: number; days: number } | undefined {
-  const past = perDay.filter(([date]) => date < today);
-  return past.length ? { perDay: past.reduce((sum, [, value]) => sum + value, 0) / past.length, days: past.length } : undefined;
+/**
+ * The average a day over the days before `today` in a spentPerDay list, without the dates you left
+ * out; nothing without such days. `leftOut` lists the days before today that were left out.
+ */
+export function averageBefore(
+  perDay: [string, number][],
+  today: string,
+  leaveOut: ReadonlySet<string> = new Set(),
+): { perDay: number; days: number; leftOut: string[] } | undefined {
+  const before = perDay.filter(([date]) => date < today);
+  const counted = before.filter(([date]) => !leaveOut.has(date));
+  if (!counted.length) return undefined;
+  return {
+    perDay: counted.reduce((sum, [, value]) => sum + value, 0) / counted.length,
+    days: counted.length,
+    leftOut: before.filter(([date]) => leaveOut.has(date)).map(([date]) => date),
+  };
+}
+
+// --- Days left out of the food average -------------------------------------------
+// A travel day with one meal would pull the average down. Kept as "country:date", shared with the trip.
+
+const AVERAGE_SKIPS = 'averageSkips';
+const skipKey = (country: string, date: string) => `${country}:${date}`;
+
+export function useAverageSkips(): ReadonlySet<string> {
+  const list = useLiveQuery(async () => ((await getMeta(AVERAGE_SKIPS)) as string[] | undefined) ?? [], []);
+  return new Set(list ?? []);
+}
+
+/** The dates in one country left out of its food average. */
+export function skippedIn(skips: ReadonlySet<string>, country: string): Set<string> {
+  return new Set([...skips].filter((k) => k.startsWith(`${country}:`)).map((k) => k.slice(country.length + 1)));
+}
+
+export async function setAverageSkip(country: string, date: string, leaveOut: boolean): Promise<void> {
+  const list = new Set(((await getMeta(AVERAGE_SKIPS)) as string[] | undefined) ?? []);
+  if (leaveOut) list.add(skipKey(country, date));
+  else list.delete(skipKey(country, date));
+  await setSharedMeta(AVERAGE_SKIPS, [...list].sort());
 }
 
 /** What a day's expenses add up to per category, in EUR, the largest first. */
