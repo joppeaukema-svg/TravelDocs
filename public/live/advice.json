@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-16T12:51:12.029Z",
+ "fetchedAt": "2026-11-17T13:33:07.048Z",
  "countries": [
   {
    "country": "CN",
@@ -1373,7 +1373,7 @@
   {
    "country": "JP",
    "url": "https://www.nederlandwereldwijd.nl/reisadvies/japan",
-   "lastModified": "2026-08-26T15:00:59.129Z",
+   "lastModified": "2026-11-16T13:45:03.099Z",
    "modification": "Reist u naar Japan? Lees welke veiligheidsrisico’s er zijn, wat u kunt doen in geval van nood, en hoe u zich voorbereidt op uw reis.",
    "colours": [
     "red",
@@ -1386,7 +1386,7 @@
     },
     {
      "type": "li",
-     "text": "De kleurcode van het reisadvies voor het zuidoosten van Fukushima is rood. Wat uw situatie ook is: reis er niet heen. Het is er te gevaarlijk. Lees meer onder Regionale risico's."
+     "text": "De kleurcode van het reisadvies voor een klein gebied in het zuidoosten van Fukushima is rood. Wat uw situatie ook is: reis niet hierheen. Het is er te gevaarlijk. Lees meer onder Regionale risico's."
     },
     {
      "type": "li",
@@ -1406,11 +1406,11 @@
         },
         {
          "type": "p",
-         "text": "Kleurcode rood geldt voor het nucleaire rampgebied in het zuidoosten van prefectuur Fukushima. Hieronder vallen steden als Futaba, Iitate, Katsurao, Minimisōma, Namie, Okuma en Tomioka. De hoge radioactieve straling in dit gebied is schadelijk voor uw gezondheid. De Japanse overheid heeft deze gebieden daarom afgesloten."
+         "text": "Kleurcode rood geldt voor het nucleaire rampgebied in het zuidoosten van prefectuur Fukushima. De Japanse overheid heeft het gebied direct rond de Fukushima Daiichi Nuclear Power Station afgesloten. De hoge radioactieve straling in dit gebied is schadelijk voor uw gezondheid."
         },
         {
          "type": "p",
-         "text": "Lees meer informatie over het nucleaire gebied op de website van Fukushima Prefectural Government (informatie in het Engels). Hier ziet u ook waar de afgesloten gebieden liggen."
+         "text": "Lees meer informatie over het nucleaire gebied op de website van Fukushima Prefectural Government (informatie in het Engels)."
         },
         {
          "type": "h",
@@ -1427,7 +1427,7 @@
        "blocks": [
         {
          "type": "p",
-         "text": "Japan is een relatief veilig land. Toch komt in grote steden zoals Tokio en Osaka criminaliteit voor."
+         "text": "In grote steden zoals Tokio en Osaka komt criminaliteit voor."
         },
         {
          "type": "p",
@@ -1448,7 +1448,7 @@
         },
         {
          "type": "p",
-         "text": "U mag in Japan geen drugs gebruiken, bezitten of verkopen. U kunt een hoge boete en lange gevangenisstraf krijgen."
+         "text": "U mag in Japan geen drugs gebruiken, bezitten of verkopen. Dit geldt ook voor sofdrugs. U kunt een hoge boete en lange gevangenisstraf krijgen."
         },
         {
          "type": "h",
@@ -1512,12 +1512,16 @@
          "text": "Tokyo Metropolitan Government"
         },
         {
+         "type": "p",
+         "text": "Lees wat u verder kunt doen bij een aardbeving in het buitenland"
+        },
+        {
          "type": "h",
          "text": "Tropische stormen"
         },
         {
          "type": "p",
-         "text": "In Japan is er kans op tropische stormen en tyfoons. Vooral van september tot en met april. Reist u tijdens deze periode naar Japan? Volg dan het lokale nieuws. Lees actuele informatie over orkanen op de volgende websites (informatie in het Engels):"
+         "text": "In Japan kunnen tropische stormen en tyfoons voorkomen. Vooral van september tot en met april. Reist u tijdens deze periode naar Japan? Volg dan het lokale nieuws. Lees actuele informatie over orkanen op de volgende websites (informatie in het Engels):"
         },
         {
          "type": "li",
@@ -1621,7 +1625,7 @@
        "blocks": [
         {
          "type": "li",
-         "text": "Sluit altijd een goede reisverzekering af die de extra kosten dekt. Bijvoorbeeld van ziekenhuisopname, of als u naar Nederland moet worden vervoerd (repatriëring). Uw basiszorgverzekering vergoedt deze kosten niet altijd 100 procent."
+         "text": "Sluit altijd een goede reisverzekering af die extra kosten dekt. Bijvoorbeeld van ziekenhuisopname, of als u naar Nederland moet worden vervoerd (repatriëring). Uw basiszorgverzekering vergoedt deze kosten niet altijd 100 procent."
         },
         {
          "type": "li",
@@ -1721,15 +1725,6 @@
        ]
       },
       {
-       "title": "Geldzaken",
-       "blocks": [
-        {
-         "type": "p",
-         "text": "In Japan kunt u niet overal betalen met een creditcard of (digitale) bankpas. Neem altijd voldoende contant geld mee."
-        }
-       ]
-      },
-      {
        "title": "Bagageregels",
        "blocks": [
         {
@@ -1738,7 +1733,7 @@
         },
         {
          "type": "p",
-         "text": "Check wat u mag meenemen naar Japan op de website van IATA (Informatie in het Engels)."
+         "text": "Check wat u mag meenemen naar Japan op de website van de IATA (Informatie in het Engels)."
         },
         {
          "type": "p",
@@ -2133,7 +2128,7 @@
      "lastModified": "2026-09-24T08:11:14.294Z"
     }
    ],
-   "hash": "0115c0574eb9a3a2"
+   "hash": "f3057f80f0c8cd32"
   },
   {
    "country": "LA",
