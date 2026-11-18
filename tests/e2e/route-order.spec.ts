@@ -7,13 +7,18 @@ test('where you are comes first everywhere; the countries behind you fold away',
   await page.getByRole('button', { name: 'Try the demo trip' }).click();
   await expect(page.getByText('Imported 7 stays')).toBeVisible();
   const earlier = page.locator('summary', { hasText: 'Earlier on this trip' });
+  // Closed, and holding the past ones. (WebKit's test driver calls what's in a closed fold
+  // visible, so this checks the fold itself.)
+  const fold = page.locator('details.group\\/earlier');
 
   // Trip: Laos on top and open; the stays behind you folded under Earlier.
   const legs = page.locator('details.group');
   await expect(legs.first()).toContainText('Laos');
   await expect(legs.first()).toHaveAttribute('open', '');
-  await expect(legs.filter({ hasText: 'Japan' })).toBeHidden();
+  await expect(fold).not.toHaveAttribute('open');
+  await expect(fold.locator('details.group', { hasText: 'Japan' })).toHaveCount(1);
   await earlier.click();
+  await expect(fold).toHaveAttribute('open', '');
   await expect(legs.filter({ hasText: 'Japan' })).toBeVisible();
   await expect(legs.filter({ hasText: 'Japan' })).not.toHaveAttribute('open', '');
 
@@ -22,7 +27,8 @@ test('where you are comes first everywhere; the countries behind you fold away',
   const countries = page.locator('a[href^="#/countries/"]');
   await expect(countries.first()).toHaveAttribute('href', '#/countries/LA');
   await expect(countries.nth(1)).toHaveAttribute('href', '#/countries/PH');
-  await expect(page.locator('a[href="#/countries/JP"]')).toBeHidden();
+  await expect(fold).not.toHaveAttribute('open');
+  await expect(fold.locator('a[href="#/countries/JP"]')).toHaveCount(1);
   await expect(earlier).toHaveText(/Earlier on this trip · 3/);
   await earlier.click();
   await expect(page.locator('a[href="#/countries/JP"]')).toBeVisible();
@@ -30,7 +36,8 @@ test('where you are comes first everywhere; the countries behind you fold away',
   // Phrases: Lao first; Japanese behind you.
   await page.goto('/#/phrases');
   await expect(page.locator('a[href^="#/phrases/"]').first()).toHaveAttribute('href', '#/phrases/lo');
-  await expect(page.locator('a[href="#/phrases/ja"]')).toBeHidden();
+  await expect(fold).not.toHaveAttribute('open');
+  await expect(fold.locator('a[href="#/phrases/ja"]')).toHaveCount(1);
 
   // SOS: Laos is the first tab, and chosen.
   await page.goto('/#/emergency');
@@ -47,7 +54,8 @@ test('where you are comes first everywhere; the countries behind you fold away',
     await expect(page.getByRole('heading', { level: 1, name: 'Money' })).toBeVisible();
   }
   await expect(page.getByRole('list', { name: 'Laos per category' })).toBeVisible();
-  await expect(page.getByRole('list', { name: 'Japan per category' })).toBeHidden();
+  await expect(fold).not.toHaveAttribute('open');
+  await expect(fold.locator('[aria-label="Japan per category"]')).toHaveCount(1);
   await earlier.click();
   await expect(page.getByRole('list', { name: 'Japan per category' })).toBeVisible();
   // The country list of a new expense starts with where you are.
