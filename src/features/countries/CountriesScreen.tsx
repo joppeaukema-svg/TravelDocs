@@ -4,10 +4,11 @@ import { allCountries, getCountry, globalContent, officialLinks, phrasebook } fr
 import type { CountryContent, Fact, FactTopic, Source } from '../../content/schema';
 import { clock, formatDate } from '../../lib/format';
 import { rulesContent } from '../../rules/content';
-import { useCurrentCountry, useRules } from '../../rules/useRules';
+import { useCurrentCountry, useRoute, useRules } from '../../rules/useRules';
+import { splitByRoute } from '../../trip/route';
 import { updateSettings } from '../../settings/settings';
 import { ExternalIcon } from '../../ui/icons';
-import { Button, Card, cx, LinkButton, Notice, PageTitle, Pill, RowLink, SectionTitle } from '../../ui/kit';
+import { Button, Card, cx, Earlier, LinkButton, Notice, PageTitle, Pill, RowLink, SectionTitle } from '../../ui/kit';
 import { FactList, UnverifiedBadge } from '../content/Facts';
 import { CallButton } from '../emergency/CallButton';
 import { PhraseList } from '../phrases/PhrasesScreen';
@@ -40,38 +41,43 @@ export function CountriesScreen() {
   const now = useNow();
   const here = useCurrentCountry().code;
   const rules = useRules();
+  const route = useRoute();
   const advice = useAdvice();
   const onRoute = new Set(rules?.result.stays.map((s) => s.stay.country) ?? []);
-  const countries = allCountries().sort((a, b) => Number(onRoute.has(b.country)) - Number(onRoute.has(a.country)));
+  // Where you are, then the rest of the route, then the others; the ones you've been to fold away.
+  const all = allCountries().sort((a, b) => Number(onRoute.has(b.country)) - Number(onRoute.has(a.country)));
+  const { ahead, past } = splitByRoute(all, (c) => [c.country], route);
+  const row = (c: CountryContent) => {
+    const a = advice?.countries.find((x) => x.country === c.country);
+    return (
+      <RowLink
+        key={c.country}
+        href={`#/countries/${c.country}`}
+        icon={<span className="font-mono text-sm font-medium">{c.country}</span>}
+        title={c.name}
+        sub={
+          <span className="flex flex-wrap items-center gap-1.5">
+            {clock(c.timeZone, now).time} · {c.currency}
+            {a && <ColourChips colours={a.colours} short />}
+          </span>
+        }
+        trailing={
+          <span className="flex flex-col items-end gap-1">
+            {c.country === here && <Pill tone="ok">Here now</Pill>}
+            {a && onRoute.has(c.country) && <AdviceBadge advice={a} />}
+          </span>
+        }
+      />
+    );
+  };
 
   return (
     <>
       <PageTitle sub="Guides with sources, and the live Dutch travel advice.">Countries</PageTitle>
-      <Card className="py-1">
-        {countries.map((c) => {
-          const a = advice?.countries.find((x) => x.country === c.country);
-          return (
-            <RowLink
-              key={c.country}
-              href={`#/countries/${c.country}`}
-              icon={<span className="font-mono text-sm font-medium">{c.country}</span>}
-              title={c.name}
-              sub={
-                <span className="flex flex-wrap items-center gap-1.5">
-                  {clock(c.timeZone, now).time} · {c.currency}
-                  {a && <ColourChips colours={a.colours} short />}
-                </span>
-              }
-              trailing={
-                <span className="flex flex-col items-end gap-1">
-                  {c.country === here && <Pill tone="ok">Here now</Pill>}
-                  {a && onRoute.has(c.country) && <AdviceBadge advice={a} />}
-                </span>
-              }
-            />
-          );
-        })}
-      </Card>
+      <Card className="py-1">{ahead.map(row)}</Card>
+      <Earlier count={past.length}>
+        <Card className="py-1">{past.map(row)}</Card>
+      </Earlier>
       <LinkButton href="#/sources" variant="ghost" className="mt-4 w-full">
         All sources and when they were checked
       </LinkButton>

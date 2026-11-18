@@ -5,6 +5,7 @@ import { readCoverageSummary } from '../profile/insurance';
 import { parseProfile, usePassportExpiry, useProfileRaw } from '../profile/profile';
 import { useSettings } from '../settings/settings';
 import type { TripData } from '../trip/io';
+import { routeOrder, type Route } from '../trip/route';
 import { useTrip } from '../trip/store';
 import { buildContext, countriesFromContent } from './context';
 import { runRules } from './engine';
@@ -68,4 +69,12 @@ export function useCurrentCountry(): { code: string | null; auto: boolean } {
   }, [trip, today, hour]);
   if (countryOverride) return { code: countryOverride, auto: false };
   return { code: auto, auto: true };
+}
+
+/** The countries of the trip in the order to show them: here first, the ones you've been to last. */
+export function useRoute(): Route {
+  const trip = useTrip();
+  const today = useToday();
+  const here = useCurrentCountry().code;
+  return useMemo(() => routeOrder(trip?.stays ?? [], today, here), [trip, today, here]);
 }

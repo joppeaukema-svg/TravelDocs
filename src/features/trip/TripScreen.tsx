@@ -13,7 +13,7 @@ import { isTripUpdate, parseTripUpdate, planTripUpdate, type UpdatePlan } from '
 import { bookingsOn } from '../../trip/timeline';
 import { beginExternalPick, endExternalPick } from '../../vault/autoLock';
 import { ChevronRightIcon, PlusIcon, UploadIcon } from '../../ui/icons';
-import { Button, Card, cx, ErrorText, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
+import { Button, Card, cx, Earlier, ErrorText, LinkButton, Notice, PageTitle, Pill, SectionTitle } from '../../ui/kit';
 import { DayRow, type DayTask } from './DayRow';
 import { CheckCard } from './parts';
 import { useTripCode } from './SharePanel';
@@ -315,66 +315,73 @@ function DayByDay({ rules }: { rules: Rules }) {
           };
         });
 
+  const renderLeg = (leg: TripLeg) => {
+    const name = leg.kind === 'stay' ? itinerary.countryName(leg.country) : LEG_TITLES[leg.kind];
+    const legChecks = checks.get(leg.key) ?? [];
+    const attention = legChecks.filter((c) => c.severity !== 'info');
+    const places = leg.stay?.places.join(' · ') ?? '';
+    return (
+      <details key={leg.key} open={leg.from <= today && today <= leg.to} className={cx('group rounded-2xl border border-line', landOf(leg))}>
+        <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-2.5 [&::-webkit-details-marker]:hidden">
+          <span className="rounded-md border-2 border-ink px-1.5 font-mono text-sm font-medium leading-6">{leg.country}</span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-bold">{name}</span>
+            <span className="block truncate text-sm text-muted">
+              {formatDayRange(leg.from, leg.to)}
+              {places && ` · ${places}`}
+            </span>
+          </span>
+          {attention.length > 0 && (
+            <Pill tone={attention.some((c) => c.severity === 'critical') ? 'crit' : 'warn'}>{attention.length} to check</Pill>
+          )}
+          <ChevronRightIcon size={18} className="shrink-0 text-muted transition group-open:rotate-90" />
+        </summary>
+        {legChecks.length > 0 && (
+          <div className="space-y-2 border-t border-line px-3 py-3">
+            <p className="px-1 text-xs font-bold uppercase tracking-[0.12em] text-muted">To check</p>
+            {legChecks.map((c) => (
+              <CheckCard key={c.id} check={c} />
+            ))}
+          </div>
+        )}
+        <ol className="border-t border-line px-4 py-1" aria-label={`${name}, day by day`}>
+          {leg.dates.map((date) => {
+            const id = `${leg.key}|${date}`;
+            return (
+              <DayRow
+                key={date}
+                date={date}
+                country={leg.country}
+                day={days.get(date)}
+                bookings={bookingsOn(data, date)}
+                holidays={holidaysOn(rulesContent.holidays, leg.country, leg.stay?.places ?? [], date)}
+                tasks={tasksOn(leg, date)}
+                isToday={date === today}
+                editing={editing === id}
+                onEdit={(on) => setEditing(on ? id : null)}
+              />
+            );
+          })}
+        </ol>
+        {(leg.stay || getCountry(leg.country)) && (
+          <div className="flex flex-wrap gap-x-5 border-t border-line px-4 py-2.5 text-sm font-bold">
+            {getCountry(leg.country) && <a href={`#/countries/${leg.country}`}>{itinerary.countryName(leg.country)} guide</a>}
+            {leg.stay && <a href={`#/trip/stay/${encodeURIComponent(leg.stay.id)}`}>Edit stay</a>}
+          </div>
+        )}
+      </details>
+    );
+  };
+
+  // Where you are on top (the trip goes on in order from there); what's behind you folded away below.
+  const past = legs.filter((leg) => leg.to < today);
   return (
-    <div className="space-y-2">
-      {legs.map((leg) => {
-        const name = leg.kind === 'stay' ? itinerary.countryName(leg.country) : LEG_TITLES[leg.kind];
-        const legChecks = checks.get(leg.key) ?? [];
-        const attention = legChecks.filter((c) => c.severity !== 'info');
-        const places = leg.stay?.places.join(' · ') ?? '';
-        return (
-          <details key={leg.key} open={leg.from <= today && today <= leg.to} className={cx('group rounded-2xl border border-line', landOf(leg))}>
-            <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-2.5 [&::-webkit-details-marker]:hidden">
-              <span className="rounded-md border-2 border-ink px-1.5 font-mono text-sm font-medium leading-6">{leg.country}</span>
-              <span className="min-w-0 flex-1">
-                <span className="block font-bold">{name}</span>
-                <span className="block truncate text-sm text-muted">
-                  {formatDayRange(leg.from, leg.to)}
-                  {places && ` · ${places}`}
-                </span>
-              </span>
-              {attention.length > 0 && (
-                <Pill tone={attention.some((c) => c.severity === 'critical') ? 'crit' : 'warn'}>{attention.length} to check</Pill>
-              )}
-              <ChevronRightIcon size={18} className="shrink-0 text-muted transition group-open:rotate-90" />
-            </summary>
-            {legChecks.length > 0 && (
-              <div className="space-y-2 border-t border-line px-3 py-3">
-                <p className="px-1 text-xs font-bold uppercase tracking-[0.12em] text-muted">To check</p>
-                {legChecks.map((c) => (
-                  <CheckCard key={c.id} check={c} />
-                ))}
-              </div>
-            )}
-            <ol className="border-t border-line px-4 py-1" aria-label={`${name}, day by day`}>
-              {leg.dates.map((date) => {
-                const id = `${leg.key}|${date}`;
-                return (
-                  <DayRow
-                    key={date}
-                    date={date}
-                    country={leg.country}
-                    day={days.get(date)}
-                    bookings={bookingsOn(data, date)}
-                    holidays={holidaysOn(rulesContent.holidays, leg.country, leg.stay?.places ?? [], date)}
-                    tasks={tasksOn(leg, date)}
-                    isToday={date === today}
-                    editing={editing === id}
-                    onEdit={(on) => setEditing(on ? id : null)}
-                  />
-                );
-              })}
-            </ol>
-            {(leg.stay || getCountry(leg.country)) && (
-              <div className="flex flex-wrap gap-x-5 border-t border-line px-4 py-2.5 text-sm font-bold">
-                {getCountry(leg.country) && <a href={`#/countries/${leg.country}`}>{itinerary.countryName(leg.country)} guide</a>}
-                {leg.stay && <a href={`#/trip/stay/${encodeURIComponent(leg.stay.id)}`}>Edit stay</a>}
-              </div>
-            )}
-          </details>
-        );
-      })}
-    </div>
+    <>
+      <div className="space-y-2">{legs.filter((leg) => leg.to >= today).map(renderLeg)}</div>
+      <Earlier count={past.length}>
+        <div className="space-y-2">{past.map(renderLeg)}</div>
+      </Earlier>
+    </>
   );
 }
 

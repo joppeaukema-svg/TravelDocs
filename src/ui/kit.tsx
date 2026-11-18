@@ -316,3 +316,17 @@ export function ErrorText({ children }: { children: ReactNode }) {
     </p>
   );
 }
+
+/** What's behind you on the trip: greyed out and folded away at the bottom of a list. */
+export function Earlier({ count, children }: { count: number; children: ReactNode }) {
+  if (!count) return null;
+  return (
+    <details className="group/earlier mt-3">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 font-bold text-muted [&::-webkit-details-marker]:hidden">
+        <ChevronRightIcon size={18} className="transition group-open/earlier:rotate-90" />
+        Earlier on this trip · {count}
+      </summary>
+      <div className="mt-1 opacity-60">{children}</div>
+    </details>
+  );
+}

@@ -7,7 +7,7 @@ import type { PrepItem } from '../../rules/types';
 import { useRules, type Rules } from '../../rules/useRules';
 import { usePrepStates } from '../../trip/store';
 import { DownloadIcon } from '../../ui/icons';
-import { Button, Card, LinkButton, Notice, PageTitle, Pill, RowLink, SectionTitle } from '../../ui/kit';
+import { Button, Card, Earlier, LinkButton, Notice, PageTitle, Pill, RowLink, SectionTitle } from '../../ui/kit';
 import { CheckCard, PrepItemRow } from '../trip/parts';
 import { packingId, PackingScreen, usePackingList } from './Packing';
 
@@ -57,6 +57,24 @@ export function ChecklistsScreen() {
   const status = (p: PrepItem) => itemStatus(p, states.get(p.id), today);
   const urgent = result.prep.filter((p) => ['overdue', 'do-now'].includes(status(p)));
   const groups = ['predeparture', ...result.stays.map((s) => s.stay.id)].filter((g) => result.prep.some((p) => p.group === g));
+  // The stay you're in on top (the rest follow in order); the ones behind you fold away.
+  const lastDay = (g: string) => (g === 'predeparture' ? rules.data.meta.depart : (result.stays.find((s) => s.stay.id === g)?.stay.to ?? today));
+  const behind = groups.filter((g) => lastDay(g) < today);
+
+  const groupRow = (g: string) => {
+    const items = result.prep.filter((p) => p.group === g);
+    const open = items.filter((p) => OPEN.includes(status(p))).length;
+    const { title, sub } = groupTitle(rules, g);
+    return (
+      <RowLink
+        key={g}
+        href={`#/checklists/${encodeURIComponent(g)}`}
+        title={title}
+        sub={sub}
+        trailing={open ? <Pill tone="muted">{open} open</Pill> : <Pill tone="ok">Done</Pill>}
+      />
+    );
+  };
 
   const checks = result.checks
     .filter((c) => c.severity !== 'info')
@@ -78,22 +96,10 @@ export function ChecklistsScreen() {
         </>
       )}
       <SectionTitle>By country</SectionTitle>
-      <Card className="py-1">
-        {groups.map((g) => {
-          const items = result.prep.filter((p) => p.group === g);
-          const open = items.filter((p) => OPEN.includes(status(p))).length;
-          const { title, sub } = groupTitle(rules, g);
-          return (
-            <RowLink
-              key={g}
-              href={`#/checklists/${encodeURIComponent(g)}`}
-              title={title}
-              sub={sub}
-              trailing={open ? <Pill tone="muted">{open} open</Pill> : <Pill tone="ok">Done</Pill>}
-            />
-          );
-        })}
-      </Card>
+      <Card className="py-1">{groups.filter((g) => !behind.includes(g)).map(groupRow)}</Card>
+      <Earlier count={behind.length}>
+        <Card className="py-1">{behind.map(groupRow)}</Card>
+      </Earlier>
       {checks.length > 0 && (
         <>
           <SectionTitle>Checks</SectionTitle>

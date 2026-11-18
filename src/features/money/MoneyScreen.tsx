@@ -33,11 +33,12 @@ import {
   type Travellers,
 } from '../../money/expenses';
 import { diffDays, minDate, stayEnd, stayStart } from '../../rules/itinerary';
-import { useCurrentCountry, useToday } from '../../rules/useRules';
+import { useCurrentCountry, useRoute, useToday } from '../../rules/useRules';
+import { splitByRoute } from '../../trip/route';
 import { useTrip } from '../../trip/store';
 import type { TripData } from '../../trip/io';
 import { ChevronRightIcon, DownloadIcon, PlusIcon } from '../../ui/icons';
-import { Button, Card, cx, ErrorText, Field, inputClass, LinkButton, Notice, PageTitle, RowLink, SectionTitle, SelectField, TextField } from '../../ui/kit';
+import { Button, Card, cx, Earlier, ErrorText, Field, inputClass, LinkButton, Notice, PageTitle, RowLink, SectionTitle, SelectField, TextField } from '../../ui/kit';
 import { convert, CURRENCIES, formatMoney, parseAmount, useRateTable } from './Converter';
 
 const eur = (n: number) => formatMoney(n, 'EUR');
@@ -334,6 +335,7 @@ export function MoneyScreen() {
   const trip = useTrip();
   const today = useToday();
   const here = useCurrentCountry().code;
+  const route = useRoute();
   const { rate } = useRateTable();
   if (!expenses || !budgets || !travellers) return null;
 
@@ -343,7 +345,13 @@ export function MoneyScreen() {
   const todayByCategory = spentByCategoryOn(expenses, today, rate);
   // The three added last (on either phone), whatever date they're for.
   const latest = [...expenses].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 3);
-  const routeWithoutSpend = [...new Set(trip?.stays.map((s) => s.country) ?? [])].filter((c) => !summary.countries.some((s) => s.country === c));
+  // Where you are first, then what's to come; the countries you've left fold away. Spending before
+  // you left, and a stop off the route (a layover), are behind you once all their days are.
+  const behindOff = (c: string) =>
+    !!trip && route.status(c) === undefined && (c === trip.meta.homeCountry ? today > trip.meta.depart : expenses.every((e) => e.country !== c || e.date < today));
+  const { ahead, past } = splitByRoute(summary.countries, (s) => [s.country], route);
+  const behind = [...ahead.filter((s) => behindOff(s.country)), ...past];
+  const routeWithoutSpend = trip ? route.order.filter((c) => route.status(c) !== 'past' && !summary.countries.some((s) => s.country === c)) : [];
 
   return (
     <>
@@ -389,9 +397,11 @@ export function MoneyScreen() {
       <SectionTitle action={<span className="tabular font-bold">{eur(summary.total)}</span>}>Per country</SectionTitle>
       {summary.countries.length === 0 && routeWithoutSpend.length === 0 && <p className="text-muted">No expenses yet.</p>}
       <div className="space-y-2">
-        {summary.countries.map((s) => (
-          <CountryCard key={s.country} s={s} expenses={expenses} travellers={travellers} rate={rate} today={today} />
-        ))}
+        {ahead
+          .filter((s) => !behindOff(s.country))
+          .map((s) => (
+            <CountryCard key={s.country} s={s} expenses={expenses} travellers={travellers} rate={rate} today={today} />
+          ))}
         {routeWithoutSpend.length > 0 && (
           <Card className="py-1">
             <ul>
@@ -405,6 +415,13 @@ export function MoneyScreen() {
           </Card>
         )}
       </div>
+      <Earlier count={behind.length}>
+        <div className="space-y-2">
+          {behind.map((s) => (
+            <CountryCard key={s.country} s={s} expenses={expenses} travellers={travellers} rate={rate} today={today} />
+          ))}
+        </div>
+      </Earlier>
 
       {latest.length > 0 && (
         <>
@@ -440,7 +457,7 @@ export function ExpenseScreen({ id }: { id?: string }) {
 function ExpenseForm({ existing }: { existing?: Expense | undefined }) {
   const today = useToday();
   const here = useCurrentCountry().code;
-  const trip = useTrip();
+  const route = useRoute();
   const { rate } = useRateTable();
   const [amount, setAmount] = useState(existing ? String(existing.amount) : '');
   // Until you pick one, the country is where you are (known a moment after the form opens, once
@@ -458,10 +475,10 @@ function ExpenseForm({ existing }: { existing?: Expense | undefined }) {
 
   const n = parseAmount(amount);
   const eurValue = n > 0 ? convert(n, currency, 'EUR', rate) : undefined;
-  const route = new Set(trip?.stays.map((s) => s.country) ?? []);
+  // The trip's countries first, where you are on top; then the rest.
   const countries = [
-    ...allCountries().filter((c) => route.has(c.country) || !route.size),
-    ...allCountries().filter((c) => route.size && !route.has(c.country)),
+    ...route.order.flatMap((c) => getCountry(c) ?? []),
+    ...allCountries().filter((c) => !route.order.includes(c.country)),
   ];
 
   async function submit() {

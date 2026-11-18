@@ -4,11 +4,12 @@ import { getCountry, phrasebook } from '../../content';
 import type { PhraseLang, PhrasesFile } from '../../content/schema';
 import { getMeta } from '../../db/db';
 import { formatDate } from '../../lib/format';
-import { useCurrentCountry, useToday } from '../../rules/useRules';
+import { useRoute, useToday } from '../../rules/useRules';
+import { splitByRoute } from '../../trip/route';
 import { setSharedMeta, useTrip } from '../../trip/store';
 import { accommodationOn } from '../../trip/timeline';
 import { CloseIcon, SpeechIcon } from '../../ui/icons';
-import { Button, Card, cx, inputClass, Notice, PageTitle, RowLink, SectionTitle } from '../../ui/kit';
+import { Button, Card, cx, Earlier, inputClass, Notice, PageTitle, RowLink, SectionTitle } from '../../ui/kit';
 import { speak, useVoice } from './speech';
 
 const book = () => phrasebook();
@@ -240,23 +241,20 @@ export function ShowCards({ lang }: { lang: PhraseLang }) {
 }
 
 export function PhrasesScreen() {
-  const here = useCurrentCountry().code;
+  const route = useRoute();
   const langs = Object.entries(book().languages) as [PhraseLang, PhrasesFile['languages'][PhraseLang]][];
-  const sorted = [...langs].sort(([, a], [, b]) => Number(b.countries.includes(here ?? '')) - Number(a.countries.includes(here ?? '')));
+  // The language where you are first, then the ones to come; the ones behind you fold away.
+  const { ahead, past } = splitByRoute(langs, ([, l]) => l.countries, route);
+  const row = ([code, l]: (typeof langs)[number]) => (
+    <RowLink key={code} href={`#/phrases/${code}`} icon={<SpeechIcon />} title={l.name} sub={l.countries.map((c) => getCountry(c)?.name ?? c).join(', ')} />
+  );
   return (
     <>
       <PageTitle sub="Key phrases and big cards to show people.">Phrases</PageTitle>
-      <Card className="py-1">
-        {sorted.map(([code, l]) => (
-          <RowLink
-            key={code}
-            href={`#/phrases/${code}`}
-            icon={<SpeechIcon />}
-            title={l.name}
-            sub={l.countries.map((c) => getCountry(c)?.name ?? c).join(', ')}
-          />
-        ))}
-      </Card>
+      <Card className="py-1">{ahead.map(row)}</Card>
+      <Earlier count={past.length}>
+        <Card className="py-1">{past.map(row)}</Card>
+      </Earlier>
     </>
   );
 }

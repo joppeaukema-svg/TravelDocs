@@ -9,7 +9,8 @@ import {
   readCardChoices,
   refreshEmergencyCard,
 } from '../../emergency/card';
-import { useCurrentCountry } from '../../rules/useRules';
+import { useCurrentCountry, useRoute } from '../../rules/useRules';
+import { splitByRoute } from '../../trip/route';
 import { EditIcon, ExternalIcon } from '../../ui/icons';
 import { Button, Card, cx, LinkButton, Notice, PageTitle, SectionTitle, Toggle } from '../../ui/kit';
 import { VaultGate } from '../vault/VaultGate';
@@ -28,6 +29,8 @@ function Detail({ label, value }: { label: string; value: string | undefined }) 
 
 export function EmergencyScreen() {
   const current = useCurrentCountry();
+  // Where you are first; the countries you've been to last, greyed out.
+  const countries = splitByRoute(allCountries(), (c) => [c.country], useRoute());
   const [picked, setPicked] = useState<string | null>(null);
   const code = picked ?? current.code;
   const country = getCountry(code);
@@ -41,7 +44,7 @@ export function EmergencyScreen() {
       <PageTitle sub="Works offline and while the vault is locked.">Emergency</PageTitle>
 
       <div className="-mx-4 mb-4 flex gap-2 overflow-x-auto px-4 pb-1" role="tablist" aria-label="Country">
-        {allCountries().map((c) => (
+        {[...countries.ahead, ...countries.past].map((c) => (
           <button
             key={c.country}
             type="button"
@@ -51,6 +54,7 @@ export function EmergencyScreen() {
             className={cx(
               'min-h-11 shrink-0 rounded-full border px-4 font-bold',
               c.country === code ? 'border-ink bg-ink text-paper' : 'border-line bg-card text-ink',
+              c.country !== code && countries.past.includes(c) && 'opacity-60',
             )}
           >
             {c.name}
